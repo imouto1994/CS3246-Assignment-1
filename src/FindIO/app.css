@@ -1,0 +1,105 @@
+/* General Elements */
+.label {
+    -fx-font-size: 18;
+}
+
+.sideBarLabel {
+    -fx-text-fill: rgb(14, 102, 85);
+}
+
+.bold {
+    -fx-font-weight: bold
+}
+
+.text-field {
+    -fx-background-color: white;
+    -fx-background-insets: 0, 0, 0;
+    -fx-background-radius: 2 0 0 2;
+    -fx-padding: 3 45 3 10;
+    -fx-font-size: 20;
+    -fx-font-weight: 600;
+}
+
+.button {
+    -fx-background-insets: 0 0 0 0, 0, 0, 0;
+    -fx-background-radius: 1, 1, 1, 1;
+    -fx-content-display: graphic-only;
+}
+
+.defaultButton {
+    -fx-background-color: rgb(231, 76, 60);
+    -fx-padding: 0.166667em 0.833333em 0.25em 0.833333em;
+}
+
+.defaultButton:hover {
+    -fx-background-color: rgb(242, 79, 62);
+}
+
+.defaultButton:armed {
+    -fx-background-color: rgb(207, 68, 54);
+}
+
+.transparentButton {
+    -fx-background-color: transparent;
+}
+
+.check-box {
+    -fx-label-padding: 0.0em 0.0em 0.0em 0.416667em; /* 0 0 0 5 */
+    -fx-text-fill: rgb(14, 102, 85);
+    -fx-font-size: 18;
+    -fx-font-weight: bold;
+}
+.check-box > .box {
+    -fx-border-color: #ffd337;
+    -fx-border-width: 3.0;
+    -fx-padding: 0.0em;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-background-color: transparent;
+}
+
+.check-box > .box > .mark {
+    -fx-shape: null;
+    -fx-padding: 1.0em;
+}
+
+.check-box:selected > .box {
+    -fx-background-radius: 0, 0, 0, 0;
+}
+
+.check-box:selected > .box > .mark {
+    -fx-background-color: red;
+    -fx-background-position: top;
+    -fx-background-repeat: stretch;
+}
+
+
+/* ID Elements */
+
+#searchButton {
+    -fx-background-radius: 0 2 2 0;
+}
+
+#imageButton #imageGlyph{
+    -fx-image: url("imageGlyph.png");
+}
+
+#imageButton:hover #imageGlyph{
+    -fx-image: url("imageGlyphHover.png");
+}
+
+#imageButton:armed #imageGlyph{
+    -fx-image: url("imageGlyphArmed.png");
+}
+
+#navBar {
+    -fx-background-color: rgb(22, 160, 133);
+}
+
+#sideBar {
+    -fx-background-color: rgb(26, 188, 156);
+}
+
+#centerSection {
+    -fx-background-color: rgb(236, 240, 241);
+}
