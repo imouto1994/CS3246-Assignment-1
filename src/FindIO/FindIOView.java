@@ -33,32 +33,43 @@ import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-public class View {
-	
+public class FindIOView {
+
+    /* Pane Section */
 	private Stage primaryStage;
 	private Scene primaryScene;
 	private Pane mainRoot;
     private Pane navBar;
     private Pane sideBar;
     private Pane centerSection;
+
+    /* Screen Attributes */
 	private double SCREEN_WIDTH  = Screen.getPrimary().getVisualBounds().getWidth();
 	private double SCREEN_HEIGHT = Screen.getPrimary().getVisualBounds().getHeight();
 
     /* UI Controls */
-	FileChooser imageChooser;
-	ImageView thumbNail;
-	Label imageNameLabel;
-	Label imageExtensionLabel;
-	Label imageSizeLabel;
-    Rectangle overlayLayer;
+	private FileChooser imageChooser;
+    private Button imageButton;
+	private ImageView thumbNail;
+	private Label imageNameLabel;
+	private Label imageExtensionLabel;
+	private Label imageSizeLabel;
+    private Rectangle overlayLayer;
 
     /* Image Results List */
     ObservableList<ImageResult> imageList = FXCollections.observableArrayList();
 
-	public View(Stage primaryStage) {
+    /* Constructor */
+	public FindIOView(Stage primaryStage) {
 		this.primaryStage = primaryStage;
 	}
-	
+
+    /* UI Control Accessors */
+    public FileChooser getImageChooser(){
+        return imageChooser;
+    }
+
+	/* Initialization Functions */
 	public void initGUI() {
 		mainRoot = initContent();
 		initStage();
@@ -73,7 +84,7 @@ public class View {
 	
 	private void initScene() {
 		primaryScene = new Scene(mainRoot);
-		primaryScene.getStylesheets().addAll(getClass().getResource("app.css")
+		primaryScene.getStylesheets().addAll(getClass().getResource("FindIOStyleSheet.css")
 				.toExternalForm());
 		primaryStage.setScene(primaryScene);
 		primaryStage.show();
@@ -103,7 +114,7 @@ public class View {
 		// Button Upload Image
 		imageChooser = new FileChooser();
 		configureImageChooser(imageChooser);
-		Button imageButton = new Button("Image");
+		imageButton = new Button("Image");
 		imageButton.getStyleClass().add("transparentButton");
 		imageButton.setId("imageButton");
 		imageButton.setPrefHeight(40.0);
@@ -113,7 +124,6 @@ public class View {
 		imageGlyph.setPreserveRatio(true);
 		imageGlyph.setSmooth(true);
 		imageButton.setGraphic(imageGlyph);
-		linkImageChooser(imageButton);
 		
 		// Stack pane for upload image and text field
 		StackPane stackPane = new StackPane();
@@ -212,8 +222,8 @@ public class View {
         finalTransition.play();
     }
 	
-	private void linkImageChooser(Button button) {
-		button.setOnAction(new EventHandler<ActionEvent>() {
+	public void linkImageChooser(final FindIOImageChooserInterface handler) {
+		imageButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 					File file = imageChooser.showOpenDialog(primaryStage);
@@ -229,6 +239,7 @@ public class View {
 						imageNameLabel.setText(fileName.toUpperCase());
 						imageExtensionLabel.setText(fileExtension.toUpperCase());
 						imageSizeLabel.setText(width + " x " + height);
+                        handler.imageSelectHandle(file);
 					}
 			}
 		});
