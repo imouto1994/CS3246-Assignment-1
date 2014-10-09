@@ -67,8 +67,8 @@ public class View {
 	
 	private void initStage() {
 		primaryStage.setTitle("find.io");
-		primaryStage.setMaximized(true);
-		primaryStage.getIcons().add(new Image(getClass().getResource("logo.png").toExternalForm()));
+		primaryStage.setMaximized(false);
+		primaryStage.getIcons().add(new Image(getClass().getResource("./Images/logo.png").toExternalForm()));
 	}
 	
 	private void initScene() {
@@ -131,7 +131,7 @@ public class View {
 		searchGlyph.setFitHeight(35.0);
 		searchGlyph.setPreserveRatio(true);
 		searchGlyph.setSmooth(true);
-		searchGlyph.setImage(new Image(getClass().getResourceAsStream("searchGlyph.png")));
+		searchGlyph.setImage(new Image(getClass().getResourceAsStream("./Images/searchGlyph.png")));
 		searchButton.setGraphic(searchGlyph);
 		linkCollapseSidePane(searchButton);
 
@@ -140,7 +140,7 @@ public class View {
 		logo.setFitHeight(80.0);
 		logo.setPreserveRatio(true);
 		logo.setSmooth(true);
-		logo.setImage(new Image(getClass().getResourceAsStream("logo_transparent.png")));
+		logo.setImage(new Image(getClass().getResourceAsStream("./Images/logo_transparent.png")));
 		
 		HBox subBox = new HBox();
 		subBox.setPrefHeight(top.getPrefHeight());
@@ -299,7 +299,7 @@ public class View {
 
 		thumbNail = new ImageView();
 		thumbNail.setFitHeight(SCREEN_HEIGHT / 3.5);
-        Image defaultImage = new Image(getClass().getResourceAsStream("EmptyImage.png"));
+        Image defaultImage = new Image(getClass().getResourceAsStream("./Images/EmptyImage.png"));
         defaultImage = resizeImageWithSpecifiedHeight(defaultImage, SCREEN_HEIGHT / 3.5);
         thumbNail.setImage(defaultImage);
         thumbNail.setId("thumbNail");
@@ -356,7 +356,6 @@ public class View {
     private void addStyleClass(Node node, String styleClass){
         String[] classes = styleClass.split("\\s+");
         for(String singleClass : classes){
-            System.out.println(singleClass);
             node.getStyleClass().add(singleClass);
         }
     }

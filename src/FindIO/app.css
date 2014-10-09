@@ -81,15 +81,15 @@
 }
 
 #imageButton #imageGlyph{
-    -fx-image: url("imageGlyph.png");
+    -fx-image: url("./Images/imageGlyph.png");
 }
 
 #imageButton:hover #imageGlyph{
-    -fx-image: url("imageGlyphHover.png");
+    -fx-image: url("./Images/imageGlyphHover.png");
 }
 
 #imageButton:armed #imageGlyph{
-    -fx-image: url("imageGlyphArmed.png");
+    -fx-image: url("./Images/imageGlyphArmed.png");
 }
 
 #navBar {
