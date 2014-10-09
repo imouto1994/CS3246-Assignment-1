@@ -1,0 +1,126 @@
+function [ output_args ] = generateSparsefeature(img_dir, sub_dir, sift_dir, pooling_dir)
+%GENERATESPARSEFEATURE Summary of this function goes here
+%   Detailed explanation goes here
+%  Input: img_dir --- directory of image dataset;
+%         sub_dir --- if true: images are categoried into different
+%         folders; if false: images are stored together into a folder;
+%         sift_dir --- directory to store the generated sift feature;
+%         pooling_dir --- directory to store the generated sparse coding
+%         feature;
+
+
+%clear all;
+clc;
+
+%% set path
+addpath('large_scale_svm');
+addpath('sift');
+addpath(genpath('sparse_coding'));
+
+dataSet = 'Caltech101';
+
+% sift descriptor extraction
+skip_cal_sift = false;              % if 'skip_cal_sift' is false, set the following parameter
+gridSpacing = 6;
+patchSize = 16;
+maxImSize = 300;
+nrml_threshold = 1;                 % low contrast region normalization threshold (descriptor length)
+
+% dictionary training for sparse coding
+skip_dic_training = true;  % To train the codebook or not.
+nBases = 1024;
+nsmp = 200000;
+beta = 1e-5;                        % a small regularization for stablizing sparse coding
+num_iters = 50;
+
+% feature pooling parameters
+pyramid = [1, 2, 4];                % spatial block number on each level of the pyramid
+gamma = 0.15;
+knn = 200;                          % find the k-nearest neighbors for approximate sparse coding
+                                    % if set 0, use the standard sparse coding
+
+% classification test on the dataset
+nRounds = 5;                        % number of random tests
+lambda = 0.1;                       % regularization parameter for w
+tr_num = 30;                        % training number per category
+
+rt_img_dir = img_dir;
+rt_data_dir =sift_dir;
+
+
+
+%% calculate sift features or retrieve the database directory
+if skip_cal_sift,
+    database = retr_database_dir(rt_data_dir);
+else
+    if sub_dir,
+        [database, lenStat] = CalculateSiftDescriptor(rt_img_dir, rt_data_dir, gridSpacing, patchSize, maxImSize, nrml_threshold);
+    else
+        [database, lenStat] = CalculateSiftDescriptor2(rt_img_dir, rt_data_dir, gridSpacing, patchSize, maxImSize, nrml_threshold);
+    end;
+end
+
+%% load sparse coding dictionary (one dictionary trained on Caltech101 is provided: dict_Caltech101_1024.mat)
+Bpath = ['dictionary/dict_' dataSet '_' num2str(nBases) '.mat'];
+Xpath = ['dictionary/rand_patches_' dataSet '_' num2str(nsmp) '.mat'];
+
+if ~skip_dic_training,
+    try 
+        load(Xpath);
+    catch
+        X = rand_sampling(database, nsmp);
+        save(Xpath, 'X');
+    end
+    [B, S, stat] = reg_sparse_coding(X, nBases, eye(nBases), beta, gamma, num_iters);
+    save(Bpath, 'B', 'S', 'stat');
+else
+    load(Bpath);
+end
+
+nBases = size(B, 2);                    % size of the dictionary
+
+%% calculate the sparse coding feature
+
+dimFea = sum(nBases*pyramid.^2);
+numFea = length(database.path);
+poolinglist = {};
+disp('==================================================');
+fprintf('Calculating the sparse coding feature...\n');
+fprintf('Regularization parameter: %f\n', gamma);
+disp('==================================================');
+
+for iter1 = 1:numFea,  
+    if ~mod(iter1, 50),
+        fprintf('.\n');
+    else
+        fprintf('.');
+    end;
+    sc_fea=zeros(dimFea,1);
+    sc_label = 0;
+    fpath = database.path{iter1};
+    load(fpath);
+    if knn,
+        sc_fea = sc_approx_pooling(feaSet, B, pyramid, gamma, knn);
+    else
+        sc_fea = sc_pooling(feaSet, B, pyramid, gamma);
+    end
+    img = '';
+    dirname ='';
+    pos = strfind(fpath,'\');
+    img = fpath(pos(end)+1:end-4);
+    if sub_dir,
+        sc_label = database.label(iter1);
+        dirname = database.cname(sc_label);
+        dirname = dirname{1,1};
+    end
+    dirpath = fullfile(pooling_dir,dirname);
+    if ~isdir(dirpath),
+        mkdir(dirpath);
+    end
+    savepath = fullfile(dirpath,img);
+    sc_fea = sc_fea';
+    save(savepath,'sc_fea');
+    fprintf('The %s.mat are saved\n',savepath);
+end;
+end
+
