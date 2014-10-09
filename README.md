@@ -5,7 +5,7 @@ This assignment is to build an image search system, which will use different vis
 Copy the large MAT data for feature visual concept to use it. Since it is too large, it cannot be put in the repository.
 
 ## Description of index database
-TEXT feature: Inverted index
-Color histogram feature: Direct index
-Visual concept feature: Inverted index
-Visual word feature: Inverted index
+* TEXT feature: Inverted index
+* Color histogram feature: Direct index
+* Visual concept feature: Inverted index
+* Visual word feature: Inverted index
