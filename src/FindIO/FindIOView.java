@@ -49,6 +49,7 @@ public class FindIOView {
 
     /* UI Controls */
 	private FileChooser imageChooser;
+    private TextField textField;
     private Button imageButton;
 	private ImageView thumbNail;
 	private Label imageNameLabel;
@@ -68,6 +69,7 @@ public class FindIOView {
     public FileChooser getImageChooser(){
         return imageChooser;
     }
+    public TextField getTextField() { return textField; }
 
 	/* Initialization Functions */
 	public void initGUI() {
@@ -106,7 +108,7 @@ public class FindIOView {
 		top.setPrefHeight(100.0);
 
 		// Text Input
-		TextField textField = new TextField();
+		textField = new TextField();
 		textField.setPromptText("Search Text");
 		textField.setPrefWidth(SCREEN_WIDTH / 2.0);
 		textField.setPrefHeight(40.0);

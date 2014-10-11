@@ -25,11 +25,11 @@ public class FindIOController extends Application implements  FindIOImageChooser
 
     public void imageSelectHandle(File file) {
         double[] colorHist = extractHistogram(file);
-        System.out.println(ColorHist.calculateSimilarity(colorHist, colorHist));
+
     }
 
     private double[] extractHistogram(File file) {
-        return ColorHist.getHist(file);
+        return ColorHistogramExtraction.getHist(file);
     }
 
     private double[] extractVisualWords(File file) {
@@ -41,6 +41,10 @@ public class FindIOController extends Application implements  FindIOImageChooser
     }
 
     private String[] extractTerms() {
-        return null;
+        String[] terms = findIOView.getTextField().getText().split("\\s+");
+
+        //TODO: Add removing stop words
+
+        return terms;
     }
 }

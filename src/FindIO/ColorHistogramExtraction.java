@@ -6,7 +6,7 @@ import java.awt.image.Raster;
 import java.io.File;
 import java.io.IOException;
 
-public class ColorHist  {
+public class ColorHistogramExtraction {
 
 	private static final int dim = 64;
 
