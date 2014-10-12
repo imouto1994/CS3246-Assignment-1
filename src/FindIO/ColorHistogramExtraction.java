@@ -12,16 +12,24 @@ public class ColorHistogramExtraction {
 
 
     /* Get color histogram function */
-	public static double[] getHist(File file) throws Throwable {
+	public static double[] getHist(File file) {
 
         BufferedImage image = null;
         try {
             image = ImageIO.read(file);
-        } catch (IOException e) {
+        } catch (Throwable e) {
             System.out.println("error when reading image "+file.getName());
             e.printStackTrace();
+            System.exit(1);
         }
-        int imHeight = image.getHeight();
+        int imHeight = 0;
+        try{
+            imHeight = image.getHeight();
+        }catch (Throwable e){
+            System.out.println("can't parse file: "+file.getName());
+            e.printStackTrace();
+            System.exit(1);
+        }
         int imWidth = image.getWidth();
         double[] bins = new double[dim*dim*dim];
         int step = 256 / dim;
@@ -91,7 +99,7 @@ public class ColorHistogramExtraction {
 
     //Test the main funciton
     public static void main(String[] args){
-        String sampleImgPath = "./src/FindIO/Datasets/train/data/bear/0018_167630455.jpg";
+        String sampleImgPath = "./src/FindIO/Datasets/train/data/tower/0097_159739573.jpg";
         File img = new File(sampleImgPath);
         if(img.exists() && !img.isDirectory()){
             try {
