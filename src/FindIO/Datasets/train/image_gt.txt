@@ -146,11 +146,11 @@
 0401_37253595.jpg   book  
 0405_1366109372.jpg   book  flowers  
 0405_2200198472.jpg   book  dog  
-0415_2482298207.jpg   bear  book  
+0415_2482298207.jpg   book  bear
 0418_428635988.jpg   book  
 0440_416829941.jpg   book  
 0440_496707556.jpg   book  
-0460_473353168.jpg   book  
+0460_473353168.jpg   book	  
 0511_2445748517.jpg   book  
 0513_2626046432.jpg   book  
 0516_2611320379.jpg   book  
@@ -246,7 +246,7 @@
 0047_622612084.jpg   computer  
 0048_2154264768.jpg   computer  
 0050_23783182.jpg   computer  
-0056_12246629.jpg   cat  computer  
+0056_12246629.jpg   computer  cat  
 0062_77405592.jpg   computer  
 0083_67244698.jpg   computer  
 0086_109782504.jpg   computer  

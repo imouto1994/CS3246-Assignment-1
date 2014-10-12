@@ -10,13 +10,15 @@ public class ColorHistogramExtraction {
 
 	private static final int dim = 64;
 
+
     /* Get color histogram function */
-	public static double[] getHist(File file) {
+	public static double[] getHist(File file) throws Throwable {
 
         BufferedImage image = null;
         try {
             image = ImageIO.read(file);
         } catch (IOException e) {
+            System.out.println("error when reading image "+file.getName());
             e.printStackTrace();
         }
         int imHeight = image.getHeight();
@@ -40,7 +42,7 @@ public class ColorHistogramExtraction {
         		int cbbin = cb / step;
         		int crbin = cr / step;
 
-                bins[ ybin*dim*dim+cbbin*dim+crbin*dim ] ++;
+                bins[ ybin*dim*dim+cbbin*dim+crbin ] ++;
 
             }
         }
@@ -85,5 +87,31 @@ public class ColorHistogramExtraction {
         }
         double dist = Math.sqrt( 1 - Sum / Math.sqrt(h1*h2));
         return dist;
+    }
+
+    //Test the main funciton
+    public static void main(String[] args){
+        String sampleImgPath = "./src/FindIO/Datasets/train/data/bear/0018_167630455.jpg";
+        File img = new File(sampleImgPath);
+        if(img.exists() && !img.isDirectory()){
+            try {
+                double[] colorHist = getHist(img);
+                int count = 0;
+                for(int i = 0; i < colorHist.length; i++){
+                    double frequency = colorHist[i];
+                    if(frequency >= 1){
+                        System.out.print(i+" "+frequency+"  ");
+                        count++;
+                    }
+                }
+                System.out.println("\nTotal number of useful bins: "+count+"\tin all bins: "+dim*dim*dim);
+            } catch(Throwable e){
+                e.printStackTrace();
+            }
+
+        } else {
+            System.out.println(Common.MESSAGE_FILE_NOTEXIST);
+        }
+
     }
 }

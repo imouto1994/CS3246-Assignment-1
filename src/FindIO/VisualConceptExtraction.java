@@ -4,26 +4,8 @@ import java.io.File;
 
 public class VisualConceptExtraction {
 
-    public static void main(String[] args){
-        initializeProcess("demolist.txt");
-    }
-
-    public static void initializeProcess(String fileListName) {
-        File file = new File("src/FindIO/Features/Visual Concept");
-        ProcessBuilder builder = new ProcessBuilder("cmd", "/c", "start", "image_classification.exe", fileListName);
-        builder.directory(file);
-        builder.redirectInput(ProcessBuilder.Redirect.INHERIT);
-        builder.redirectOutput(ProcessBuilder.Redirect.INHERIT);
-        builder.redirectErrorStream(true);
-
-        try {
-            Process process = builder.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static double[] getVisualWords(File file){
+    // TODO: implement this method
+    public static double[] getVisualConcepts(File file){
         return null;
     }
 
@@ -33,7 +15,7 @@ public class VisualConceptExtraction {
     }
 
     // TODO: implement this method
-    public static double calculateDistance(double[] arr1, double[] arr2){
+    public static double calculateDistance(double[] arr1, double[] arr2) {
         return 0;
     }
 }
