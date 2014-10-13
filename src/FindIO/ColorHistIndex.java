@@ -86,7 +86,6 @@ public class ColorHistIndex extends Index {
 
     public void buildIndex(String groundTruthFile) throws Throwable{
 
-
         BufferedReader reader = new BufferedReader(new FileReader(groundTruthFile));
         String line = null;
         //add the image frequency pair to the tag posting list
@@ -101,7 +100,7 @@ public class ColorHistIndex extends Index {
                 if(image.exists() && !image.isDirectory()){
                     isFileExists = true;
                     double[] colorHist = ColorHistogramExtraction.getHist(image);
-                    addDoc(imgID, colorHist);
+                    addDoc(Common.removeExtension(imgID), colorHist);
                     break;
                 }
             }

@@ -19,6 +19,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -91,36 +92,55 @@ public class VisualWordIndex extends Index {
         initbuilding_time = System.currentTimeMillis() - startbuilding_time;
     }
 
-    // TODO: reimplement this method
-    public void buildIndex(String dataFile) throws Throwable{
+    private void walk(String path, Map<String, List<ImagePair>> vwImageMap){
+        File root = new File( path );
+        File[] list = root.listFiles();
 
-        BufferedReader reader = new BufferedReader(new FileReader(dataFile));
-        HashMap<String, ArrayList<ImagePair>> tagImgMap = new HashMap<String, ArrayList<ImagePair>>();
-        String line = null;
+        if (list == null) return;
 
-        //add the image frequency pair to the tag posting list
-        while ((line = reader.readLine()) != null) {
-            String[] img_tags = line.split(" ");
-            String imgID = img_tags[0];
-            for(int i = 1; i < img_tags.length; i ++) {
-                String tag = img_tags[i];
-                ImagePair image_freq = new ImagePair(imgID, 1);
-
-                if(!tagImgMap.containsKey(tag)){
-                    ArrayList<ImagePair> imgPairList = new ArrayList<ImagePair>();
-                    imgPairList.add(image_freq);
-                    tagImgMap.put(tag, imgPairList);
-                } else {
-                    ArrayList<ImagePair> imgPairList = tagImgMap.get(tag);
-                    imgPairList.add(image_freq);
-                    tagImgMap.put(tag, imgPairList);
+        for ( File f : list ) {
+            if ( f.isDirectory() ) {
+                walk(f.getAbsolutePath(), vwImageMap);
+            }
+            else {
+                String fileName = f.getName();
+                try {
+                    BufferedReader br = new BufferedReader(new FileReader(f.getAbsolutePath()));
+                    String line;
+                    while((line = br.readLine()) != null){
+                        String[] freqs = line.trim().split("\\s+");
+                        for(int i = 0; i < freqs.length; i++){
+                            double freq = Double.parseDouble(freqs[i]);
+                            if(freq != 0.0){
+                                if(vwImageMap.get(String.valueOf(i)) == null){
+                                    vwImageMap.put(String.valueOf(i), new ArrayList<ImagePair>());
+                                }
+                                List<ImagePair> imagesList = vwImageMap.get(String.valueOf(i));
+                                imagesList.add(new ImagePair(fileName, (float) freq));
+                            }
+                        }
+                    }
+                    br.close();
+                } catch (FileNotFoundException e) {
+                    System.out.println("Result file is not created");
+                } catch (IOException e) {
+                    System.out.println("Cannot read line from results");
                 }
             }
         }
+    }
 
-        for(String tag : tagImgMap.keySet()){
-            ArrayList<ImagePair> imgPairList = tagImgMap.get(tag);
-            addDoc(tag, imgPairList);
+
+    public void buildIndex(String dataFile) throws Throwable{
+
+        VisualWordExtraction.createVisualWordsForDirectory("C:\\Users\\Nhan\\Documents\\FindIO\\src\\FindIO\\Datasets\\train\\data", true, "indexSiftPooling");
+
+        Map<String, List<ImagePair>> vwImageMap = new HashMap<String, List<ImagePair>>();
+        walk("src/FindIO/Features/Visual Word/ScSPM/indexSiftPooling", vwImageMap);
+
+        for(String word : vwImageMap.keySet()){
+            List<ImagePair> imgPairList = vwImageMap.get(word);
+            addDoc(word, imgPairList);
             index_count++;
         }
         closeWriter();
@@ -133,7 +153,7 @@ public class VisualWordIndex extends Index {
      * @param tag: tag as the key of inverted index
      * @param imgPairList: the posting list containing image pairs
      * */
-    public void addDoc(String tag, ArrayList<ImagePair> imgPairList) {
+    public void addDoc(String tag, List<ImagePair> imgPairList) {
 
         Document doc = new Document();
         // clear the StringBuffer

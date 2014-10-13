@@ -119,7 +119,6 @@ public class TextIndex extends Index{
 
     public void buildIndex(String dataFile) throws Throwable{
 
-
         BufferedReader reader = new BufferedReader(new FileReader(dataFile));
         HashMap<String, ArrayList<ImagePair>> tagImgMap = new HashMap<String, ArrayList<ImagePair>>();
         String line = null;
@@ -127,7 +126,7 @@ public class TextIndex extends Index{
         //add the image frequency pair to the tag posting list
         while ((line = reader.readLine()) != null) {
             String[] img_tags = line.split(" ");
-            String imgID = img_tags[0];
+            String imgID = Common.removeExtension(img_tags[0]);
             for(int i = 1; i < img_tags.length; i ++) {
                 String tag = img_tags[i];
                 ImagePair image_freq = new ImagePair(imgID, 1);
@@ -139,7 +138,6 @@ public class TextIndex extends Index{
                 } else {
                     ArrayList<ImagePair> imgPairList = tagImgMap.get(tag);
                     imgPairList.add(image_freq);
-                    tagImgMap.put(tag, imgPairList);
                 }
             }
         }

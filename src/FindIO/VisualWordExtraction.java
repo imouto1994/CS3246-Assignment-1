@@ -18,26 +18,10 @@ public class VisualWordExtraction {
         String fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
         String fileNameWithoutExtension = fileName.replace("." + fileExtension, "");
         String fileParentDirectory = file.getAbsoluteFile().getParent();
-        System.out.println(fileParentDirectory);
         String workingDirectory = System.getProperty("user.dir");
         String featureDirectory = workingDirectory + "\\src\\FindIO\\Features\\Visual Word\\ScSPM\\";
 
-        // Create Proxy
-        MatlabProxyFactoryOptions options = new MatlabProxyFactoryOptions.Builder()
-                .setUsePreviouslyControlledSession(true)
-                .setHidden(true)
-                .build();
-        MatlabProxyFactory factory = new MatlabProxyFactory(options);
-        MatlabProxy proxy = null;
-        try {
-            proxy = factory.getProxy();
-            proxy.eval("addpath('" + featureDirectory + "')");
-            proxy.eval("cd('" + featureDirectory + "')");
-            proxy.feval("generateSparsefeature", fileParentDirectory, Boolean.FALSE,".\\siftfeature", ".\\siftpooling");
-            proxy.eval("rmpath('" + featureDirectory + "')");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        createVisualWordsForDirectory(fileParentDirectory, false, "siftpooling");
 
         File resultFile = new File(featureDirectory + "siftpooling\\" + fileNameWithoutExtension);
         if(!resultFile.exists()){
@@ -65,6 +49,28 @@ public class VisualWordExtraction {
         resultFile.delete();
 
         return words;
+    }
+
+    public static void createVisualWordsForDirectory(String directory, boolean hasSubFolders, String poolingDirName){
+        String workingDirectory = System.getProperty("user.dir");
+        String featureDirectory = workingDirectory + "\\src\\FindIO\\Features\\Visual Word\\ScSPM\\";
+
+        // Create Proxy
+        MatlabProxyFactoryOptions options = new MatlabProxyFactoryOptions.Builder()
+                .setUsePreviouslyControlledSession(true)
+                .setHidden(true)
+                .build();
+        MatlabProxyFactory factory = new MatlabProxyFactory(options);
+        MatlabProxy proxy = null;
+        try {
+            proxy = factory.getProxy();
+            proxy.eval("addpath('" + featureDirectory + "')");
+            proxy.eval("cd('" + featureDirectory + "')");
+            proxy.feval("generateSparsefeature", directory, hasSubFolders,".\\siftfeature", ".\\" + poolingDirName);
+            proxy.eval("rmpath('" + featureDirectory + "')");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // TODO: implement this method
