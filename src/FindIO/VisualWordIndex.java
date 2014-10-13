@@ -22,21 +22,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Beyond on 10/12/2014 0012.
+ * Created by Nhan on 10/13/14.
  */
-public class ColorHistIndex extends Index {
-
+public class VisualWordIndex extends Index {
 
     private File indexFile;
     private MMapDirectory MMapDir;
     private IndexWriterConfig config;
     private IndexReader indexReader;
     private AtomicReader areader;
-    private String fieldname1 = "imageID";
-    private String fieldname2 = "colorHistogram";
+    private String fieldname1 = "vw";
+    private String fieldname2 = "img_freq";
 
+    private Field vw_field;
     private Field img_field;
-    private Field hist_field;
 
     // Maximum Buffer Size
     private int MAX_BUFF = 48;
@@ -48,7 +47,8 @@ public class ColorHistIndex extends Index {
 
     private FileInputStream binIn;
 
-    public ColorHistIndex() {
+    public VisualWordIndex() {
+
     }
 
     public void setIndexfile(String indexfilename) {
@@ -64,95 +64,105 @@ public class ColorHistIndex extends Index {
     public void initBuilding() throws Throwable {
         startbuilding_time = System.currentTimeMillis();
 
+        // PayloadAnalyzer to map the Lucene id and Doc id
         Analyzer analyzer = new StandardAnalyzer();
+        // MMap
         MMapDir = new MMapDirectory(indexFile);
-
         // set the configuration of index writer
         config = new IndexWriterConfig(Version.LUCENE_4_10_1, analyzer);
         config.setRAMBufferSizeMB(MAX_BUFF);
         config.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
 
+        // the index configuration
+        if (test) {
+            System.out.println("Max Docs Num:\t" + config.getMaxBufferedDocs());
+            System.out.println("RAM Buffer Size:\t"
+                    + config.getRAMBufferSizeMB());
+            System.out.println("Max Merge Policy:\t" + config.getMergePolicy());
+        }
         // use Memory Map to store the index
         MMwriter = new IndexWriter(MMapDir, config);
 
-        img_field = new TextField(this.fieldname1, "-1", Field.Store.YES);
-        hist_field = new TextField(this.fieldname2, "-1", Field.Store.YES);
+        vw_field = new TextField(this.fieldname1, "-1", Field.Store.YES);
+        img_field = new TextField(this.fieldname2, "-1", Field.Store.YES);
 
         strbuf = new StringBuffer();
         databuf = new StringBuffer();
         initbuilding_time = System.currentTimeMillis() - startbuilding_time;
     }
 
+    // TODO: reimplement this method
+    public void buildIndex(String dataFile) throws Throwable{
 
-    public void buildIndex(String groundTruthFile) throws Throwable{
-
-
-        BufferedReader reader = new BufferedReader(new FileReader(groundTruthFile));
+        BufferedReader reader = new BufferedReader(new FileReader(dataFile));
+        HashMap<String, ArrayList<ImagePair>> tagImgMap = new HashMap<String, ArrayList<ImagePair>>();
         String line = null;
+
         //add the image frequency pair to the tag posting list
         while ((line = reader.readLine()) != null) {
-            String[] img_folders = line.split("\\s+");
-            String imgID = img_folders[0];
-            String folder = img_folders[1];
-            boolean isFileExists = false;
-            for(int i = 1; i < img_folders.length; i++){
-               String imgPath = "./src/FindIO/Datasets/train/data/"+folder+"/"+imgID;
-                File image = new File(imgPath);
-                if(image.exists() && !image.isDirectory()){
-                    isFileExists = true;
-                    double[] colorHist = ColorHistogramExtraction.getHist(image);
-                    addDoc(imgID, colorHist);
-                    break;
+            String[] img_tags = line.split(" ");
+            String imgID = img_tags[0];
+            for(int i = 1; i < img_tags.length; i ++) {
+                String tag = img_tags[i];
+                ImagePair image_freq = new ImagePair(imgID, 1);
+
+                if(!tagImgMap.containsKey(tag)){
+                    ArrayList<ImagePair> imgPairList = new ArrayList<ImagePair>();
+                    imgPairList.add(image_freq);
+                    tagImgMap.put(tag, imgPairList);
+                } else {
+                    ArrayList<ImagePair> imgPairList = tagImgMap.get(tag);
+                    imgPairList.add(image_freq);
+                    tagImgMap.put(tag, imgPairList);
                 }
             }
-            if(!isFileExists) {
-                System.out.println(Common.MESSAGE_FILE_NOTEXIST+":\t"+imgID);
-            }
-            index_count++;
         }
 
+        for(String tag : tagImgMap.keySet()){
+            ArrayList<ImagePair> imgPairList = tagImgMap.get(tag);
+            addDoc(tag, imgPairList);
+            index_count++;
+        }
         closeWriter();
     }
-
 
     /**
      * Add a document. The document contains two fields: one is the element id,
      * the other is the values on each dimension
      *
-     * @param imgID: image file name
-     * @param colorHist: color histogram
+     * @param tag: tag as the key of inverted index
+     * @param imgPairList: the posting list containing image pairs
      * */
-    public void addDoc(String imgID, double[] colorHist) {
+    public void addDoc(String tag, ArrayList<ImagePair> imgPairList) {
 
         Document doc = new Document();
         // clear the StringBuffer
         strbuf.setLength(0);
         // set new Text for payload analyzer
         long start = System.currentTimeMillis();
-        for (int i = 0; i < colorHist.length; i++) {
-            double histBinValue = colorHist[i];
-            if(histBinValue >= 1){
-                strbuf.append(i + " " + histBinValue + ",");
-            }
+        for (int i = 0; i < imgPairList.size(); i++) {
+            ImagePair imgPair = imgPairList.get(i);
+            strbuf.append(imgPair.getImageID() + " "+imgPair.getValue()+",");
         }
         strbuf_time += (System.currentTimeMillis() - start);
 
         // set fields for document
-        this.img_field.setStringValue(imgID);
-        this.hist_field.setStringValue(strbuf.toString());
+        this.vw_field.setStringValue(tag);
+        this.img_field.setStringValue(strbuf.toString());
+        doc.add(vw_field);
         doc.add(img_field);
-        doc.add(hist_field);
 
         try {
             MMwriter.addDocument(doc);
         } catch (IOException e) {
+            // TODO Auto-generated catch block
             System.err.println("index writer error");
             if (test)
                 e.printStackTrace();
         }
     }
 
-    public Map<String, double[]> searchImgHist(String imageID) throws Throwable{
+    public Map<String, Map<String, Double>> searchText(String visualWords) throws Throwable{
         IndexReader reader = DirectoryReader.open(FSDirectory.open(indexFile));
         IndexSearcher searcher = new IndexSearcher(reader);
         // :Post-Release-Update-Version.LUCENE_XY:
@@ -164,7 +174,7 @@ public class ColorHistIndex extends Index {
         // :Post-Release-Update-Version.LUCENE_XY:
         QueryParser parser = new QueryParser(fieldname1, analyzer);
 
-        Query query = parser.parse(imageID);
+        Query query = parser.parse(visualWords);
         System.out.println("Searching for: " + query.toString(fieldname1));
 
         TopDocs topDocs;
@@ -179,44 +189,47 @@ public class ColorHistIndex extends Index {
 
         ScoreDoc[] hits = topDocs.scoreDocs;
 
-        Map<String, double[]> mapResults = new HashMap<String, double[]>();
+        Map<String, Map<String, Double>> mapResults = new HashMap<String, Map<String, Double>>();
         //print out the top hits documents
         for(ScoreDoc hit : hits){
             Document doc = searcher.doc(hit.doc);
-            String imageName = doc.get(fieldname1);
-            String[] colorBins = doc.get(fieldname2).split(",");
-            if(mapResults.get(imageName) == null){
-                mapResults.put(imageName, ColorHistogramExtraction.getDefaultColorHist());
-            }
-            double[] colorHist = mapResults.get(imageName);
-            for(String colorBin: colorBins){
-                String[] infos = colorBin.trim().split("\\s+");
-                colorHist[Integer.parseInt(infos[0])] = Double.parseDouble(infos[1]);
+            String visualWord = doc.get(fieldname1);
+            String[] images = doc.get(fieldname2).split(",");
+            for(String image : images){
+                String[] infos = image.trim().split("\\s+");
+                String imageName = infos[0];
+                String frequency = infos[1];
+                if(mapResults.get(imageName) == null){
+                    mapResults.put(imageName, new HashMap<String, Double>());
+                }
+                Map<String, Double> imageVisualWords = mapResults.get(imageName);
+                imageVisualWords.put(visualWord, Double.parseDouble(frequency));
             }
         }
-        reader.close();
 
+        reader.close();
         return mapResults;
     }
 
     public static void main(String[] args){
-        ColorHistIndex colorIndex = new ColorHistIndex();
-        colorIndex.setIndexfile("./src/FindIO/index/colorHistIndex");
-        try{
-            colorIndex.initBuilding();
-            colorIndex.buildIndex("./src/FindIO/Datasets/train/image_gt.txt");
-        } catch(Throwable e) {
-            System.out.println(Common.MESSAGE_HIST_INDEX_ERROR);
-            if(test)
-                e.printStackTrace();
-        }
-
+        TextIndex textIndex = new TextIndex();
+        textIndex.setIndexfile("./src/FindIO/index/textIndex");
 //        try{
-//            textIndex.searchText("china bear");
-//        }catch(Throwable e) {
-//            System.out.println(Common.MESSAGE_TEXTINDEX_ERROR);
+//            textIndex.initBuilding();
+//            textIndex.buildIndex("./src/FindIO/Datasets/train/image_tags.txt");
+//        } catch(Throwable e) {
+//            System.out.println(MESSAGE_TEXT_INDEX_ERROR);
 //            if(test)
 //                e.printStackTrace();
 //        }
+
+        try{
+            textIndex.searchText("china bear");
+        }catch(Throwable e) {
+            System.out.println(Common.MESSAGE_TEXT_INDEX_ERROR);
+            if(test)
+                e.printStackTrace();
+        }
     }
+
 }

@@ -25,7 +25,6 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -42,14 +41,12 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.store.FSDirectory;
 
-import javax.print.Doc;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 /** Index all text files under a directory.
  */
@@ -184,7 +181,6 @@ public class TextIndex extends Index{
         try {
             MMwriter.addDocument(doc);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             System.err.println("index writer error");
             if (test)
                 e.printStackTrace();
@@ -193,7 +189,7 @@ public class TextIndex extends Index{
 
 
 
-    public void searchText(String queryString) throws Throwable{
+    public Map<String, Map<String, Double>> searchText(String queryString) throws Throwable{
         IndexReader reader = DirectoryReader.open(FSDirectory.open(indexFile));
         IndexSearcher searcher = new IndexSearcher(reader);
         // :Post-Release-Update-Version.LUCENE_XY:
@@ -220,13 +216,27 @@ public class TextIndex extends Index{
 
         ScoreDoc[] hits = topDocs.scoreDocs;
 
+        Map<String, Map<String, Double>> mapResults = new HashMap<String, Map<String, Double>>();
         //print out the top hits documents
         for(ScoreDoc hit : hits){
             Document doc = searcher.doc(hit.doc);
-            System.out.println(doc.get(fieldname1)+" "+doc.get(fieldname2));
-        }
+            String tag = doc.get(fieldname1);
+            String[] images = doc.get(fieldname2).split(",");
+            for(String image : images) {
+                String[] infos = image.trim().split("\\s+");
+                String imageName = infos[0];
+                String freq = infos[1];
+                if(mapResults.get(imageName) == null){
+                    mapResults.put(imageName, new HashMap<String, Double>());
+                }
+                Map<String, Double> imageTags = mapResults.get(imageName);
+                imageTags.put(tag, Double.parseDouble(freq));
+            }
 
+        }
         reader.close();
+
+        return mapResults;
     }
 
     public static void main(String[] args){

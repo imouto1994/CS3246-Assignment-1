@@ -56,6 +56,9 @@ public class FindIOView {
 	private Label imageExtensionLabel;
 	private Label imageSizeLabel;
     private Rectangle overlayLayer;
+    private CheckBox checkBoxForHistogram;
+    private CheckBox checkBoxForSIFT;
+    private CheckBox checkBoxForConcept;
 
     /* Image Results List */
     ObservableList<ImageResult> imageList = FXCollections.observableArrayList();
@@ -344,9 +347,9 @@ public class FindIOView {
         grid.add(imageSizeTitleLabel, 0, 2);
         grid.add(imageSizeLabel, 1, 2);
 
-        CheckBox checkBoxForHistogram = new CheckBox("Histogram".toUpperCase());
-        CheckBox checkBoxForSIFT = new CheckBox("Visual Word".toUpperCase());
-        CheckBox checkBoxForConcept = new CheckBox("Visual Concept".toUpperCase());
+        checkBoxForHistogram = new CheckBox("Histogram".toUpperCase());
+        checkBoxForSIFT = new CheckBox("Visual Word".toUpperCase());
+        checkBoxForConcept = new CheckBox("Visual Concept".toUpperCase());
         VBox subBox = new VBox();
         subBox.setPrefWidth(left.getPrefWidth());
         subBox.setSpacing(SCREEN_HEIGHT / 35.0);

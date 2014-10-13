@@ -89,6 +89,7 @@ poolinglist = {};
 disp('==================================================');
 fprintf('Calculating the sparse coding feature...\n');
 fprintf('Regularization parameter: %f\n', gamma);
+fprintf('Number of features: %f\n', numFea);
 disp('==================================================');
 
 for iter1 = 1:numFea,  
@@ -121,8 +122,8 @@ for iter1 = 1:numFea,
     end
     savepath = fullfile(dirpath,img);
     sc_fea = sc_fea';
-    save(savepath,'sc_fea');
-    fprintf('The %s.mat are saved\n',savepath);
+    save(savepath,'sc_fea', '-ascii');
+    fprintf('The file %s are saved\n',savepath);
 end;
 end
 

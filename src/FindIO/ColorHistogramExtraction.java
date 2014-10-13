@@ -55,6 +55,10 @@ public class ColorHistogramExtraction {
         return bins;
 	}
 
+    public static double[] getDefaultColorHist() {
+        return new double[dim * dim * dim];
+    }
+
     /* Calculate similarity between 2 color histograms */
     public static double calculateSimilarity(double[] array1, double[] array2){
 
