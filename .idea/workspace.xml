@@ -64,45 +64,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="VisualWordExtraction.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/FindIO/VisualWordExtraction.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="57" column="23" selection-start="2339" selection-end="2339" vertical-scroll-proportion="0.46843177" vertical-offset="853" max-vertical-offset="1615">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="VisualWordIndex.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/FindIO/VisualWordIndex.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="46" column="0" selection-start="1389" selection-end="1389" vertical-scroll-proportion="0.0" vertical-offset="2892" max-vertical-offset="4579">
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#6869#6898#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="FindIOController.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/FindIO/FindIOController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="45" column="10" selection-start="1117" selection-end="1117" vertical-scroll-proportion="0.0" vertical-offset="402" max-vertical-offset="1330">
+            <state line="38" column="0" selection-start="914" selection-end="914" vertical-scroll-proportion="0.0" vertical-offset="402" max-vertical-offset="1330">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="VisualConceptExtraction.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/FindIO/VisualConceptExtraction.java">
+      <file leaf-file-name="ColorHistogramExtraction.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/FindIO/ColorHistogramExtraction.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="56" column="0" selection-start="2026" selection-end="2026" vertical-scroll-proportion="0.0" vertical-offset="1219" max-vertical-offset="2033">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state line="11" column="26" selection-start="347" selection-end="347" vertical-scroll-proportion="0.03869654" vertical-offset="19" max-vertical-offset="2869">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -136,12 +111,12 @@
         <option value="$PROJECT_DIR$/src/FindIO/Common.java" />
         <option value="$PROJECT_DIR$/src/FindIO/FindIOView.java" />
         <option value="$PROJECT_DIR$/src/FindIO/TextIndex.java" />
-        <option value="$PROJECT_DIR$/src/FindIO/ColorHistogramExtraction.java" />
         <option value="$PROJECT_DIR$/src/FindIO/ColorHistIndex.java" />
         <option value="$PROJECT_DIR$/src/FindIO/VisualWordIndex.java" />
         <option value="$PROJECT_DIR$/src/FindIO/VisualConceptExtraction.java" />
         <option value="$PROJECT_DIR$/src/FindIO/FindIOController.java" />
         <option value="$PROJECT_DIR$/src/FindIO/VisualWordExtraction.java" />
+        <option value="$PROJECT_DIR$/src/FindIO/ColorHistogramExtraction.java" />
       </list>
     </option>
   </component>
@@ -973,13 +948,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/FindIO/ColorHistogramExtraction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="31" column="13" selection-start="902" selection-end="902" vertical-scroll-proportion="0.0" vertical-offset="340" max-vertical-offset="2337">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/FindIO/TextIndex.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="182" column="33" selection-start="6461" selection-end="6461" vertical-scroll-proportion="0.0" vertical-offset="3133" max-vertical-offset="4617">
@@ -996,9 +964,28 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/FindIO/VisualWordExtraction.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="56" column="13" selection-start="2056" selection-end="2315" vertical-scroll-proportion="0.42973524" vertical-offset="853" max-vertical-offset="1615">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/FindIO/VisualWordIndex.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="46" column="0" selection-start="1389" selection-end="1389" vertical-scroll-proportion="-4.1099796" vertical-offset="2892" max-vertical-offset="4579">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#6869#6898#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/FindIO/VisualConceptExtraction.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="56" column="0" selection-start="2026" selection-end="2026" vertical-scroll-proportion="0.0" vertical-offset="1219" max-vertical-offset="2033">
+        <state line="56" column="0" selection-start="2026" selection-end="2026" vertical-scroll-proportion="-0.3156823" vertical-offset="1219" max-vertical-offset="2033">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1007,27 +994,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/FindIO/FindIOController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="45" column="10" selection-start="1117" selection-end="1117" vertical-scroll-proportion="0.0" vertical-offset="402" max-vertical-offset="1330">
+        <state line="38" column="0" selection-start="914" selection-end="914" vertical-scroll-proportion="0.0" vertical-offset="402" max-vertical-offset="1330">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/FindIO/VisualWordIndex.java">
+    <entry file="file://$PROJECT_DIR$/src/FindIO/ColorHistogramExtraction.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="46" column="0" selection-start="1389" selection-end="1389" vertical-scroll-proportion="0.0" vertical-offset="2322" max-vertical-offset="4579">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#6869#6898#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/FindIO/VisualWordExtraction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="57" column="23" selection-start="2339" selection-end="2339" vertical-scroll-proportion="0.46843177" vertical-offset="853" max-vertical-offset="1615">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state line="11" column="26" selection-start="347" selection-end="347" vertical-scroll-proportion="0.03869654" vertical-offset="19" max-vertical-offset="2869">
+          <folding />
         </state>
       </provider>
     </entry>

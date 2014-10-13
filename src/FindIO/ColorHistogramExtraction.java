@@ -1,10 +1,15 @@
 package FindIO;
 
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReadParam;
+import javax.imageio.ImageReader;
+import javax.imageio.ImageTypeSpecifier;
+import javax.imageio.stream.ImageInputStream;
 import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 
 public class ColorHistogramExtraction {
 
@@ -13,13 +18,39 @@ public class ColorHistogramExtraction {
 
     /* Get color histogram function */
 	public static double[] getHist(File file) throws Throwable {
-
+        ImageInputStream stream = ImageIO.createImageInputStream(file);
+        Iterator<ImageReader> iter = ImageIO.getImageReaders(stream);
         BufferedImage image = null;
-        try {
-            image = ImageIO.read(file);
-        } catch (IOException e) {
-            System.out.println("error when reading image "+file.getName());
-            e.printStackTrace();
+        Exception lastException = null;
+        while (iter.hasNext()) {
+            ImageReader reader = null;
+            try {
+                reader = (ImageReader)iter.next();
+                ImageReadParam param = reader.getDefaultReadParam();
+                reader.setInput(stream, true, true);
+                Iterator<ImageTypeSpecifier> imageTypes = reader.getImageTypes(0);
+                while (imageTypes.hasNext()) {
+                    ImageTypeSpecifier imageTypeSpecifier = imageTypes.next();
+                    int bufferedImageType = imageTypeSpecifier.getBufferedImageType();
+                    if (bufferedImageType == BufferedImage.TYPE_BYTE_GRAY) {
+                        param.setDestinationType(imageTypeSpecifier);
+                        break;
+                    }
+                }
+                image = reader.read(0, param);
+                if (image != null) break;
+            } catch (Exception e) {
+                lastException = e;
+            } finally {
+                if (reader != null)
+                    reader.dispose();
+            }
+        }
+        // If you don't have an image at the end of all readers
+        if (image == null) {
+            if (null != lastException) {
+                throw lastException;
+            }
         }
         int imHeight = image.getHeight();
         int imWidth = image.getWidth();
@@ -30,28 +61,30 @@ public class ColorHistogramExtraction {
         {
             for(int j = 0; j < imHeight; j++)
             {
-            	// rgb->ycrcb
-            	int r = raster.getSample(i,j,0);
-            	int g = raster.getSample(i,j,1);
-            	int b = raster.getSample(i,j,2);
-            	int y  = (int)( 0.299   * r + 0.587   * g + 0.114   * b);
-        		int cb = (int)(-0.16874 * r - 0.33126 * g + 0.50000 * b);
-        		int cr = (int)( 0.50000 * r - 0.41869 * g - 0.08131 * b);
-        		
-        		int ybin = y / step;
-        		int cbbin = cb / step;
-        		int crbin = cr / step;
+                // rgb->ycrcb
+                int r = raster.getSample(i,j,0);
+                int g = raster.getSample(i,j,1);
+                int b = raster.getSample(i,j,2);
 
-                bins[ ybin*dim*dim+cbbin*dim+crbin ] ++;
+                //Changed Codes.
+                int y  = (int)( 0 + 0.299   * r + 0.587   * g + 0.114   * b);
+                int cb = (int)(128 -0.16874 * r - 0.33126 * g + 0.50000 * b);
+                int cr = (int)(128 + 0.50000 * r - 0.41869 * g - 0.08131 * b);
 
+                int ybin = y / step;
+                int cbbin = cb / step;
+                int crbin = cr / step;
+
+                //Changed Codes.
+                bins[ybin*dim*dim+cbbin*dim+crbin] ++;
             }
         }
-        
-        //normalize
-        for(int i = 0; i < 3*dim; i++) {
-        	bins[i] = bins[i]/(imHeight*imWidth);
+
+        //Changed Codes.
+        for(int i = 0; i < dim*dim*dim; i++) {
+            bins[i] = bins[i]/(imHeight*imWidth);
         }
-        
+
         return bins;
 	}
 
