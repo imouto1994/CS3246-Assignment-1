@@ -11,13 +11,37 @@ public class FindIOController extends Application implements  FindIOImageChooser
     private double[] colorHist = null;
     private double[] visualWords = null;
     private double[] visualConcepts = null;
+    private Map<String, String> imageFilePaths = null;
 
 	@Override
 	public void start(Stage primaryStage) {
+        //initDb();
 		findIOView = new FindIOView(primaryStage);
 		findIOView.initGUI();
         injectLogicIntoView();
 	}
+
+    public void initDb() {
+        imageFilePaths = new HashMap<String, String>();
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader("src/FindIO/image_mainGroundTruth.txt"));
+        } catch (FileNotFoundException e) {
+            System.out.println("Ground truth file does not exist");
+        }
+        String line = null;
+        try {
+            while ((line = reader.readLine()) != null) {
+                String[] img_folders = line.split("\\s+");
+                String imageID = img_folders[0];
+                String folderName = img_folders[1];
+                String filePath = "./src/FindIO/Datasets/train/data/"+folderName+"/"+ imageID;
+                imageFilePaths.put(Common.removeExtension(imageID), filePath);
+            }
+        } catch (IOException e) {
+            System.out.println("There was error during the process of reading the ground truth file");
+        }
+    }
 
     public void injectLogicIntoView() {
         findIOView.linkImageChooser(this);
@@ -37,18 +61,19 @@ public class FindIOController extends Application implements  FindIOImageChooser
         try {
             colorHist = extractHistogram(file);
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("There is problem in retrieving histogram for the picture");
         }
 
         /* Extract Visual Words */
-        visualWords = extractVisualWords(file);
+        //visualWords = extractVisualWords(file);
 
         /* Extract Visual Concepts */
-        visualConcepts = extractVisualConcepts(file);
+        //visualConcepts = extractVisualConcepts(file);
     }
 
     private double[] extractHistogram(File file) throws Exception {
-        return ColorHistogramExtraction.getHist(file);
+        return ColorHistExtraction.getHist(file);
     }
 
     private double[] extractVisualWords(File file) {
@@ -63,6 +88,7 @@ public class FindIOController extends Application implements  FindIOImageChooser
         String[] terms = findIOView.getTextField().getText().trim().split("\\s+");
 
         //TODO: Add removing stop words
+
         Set<String> termsSet = new HashSet<String>(Arrays.asList(terms));
         StringBuilder strBuilder = new StringBuilder();
         String queryTerm = "";
@@ -74,19 +100,46 @@ public class FindIOController extends Application implements  FindIOImageChooser
         return strBuilder.toString().trim();
     }
 
-    public void search() {
+    public List<String> search() {
         boolean hasColorHistogramFeature = findIOView.getCheckBoxForHistogram().isSelected();
         boolean hasVisualWordFeature = findIOView.getCheckBoxForSIFT().isSelected();
         boolean hasVisualConceptFeature = findIOView.getCheckBoxForConcept().isSelected();
         boolean hasTextFeature = !findIOView.getTextField().getText().trim().isEmpty();
 
-        if(hasVisualWordFeature){
-            Map<String, double[]> vwResults = searchVisualWord();
+        boolean isSearchValid = hasColorHistogramFeature || hasVisualWordFeature || hasVisualConceptFeature || hasTextFeature;
+        if(!isSearchValid){
+            return null;
         }
 
-        if(hasTextFeature) {
-            Map<String, double[]> textResults = searchText();
+        Set<String> imagePool = new HashSet<String>();
+
+        Map<String, double[]> vwResults = null;
+        if(hasVisualWordFeature ){
+            vwResults  = searchVisualWord();
+            imagePool.addAll(vwResults.keySet());
         }
+        Map<String, double[]> vcResults = null;
+        if(hasVisualConceptFeature){
+            vcResults = searchVisualConcept();
+            imagePool.addAll(vcResults.keySet());
+        }
+        Map<String, double[]> textResults = null;
+        if(hasTextFeature) {
+            textResults = searchText();
+            imagePool.addAll(textResults.keySet());
+        }
+
+        Map<String, double[]> colorHistResults = null;
+        if(hasColorHistogramFeature){
+            if(hasColorHistogramFeature || hasVisualConceptFeature || hasTextFeature){
+                colorHistResults = searchColorHistogram(new ArrayList<String>(imagePool));
+            } else {
+                colorHistResults = searchAllColorHistograms();
+                imagePool.addAll(colorHistResults.keySet());
+            }
+        }
+
+        return null;
     }
 
     private Map<String, double[]> searchVisualWord(){
@@ -116,7 +169,22 @@ public class FindIOController extends Application implements  FindIOImageChooser
     }
 
     private Map<String, double[]> searchVisualConcept(){
-        return null;
+        StringBuilder strBuilder = new StringBuilder();
+        for(int i = 0; i < visualConcepts.length; i++){
+            if(visualConcepts[i] > 0){
+                strBuilder.append(String.valueOf(i));
+                strBuilder.append(" ");
+            }
+        }
+        VisualConceptIndex vcIndex = new VisualConceptIndex();
+        Map<String, double[]> results = null;
+        try {
+            results = vcIndex.searchVisualConcept(strBuilder.toString().trim());
+        } catch (Exception e) {
+            System.out.println("There was error in searching in the index database for visual concepts");
+        }
+
+        return results;
     }
 
     private Map<String, double[]> searchText() {
@@ -131,7 +199,7 @@ public class FindIOController extends Application implements  FindIOImageChooser
         return results;
     }
 
-    private Map<String, double[]> searchColorHistogram(String[] images) {
+    private Map<String, double[]> searchColorHistogram(List<String> images) {
         StringBuilder strBuilder = new StringBuilder();
         for(String image : images) {
             strBuilder.append(image);

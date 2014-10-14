@@ -184,7 +184,7 @@ public class FindIOView {
         searchButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                handler.search();
+                //handler.search();
             }
         });
     }

@@ -1,5 +1,7 @@
 package FindIO;
 
+import java.util.List;
+
 public interface FindIOSearchInterface {
-    public void search();
+    public List<String> search();
 }
