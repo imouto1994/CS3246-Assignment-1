@@ -17,6 +17,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Beyond on 10/13/2014 0013.
@@ -51,7 +52,7 @@ public class VisualConceptIndex extends Index{
 //        }
 
         try{
-            vcIndex.searchVisualConcept(0);
+            vcIndex.searchVisualConcept("0");
         }catch(Throwable e) {
             System.out.println(Common.MESSAGE_VC_INDEX_ERROR);
             if(test)
@@ -59,6 +60,9 @@ public class VisualConceptIndex extends Index{
         }
     }
 
+    public VisualConceptIndex(){
+        setIndexfile("./src/FindIO/index/vcIndex");
+    }
 
     public void setIndexfile(String indexfilename) {
         this.indexFile = new File(indexfilename);
@@ -96,7 +100,7 @@ public class VisualConceptIndex extends Index{
     public void buildIndex(String gtFile) throws Throwable{
 
         BufferedReader reader = new BufferedReader(new FileReader(gtFile));
-        HashMap<Integer, ArrayList<ImagePair>> conceptImgMap = new HashMap<Integer, ArrayList<ImagePair>>();
+        HashMap<Integer, ArrayList<FindIOPair>> conceptImgMap = new HashMap<Integer, ArrayList<FindIOPair>>();
         String line = null;
 
         //add the vc image pair to the hashmap
@@ -105,10 +109,9 @@ public class VisualConceptIndex extends Index{
             String imageID = img_folders[0];
             String vcTxtName = imageID.substring(0, imageID.lastIndexOf('.'))+".txt";
             String folderName = img_folders[1];
-            boolean isFileExists = false;
             String vcFilePath = "./src/FindIO/Datasets/train/data/"+folderName+"/"+vcTxtName;
             try {
-                readVcFile(imageID, vcFilePath, conceptImgMap);
+                readVcFile(Common.removeExtension(imageID), vcFilePath, conceptImgMap);
             } catch(FileNotFoundException e) {
                 System.out.println(Common.MESSAGE_FILE_NOTEXIST+": "+vcFilePath);
                 e.printStackTrace();
@@ -121,7 +124,7 @@ public class VisualConceptIndex extends Index{
 
         //Add concept image pair to the index
         for(int concept : conceptImgMap.keySet()){
-            ArrayList<ImagePair> imgPairList = conceptImgMap.get(concept);
+            ArrayList<FindIOPair> imgPairList = conceptImgMap.get(concept);
             addDoc(concept, imgPairList);
         }
         reader.close();
@@ -129,7 +132,7 @@ public class VisualConceptIndex extends Index{
     }
 
 
-    public void readVcFile(String imgID, String vcFilePath, HashMap<Integer, ArrayList<ImagePair>> conceptImgMap)throws IOException{
+    public void readVcFile(String imgID, String vcFilePath, HashMap<Integer, ArrayList<FindIOPair>> conceptImgMap)throws IOException{
         BufferedReader reader = new BufferedReader(new FileReader(vcFilePath));
         String line = null;
 
@@ -142,15 +145,15 @@ public class VisualConceptIndex extends Index{
                 if(score<=0){ //never include the negative scored images in the index
                     continue;
                 }
-                ImagePair image_freq = new ImagePair(imgID, score);
+                FindIOPair image_freq = new FindIOPair(imgID, score);
 
 
                 if(!conceptImgMap.containsKey(concept)){
-                    ArrayList<ImagePair> imgPairList = new ArrayList<ImagePair>();
+                    ArrayList<FindIOPair> imgPairList = new ArrayList<FindIOPair>();
                     imgPairList.add(image_freq);
                     conceptImgMap.put(concept, imgPairList);
                 } else {
-                    ArrayList<ImagePair> imgPairList = conceptImgMap.get(concept);
+                    ArrayList<FindIOPair> imgPairList = conceptImgMap.get(concept);
                     imgPairList.add(image_freq);
                     conceptImgMap.put(concept, imgPairList);
                 }
@@ -165,7 +168,7 @@ public class VisualConceptIndex extends Index{
      * @param concept: concept as the key of inverted index
      * @param imgPairList: the posting list containing image pairs
      * */
-    public void addDoc(int concept, ArrayList<ImagePair> imgPairList) {
+    public void addDoc(int concept, ArrayList<FindIOPair> imgPairList) {
 
         Document doc = new Document();
         // clear the StringBuffer
@@ -173,8 +176,8 @@ public class VisualConceptIndex extends Index{
         // set new Text for payload analyzer
         long start = System.currentTimeMillis();
         for (int i = 0; i < imgPairList.size(); i++) {
-            ImagePair imgPair = imgPairList.get(i);
-            strbuf.append(imgPair.getImageID() + " "+imgPair.getValue()+",");
+            FindIOPair imgPair = imgPairList.get(i);
+            strbuf.append(imgPair.getID() + " "+imgPair.getValue()+",");
         }
         strbuf_time += (System.currentTimeMillis() - start);
 
@@ -194,9 +197,7 @@ public class VisualConceptIndex extends Index{
         }
     }
 
-
-
-    public void searchVisualConcept(int concept) throws Throwable{
+    public Map<String, double[]> searchVisualConcept(String visualConcepts) throws Exception {
         IndexReader reader = DirectoryReader.open(FSDirectory.open(indexFile));
         IndexSearcher searcher = new IndexSearcher(reader);
         // :Post-Release-Update-Version.LUCENE_XY:
@@ -208,7 +209,7 @@ public class VisualConceptIndex extends Index{
         // :Post-Release-Update-Version.LUCENE_XY:
         QueryParser parser = new QueryParser(fieldname1, analyzer);
 
-        Query query = NumericRangeQuery.newIntRange(this.fieldname1, 1, concept, concept, true, true);
+        Query query = parser.parse(visualConcepts);
         System.out.println("Searching for: " + query.toString(fieldname1));
 
         TopDocs topDocs;
@@ -223,14 +224,26 @@ public class VisualConceptIndex extends Index{
 
         ScoreDoc[] hits = topDocs.scoreDocs;
 
+        Map<String, double[]> mapResults = new HashMap<String, double[]>();
         //print out the top hits documents
         for(ScoreDoc hit : hits){
             Document doc = searcher.doc(hit.doc);
-            System.out.println(doc.get(fieldname1)+" "+doc.get(fieldname2));
+            String visualConcept =  doc.get(fieldname1);
+            String[] images = doc.get(fieldname2).split(",");
+            for(String image : images) {
+                String[] infos = image.trim().split("\\s+");
+                String imageName = infos[0];
+                String frequency = infos[1];
+                if(mapResults.get(imageName) == null){
+                    mapResults.put(imageName, new double[Common.NUM_VISUAL_CONCEPTS]);
+                }
+                double[] imageVisualConcepts = mapResults.get(imageName);
+                imageVisualConcepts[Integer.parseInt(visualConcept)] = Double.parseDouble(frequency);
+            }
         }
 
         reader.close();
+
+        return mapResults;
     }
-
-
 }

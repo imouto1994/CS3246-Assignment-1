@@ -50,7 +50,6 @@ public class FolderScanner {
         }
     }
 
-
     public void writeToGtFile() throws IOException{
         FileWriter fileWriter = new FileWriter(new File(this.gtFile));
         StringBuffer strbuf = new StringBuffer();

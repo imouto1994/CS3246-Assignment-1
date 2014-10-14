@@ -105,7 +105,7 @@ public class VisualConceptExtraction {
 
         File resultFile = new File(filePath.substring(0, filePath.lastIndexOf('.') + 1) + "txt");
 
-        double[] concepts = new double[1000];
+        double[] concepts = new double[Common.NUM_VISUAL_CONCEPTS];
         try {
             BufferedReader br = new BufferedReader(new FileReader(resultFile.getAbsolutePath()));
             String line;

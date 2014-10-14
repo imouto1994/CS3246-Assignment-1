@@ -5,7 +5,6 @@ import matlabcontrol.MatlabProxyFactory;
 import matlabcontrol.MatlabProxyFactoryOptions;
 
 import java.io.*;
-import java.util.Arrays;
 
 public class VisualWordExtraction {
 
@@ -28,7 +27,7 @@ public class VisualWordExtraction {
             System.out.println("Result file was not created");
         }
 
-        double[] words = new double[21504];
+        double[] words = new double[Common.NUM_VISUAL_WORDS];
         try {
             BufferedReader br = new BufferedReader(new FileReader(resultFile.getAbsolutePath()));
             String line;

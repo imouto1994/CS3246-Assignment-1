@@ -17,7 +17,6 @@ import org.apache.lucene.util.Version;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,6 +48,7 @@ public class ColorHistIndex extends Index {
     private FileInputStream binIn;
 
     public ColorHistIndex() {
+        setIndexfile("./src/FindIO/index/colorHistIndex");
     }
 
     public void setIndexfile(String indexfilename) {
@@ -99,7 +99,7 @@ public class ColorHistIndex extends Index {
                 File image = new File(imgPath);
                 if(image.exists() && !image.isDirectory()){
                     isFileExists = true;
-                    double[] colorHist = ColorHistogramExtraction.getHist(image);
+                    double[] colorHist = ColorHistExtraction.getHist(image);
                     addDoc(Common.removeExtension(imgID), colorHist);
                     break;
                 }
@@ -130,7 +130,7 @@ public class ColorHistIndex extends Index {
         long start = System.currentTimeMillis();
         for (int i = 0; i < colorHist.length; i++) {
             double histBinValue = colorHist[i];
-            if(histBinValue >= 1){
+            if(histBinValue > 0){
                 strbuf.append(i + " " + histBinValue + ",");
             }
         }
@@ -151,7 +151,7 @@ public class ColorHistIndex extends Index {
         }
     }
 
-    public Map<String, double[]> searchImgHist(String imageID) throws Throwable{
+    public Map<String, double[]> searchImgHist(String imageID) throws Exception{
         IndexReader reader = DirectoryReader.open(FSDirectory.open(indexFile));
         IndexSearcher searcher = new IndexSearcher(reader);
         // :Post-Release-Update-Version.LUCENE_XY:
@@ -185,7 +185,7 @@ public class ColorHistIndex extends Index {
             String imageName = doc.get(fieldname1);
             String[] colorBins = doc.get(fieldname2).split(",");
             if(mapResults.get(imageName) == null){
-                mapResults.put(imageName, ColorHistogramExtraction.getDefaultColorHist());
+                mapResults.put(imageName, ColorHistExtraction.getDefaultColorHist());
             }
             double[] colorHist = mapResults.get(imageName);
             for(String colorBin: colorBins){
