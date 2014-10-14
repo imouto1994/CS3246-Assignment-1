@@ -12,5 +12,13 @@ public class Common {
     static final String MESSAGE_VC_SEARCH_ERROR = "Some errors when searching image visual concepts";
     static final String MESSAGE_FILE_NOTEXIST = "Woops! File not existing";
 
-    static final int topK = 20;
+    public static final int topK = 1024;
+
+    public static String removeExtension(String fileName){
+        if(!fileName.contains(".")){
+            return fileName;
+        } else {
+            return fileName.substring(0, fileName.lastIndexOf('.'));
+        }
+    }
 }

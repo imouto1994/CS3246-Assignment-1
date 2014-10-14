@@ -19,6 +19,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Beyond on 10/12/2014 0012.
@@ -85,7 +86,6 @@ public class ColorHistIndex extends Index {
 
     public void buildIndex(String groundTruthFile) throws Throwable{
 
-
         BufferedReader reader = new BufferedReader(new FileReader(groundTruthFile));
         String line = null;
         //add the image frequency pair to the tag posting list
@@ -100,7 +100,7 @@ public class ColorHistIndex extends Index {
                 if(image.exists() && !image.isDirectory()){
                     isFileExists = true;
                     double[] colorHist = ColorHistogramExtraction.getHist(image);
-                    addDoc(imgID, colorHist);
+                    addDoc(Common.removeExtension(imgID), colorHist);
                     break;
                 }
             }
@@ -109,7 +109,7 @@ public class ColorHistIndex extends Index {
             }
             index_count++;
         }
-
+        reader.close();
         closeWriter();
     }
 
@@ -145,16 +145,13 @@ public class ColorHistIndex extends Index {
         try {
             MMwriter.addDocument(doc);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             System.err.println("index writer error");
             if (test)
                 e.printStackTrace();
         }
     }
 
-
-
-    public void searchImgHist(String imageID) throws Throwable{
+    public Map<String, double[]> searchImgHist(String imageID) throws Throwable{
         IndexReader reader = DirectoryReader.open(FSDirectory.open(indexFile));
         IndexSearcher searcher = new IndexSearcher(reader);
         // :Post-Release-Update-Version.LUCENE_XY:
@@ -181,13 +178,24 @@ public class ColorHistIndex extends Index {
 
         ScoreDoc[] hits = topDocs.scoreDocs;
 
+        Map<String, double[]> mapResults = new HashMap<String, double[]>();
         //print out the top hits documents
         for(ScoreDoc hit : hits){
             Document doc = searcher.doc(hit.doc);
-            System.out.println(doc.get(fieldname1)+" "+doc.get(fieldname2));
+            String imageName = doc.get(fieldname1);
+            String[] colorBins = doc.get(fieldname2).split(",");
+            if(mapResults.get(imageName) == null){
+                mapResults.put(imageName, ColorHistogramExtraction.getDefaultColorHist());
+            }
+            double[] colorHist = mapResults.get(imageName);
+            for(String colorBin: colorBins){
+                String[] infos = colorBin.trim().split("\\s+");
+                colorHist[Integer.parseInt(infos[0])] = Double.parseDouble(infos[1]);
+            }
         }
-
         reader.close();
+
+        return mapResults;
     }
 
     public static void main(String[] args){

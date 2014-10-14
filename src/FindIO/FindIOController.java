@@ -1,5 +1,6 @@
 package FindIO;
 
+import javafx.animation.ParallelTransition;
 import javafx.application.Application;
 import java.io.*;
 
@@ -24,24 +25,41 @@ public class FindIOController extends Application implements  FindIOImageChooser
 	}
 
     public void imageSelectHandle(File file) {
-        double[] colorHist = extractHistogram(file);
+        /* Extract Color Histogram
+        try {
+            double[] colorHist = extractHistogram(file);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
+        */
 
+        /* Extract Terms
+        String[] extractedTerms = extractTerms();
+        */
+
+        /* Extract Visual Words */
+        double[] visualWords = extractVisualWords(file);
+
+
+        /* Extract Visual Concepts
+        double[] visualConcepts = extractVisualConcepts(file);
+        */
     }
 
-    private double[] extractHistogram(File file) {
+    private double[] extractHistogram(File file) throws Throwable {
         return ColorHistogramExtraction.getHist(file);
     }
 
     private double[] extractVisualWords(File file) {
-        return null;
+        return VisualWordExtraction.getVisualWords(file);
     }
 
     private double[] extractVisualConcepts(File file) {
-        return null;
+        return VisualConceptExtraction.getVisualConcepts(file);
     }
 
     private String[] extractTerms() {
-        String[] terms = findIOView.getTextField().getText().split("\\s+");
+        String[] terms = findIOView.getTextField().getText().trim().split("\\s+");
 
         //TODO: Add removing stop words
 

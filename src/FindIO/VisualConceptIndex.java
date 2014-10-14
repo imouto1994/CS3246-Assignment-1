@@ -38,8 +38,27 @@ public class VisualConceptIndex extends Index{
     // to create the TextField for vector insertion
     private StringBuffer strbuf;
 
-    public VisualConceptIndex() {
+    public static void main(String[] args){
+        VisualConceptIndex vcIndex = new VisualConceptIndex();
+        vcIndex.setIndexfile("./src/FindIO/index/vcIndex");
+//        try{
+//            vcIndex.initBuilding();
+//            vcIndex.buildIndex("./src/FindIO/Datasets/train/image_gt.txt");
+//        } catch(Throwable e) {
+//            System.out.println(Common.MESSAGE_VC_INDEX_ERROR);
+//            if(test)
+//                e.printStackTrace();
+//        }
+
+        try{
+            vcIndex.searchVisualConcept(0);
+        }catch(Throwable e) {
+            System.out.println(Common.MESSAGE_VC_INDEX_ERROR);
+            if(test)
+                e.printStackTrace();
+        }
     }
+
 
     public void setIndexfile(String indexfilename) {
         this.indexFile = new File(indexfilename);
@@ -66,6 +85,7 @@ public class VisualConceptIndex extends Index{
         // use Memory Map to store the index
         MMwriter = new IndexWriter(MMapDir, config);
 
+        concept_field = new IntField(this.fieldname1, -1, Field.Store.YES);
         img_field = new TextField(this.fieldname2, "-1", Field.Store.YES);
 
         strbuf = new StringBuffer();
@@ -73,22 +93,53 @@ public class VisualConceptIndex extends Index{
     }
 
 
-    public void buildIndex(String dataFile) throws Throwable{
+    public void buildIndex(String gtFile) throws Throwable{
 
-
-        BufferedReader reader = new BufferedReader(new FileReader(dataFile));
+        BufferedReader reader = new BufferedReader(new FileReader(gtFile));
         HashMap<Integer, ArrayList<ImagePair>> conceptImgMap = new HashMap<Integer, ArrayList<ImagePair>>();
+        String line = null;
+
+        //add the vc image pair to the hashmap
+        while ((line = reader.readLine()) != null) {
+            String[] img_folders = line.split("\\s+");
+            String imageID = img_folders[0];
+            String vcTxtName = imageID.substring(0, imageID.lastIndexOf('.'))+".txt";
+            String folderName = img_folders[1];
+            boolean isFileExists = false;
+            String vcFilePath = "./src/FindIO/Datasets/train/data/"+folderName+"/"+vcTxtName;
+            try {
+                readVcFile(imageID, vcFilePath, conceptImgMap);
+            } catch(FileNotFoundException e) {
+                System.out.println(Common.MESSAGE_FILE_NOTEXIST+": "+vcFilePath);
+                e.printStackTrace();
+            } catch(IOException e){
+                System.out.println(Common.MESSAGE_VC_INDEX_ERROR);
+                e.printStackTrace();
+            }
+            index_count++;
+        }
+
+        //Add concept image pair to the index
+        for(int concept : conceptImgMap.keySet()){
+            ArrayList<ImagePair> imgPairList = conceptImgMap.get(concept);
+            addDoc(concept, imgPairList);
+        }
+        reader.close();
+        closeWriter();
+    }
+
+
+    public void readVcFile(String imgID, String vcFilePath, HashMap<Integer, ArrayList<ImagePair>> conceptImgMap)throws IOException{
+        BufferedReader reader = new BufferedReader(new FileReader(vcFilePath));
         String line = null;
 
         //add the image score pair to the visual concept posting list
         while ((line = reader.readLine()) != null) {
             String[] img_scores = line.split(" ");
-            String imgID = img_scores[0];
-            for(int i = 1; i < img_scores.length; i++) {
-                int concept = i-1;
-                float score = Float.valueOf(img_scores[i]);
+            for(int concept = 0; concept < img_scores.length; concept++) {
+                float score = Float.valueOf(img_scores[concept]);
 
-                if(score<0){ //never include the negative scored images in the index
+                if(score<=0){ //never include the negative scored images in the index
                     continue;
                 }
                 ImagePair image_freq = new ImagePair(imgID, score);
@@ -105,13 +156,6 @@ public class VisualConceptIndex extends Index{
                 }
             }
         }
-
-        for(int concept : conceptImgMap.keySet()){
-            ArrayList<ImagePair> imgPairList = conceptImgMap.get(concept);
-            addDoc(concept, imgPairList);
-            index_count++;
-        }
-        closeWriter();
     }
 
     /**
@@ -188,24 +232,5 @@ public class VisualConceptIndex extends Index{
         reader.close();
     }
 
-    public static void main(String[] args){
-        VisualConceptIndex vcIndex = new VisualConceptIndex();
-        vcIndex.setIndexfile("./src/FindIO/index/vcIndex");
-        try{
-            vcIndex.initBuilding();
-            vcIndex.buildIndex("./src/FindIO/Datasets/train/image_concepts.txt");
-        } catch(Throwable e) {
-            System.out.println(Common.MESSAGE_VC_INDEX_ERROR);
-            if(test)
-                e.printStackTrace();
-        }
 
-//        try{
-//            vcIndex.searchText("china bear");
-//        }catch(Throwable e) {
-//            System.out.println(Common.MESSAGE_VC_INDEX_ERROR);
-//            if(test)
-//                e.printStackTrace();
-//        }
-    }
 }
