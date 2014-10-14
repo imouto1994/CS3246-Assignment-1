@@ -109,7 +109,7 @@ public class ColorHistIndex extends Index {
             }
             index_count++;
         }
-
+        reader.close();
         closeWriter();
     }
 

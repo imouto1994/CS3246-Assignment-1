@@ -128,7 +128,7 @@ public class ColorHistogramExtraction {
 
     //Test the main funciton
     public static void main(String[] args){
-        String sampleImgPath = "./src/FindIO/Datasets/train/data/bear/0018_167630455.jpg";
+        String sampleImgPath = "./src/FindIO/Datasets/train/data/tower/0097_159739573.jpg";
         File img = new File(sampleImgPath);
         if(img.exists() && !img.isDirectory()){
             try {

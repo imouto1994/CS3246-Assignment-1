@@ -8,6 +8,9 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Lib" level="project" />
+    <orderEntry type="library" name="lucene-analyzers-common-4.10.1" level="project" />
+    <orderEntry type="library" name="lucene-core-4.10.1" level="project" />
+    <orderEntry type="library" name="matlabcontrol-4.1.0" level="project" />
   </component>
 </module>
 
