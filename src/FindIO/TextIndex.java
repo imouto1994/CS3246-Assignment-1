@@ -81,7 +81,7 @@ public class TextIndex extends Index{
     }
 
     /**
-     * initialization for building the index
+     * Initialization for building the index
      *
      * @throws Throwable
      * */
@@ -115,7 +115,7 @@ public class TextIndex extends Index{
         initbuilding_time = System.currentTimeMillis() - startbuilding_time;
     }
 
-
+    /* Build the index */
     public void buildIndex(String dataFile) throws Throwable{
 
         BufferedReader reader = new BufferedReader(new FileReader(dataFile));
@@ -146,6 +146,7 @@ public class TextIndex extends Index{
             addDoc(tag, imgPairList);
             index_count++;
         }
+        System.out.println("Number of index: " + index_count);
         closeWriter();
     }
 
@@ -177,14 +178,14 @@ public class TextIndex extends Index{
 
         try {
             MMwriter.addDocument(doc);
+            System.out.println(Common.MESSAGE_FILE_INDEX_SUCCESS + tag);
         } catch (IOException e) {
-            System.err.println("index writer error");
-            if (test)
+            System.err.println(Common.MESSAGE_TEXT_INDEX_ERROR);
+            if (test){
                 e.printStackTrace();
+            }
         }
     }
-
-
 
     public Map<String, double[]> searchText(String queryString) throws Exception{
         List<String> terms = Arrays.asList(queryString.trim().split("\\s+"));
@@ -241,24 +242,17 @@ public class TextIndex extends Index{
         return mapResults;
     }
 
+    /* Main Function For Indexing */
     public static void main(String[] args){
         TextIndex textIndex = new TextIndex();
-        textIndex.setIndexfile("./src/FindIO/index/textIndex");
-//        try{
-//            textIndex.initBuilding();
-//            textIndex.buildIndex("./src/FindIO/Datasets/train/image_tags.txt");
-//        } catch(Throwable e) {
-//            System.out.println(MESSAGE_TEXT_INDEX_ERROR);
-//            if(test)
-//                e.printStackTrace();
-//        }
-
         try{
-            textIndex.searchText("china bear");
-        }catch(Throwable e) {
+            textIndex.initBuilding();
+            textIndex.buildIndex("./src/FindIO/Datasets/train/image_tags.txt");
+        } catch(Throwable e) {
             System.out.println(Common.MESSAGE_TEXT_INDEX_ERROR);
-            if(test)
+            if(test){
                 e.printStackTrace();
+            }
         }
     }
 }

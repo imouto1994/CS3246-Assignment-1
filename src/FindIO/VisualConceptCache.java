@@ -15,17 +15,16 @@ import org.apache.lucene.util.Version;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class VisualConceptIndex extends Index{
+public class VisualConceptCache extends Index{
     private File indexFile;
     private MMapDirectory MMapDir;
     private IndexWriterConfig config;
 
-    private String fieldname1 = "concept";
-    private String fieldname2 = "img_score";
+    private String fieldname1 = "imageID";
+    private String fieldname2 = "concepts";
 
     private Field concept_field;
     private Field img_field;
@@ -37,11 +36,12 @@ public class VisualConceptIndex extends Index{
     private StringBuffer strbuf;
 
     public static void main(String[] args){
-        VisualConceptIndex vcIndex = new VisualConceptIndex();
+        VisualConceptCache vcIndex = new VisualConceptCache();
         try{
             vcIndex.initBuilding();
-            vcIndex.buildIndex("src/FindIO/image_groundTruth.txt");
+            vcIndex.buildCache("src/FindIO/query_groundTruth.txt");
         } catch(Throwable e) {
+            e.printStackTrace();
             System.out.println(Common.MESSAGE_VC_INDEX_ERROR);
             if(test){
                 e.printStackTrace();
@@ -49,8 +49,8 @@ public class VisualConceptIndex extends Index{
         }
     }
 
-    public VisualConceptIndex(){
-        setIndexfile("./src/FindIO/index/vcIndex");
+    public VisualConceptCache(){
+        setIndexfile("./src/FindIO/cache/vcCache");
     }
 
     public void setIndexfile(String indexfilename) {
@@ -78,18 +78,18 @@ public class VisualConceptIndex extends Index{
         // use Memory Map to store the index
         MMwriter = new IndexWriter(MMapDir, config);
 
-        concept_field = new TextField(this.fieldname1, "-1", Field.Store.YES);
-        img_field = new TextField(this.fieldname2, "-1", Field.Store.YES);
+        img_field = new TextField(this.fieldname1, "-1", Field.Store.YES);
+        concept_field = new TextField(this.fieldname2, "-1", Field.Store.YES);
 
         strbuf = new StringBuffer();
         initbuilding_time = System.currentTimeMillis() - startbuilding_time;
     }
 
 
-    public void buildIndex(String gtFile) throws Throwable{
+    public void buildCache(String gtFile) throws Throwable{
         String imageListFilePath = "src/FindIO/Features/Visual Concept/trainImageList.txt";
         String imageListFileName = "trainImageList.txt";
-        String dataFolder = "src/FindIO/Datasets/train/data";
+        String dataFolder = "src/FindIO/Datasets/test/query";
         try {
             VisualConceptExtraction.generateImageList(imageListFilePath, dataFolder);
             VisualConceptExtraction.getVisualConceptsForImages(imageListFileName);
@@ -102,7 +102,6 @@ public class VisualConceptIndex extends Index{
         }
 
         BufferedReader reader = new BufferedReader(new FileReader(gtFile));
-        HashMap<Integer, ArrayList<FindIOPair>> conceptImgMap = new HashMap<Integer, ArrayList<FindIOPair>>();
         String line = null;
 
         //add the vc image pair to the hashmap
@@ -114,9 +113,10 @@ public class VisualConceptIndex extends Index{
             String imageID = img_folders[0];
             String vcTxtName = imageID.substring(0, imageID.lastIndexOf('.'))+".txt";
             String folderName = img_folders[1];
-            String vcFilePath = "./src/FindIO/Datasets/train/data/"+folderName+"/"+vcTxtName;
+            String vcFilePath = "./src/FindIO/Datasets/test/query/"+folderName+"/"+vcTxtName;
             try {
-                readVcFile(Common.removeExtension(imageID), vcFilePath, conceptImgMap);
+                double[] concepts = readVcFile(Common.removeExtension(imageID), vcFilePath);
+                addDoc(Common.removeExtension(imageID), concepts);
             } catch(FileNotFoundException e) {
                 System.out.println(Common.MESSAGE_FILE_NOTEXIST+": "+vcFilePath);
                 e.printStackTrace();
@@ -124,12 +124,6 @@ public class VisualConceptIndex extends Index{
                 System.out.println(Common.MESSAGE_VC_INDEX_ERROR);
                 e.printStackTrace();
             }
-        }
-
-        //Add concept image pair to the index
-        for(int concept : conceptImgMap.keySet()){
-            ArrayList<FindIOPair> imgPairList = conceptImgMap.get(concept);
-            addDoc(concept, imgPairList);
             index_count++;
         }
         System.out.println("Number of index: " + index_count);
@@ -138,31 +132,17 @@ public class VisualConceptIndex extends Index{
     }
 
 
-    public void readVcFile(String imgID, String vcFilePath, HashMap<Integer, ArrayList<FindIOPair>> conceptImgMap)throws IOException{
+    public double[] readVcFile(String imgID, String vcFilePath) throws IOException{
         BufferedReader reader = new BufferedReader(new FileReader(vcFilePath));
+        double[] concepts = new double[Common.NUM_VISUAL_CONCEPTS];
         String line = null;
 
         //add the image score pair to the visual concept posting list
         while ((line = reader.readLine()) != null) {
             String[] img_scores = line.trim().split("\\s+");
             for(int concept = 0; concept < img_scores.length; concept++) {
-                float score = Float.valueOf(img_scores[concept]);
-
-                if(score<=0){ //never include the negative scored images in the index
-                    continue;
-                }
-                FindIOPair image_freq = new FindIOPair(imgID, score);
-
-
-                if(!conceptImgMap.containsKey(concept)){
-                    ArrayList<FindIOPair> imgPairList = new ArrayList<FindIOPair>();
-                    imgPairList.add(image_freq);
-                    conceptImgMap.put(concept, imgPairList);
-                } else {
-                    ArrayList<FindIOPair> imgPairList = conceptImgMap.get(concept);
-                    imgPairList.add(image_freq);
-                    conceptImgMap.put(concept, imgPairList);
-                }
+                double score = Double.parseDouble(img_scores[concept]);
+                concepts[concept] = score;
             }
         }
 
@@ -171,46 +151,50 @@ public class VisualConceptIndex extends Index{
         if(vcFile.exists()){
             vcFile.delete();
         }
+
+        return concepts;
     }
 
     /**
      * Add a document. The document contains two fields: one is the element id,
      * the other is the values on each dimension
      *
-     * @param concept: concept as the key of inverted index
-     * @param imgPairList: the posting list containing image pairs
+     * @param imageID: the ID of the image
+     * @param concepts: the list of concepts
      * */
-    public void addDoc(int concept, ArrayList<FindIOPair> imgPairList) {
+    public void addDoc(String imageID, double[] concepts) {
 
         Document doc = new Document();
         // clear the StringBuffer
         strbuf.setLength(0);
         // set new Text for payload analyzer
         long start = System.currentTimeMillis();
-        for (int i = 0; i < imgPairList.size(); i++) {
-            FindIOPair imgPair = imgPairList.get(i);
-            strbuf.append(imgPair.getID() + " "+imgPair.getValue()+",");
+        for (int i = 0; i < concepts.length; i++) {
+            double conceptRelateValue = concepts[i];
+            if(conceptRelateValue > 0){
+                strbuf.append(i + " " + conceptRelateValue + ",");
+            }
         }
         strbuf_time += (System.currentTimeMillis() - start);
 
         // set fields for document
-        this.concept_field.setStringValue(String.valueOf(concept));
-        this.img_field.setStringValue(Common.removeLast(strbuf.toString(), ","));
-        doc.add(concept_field);
+        this.img_field.setStringValue(imageID);
+        this.concept_field.setStringValue(Common.removeLast(strbuf.toString(), ","));
         doc.add(img_field);
+        doc.add(concept_field);
 
         try {
             MMwriter.addDocument(doc);
-            System.out.println(Common.MESSAGE_FILE_INDEX_SUCCESS + "concept " + concept);
+            System.out.println(Common.MESSAGE_FILE_INDEX_SUCCESS + imageID);
         } catch (IOException e) {
-            System.err.println(Common.MESSAGE_VC_INDEX_ERROR);
+            System.err.println(Common.MESSAGE_HIST_INDEX_ERROR);
             if (test){
                 e.printStackTrace();
             }
         }
     }
 
-    public Map<String, double[]> searchVisualConcept(String visualConcepts) throws Exception {
+    public Map<String, double[]> searchVisualConceptsForImage(String imageID) throws Exception {
         IndexReader reader = DirectoryReader.open(FSDirectory.open(indexFile));
         IndexSearcher searcher = new IndexSearcher(reader);
         // :Post-Release-Update-Version.LUCENE_XY:
@@ -222,7 +206,7 @@ public class VisualConceptIndex extends Index{
         // :Post-Release-Update-Version.LUCENE_XY:
         QueryParser parser = new QueryParser(fieldname1, analyzer);
 
-        Query query = parser.parse(visualConcepts);
+        Query query = parser.parse(imageID);
         System.out.println("Searching for: " + query.toString(fieldname1));
 
         TopDocs topDocs;
@@ -241,20 +225,17 @@ public class VisualConceptIndex extends Index{
         //print out the top hits documents
         for(ScoreDoc hit : hits){
             Document doc = searcher.doc(hit.doc);
-            String visualConcept =  doc.get(fieldname1);
-            String[] images = doc.get(fieldname2).split(",");
-            for(String image : images) {
-                String[] infos = image.trim().split("\\s+");
-                String imageName = infos[0];
-                String frequency = infos[1];
-                if(mapResults.get(imageName) == null){
-                    mapResults.put(imageName, new double[Common.NUM_VISUAL_CONCEPTS]);
-                }
-                double[] imageVisualConcepts = mapResults.get(imageName);
-                imageVisualConcepts[Integer.parseInt(visualConcept)] = Double.parseDouble(frequency);
+            String imageName = doc.get(fieldname1);
+            String[] conceptsInfo = doc.get(fieldname2).split(",");
+            if(mapResults.get(imageName) == null){
+                mapResults.put(imageName, new double[Common.NUM_VISUAL_CONCEPTS]);
+            }
+            double[] concepts = mapResults.get(imageName);
+            for(String conceptInfo: conceptsInfo){
+                String[] infos = conceptInfo.trim().split("\\s+");
+                concepts[Integer.parseInt(infos[0])] = Double.parseDouble(infos[1]);
             }
         }
-
         reader.close();
 
         return mapResults;

@@ -66,10 +66,10 @@ public class FindIOController extends Application implements  FindIOImageChooser
         }
 
         /* Extract Visual Words */
-        //visualWords = extractVisualWords(file);
+        visualWords = extractVisualWords(file);
 
         /* Extract Visual Concepts */
-        //visualConcepts = extractVisualConcepts(file);
+        visualConcepts = extractVisualConcepts(file);
     }
 
     private double[] extractHistogram(File file) throws Exception {

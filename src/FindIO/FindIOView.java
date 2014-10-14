@@ -184,7 +184,7 @@ public class FindIOView {
         searchButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                //handler.search();
+                handler.search();
             }
         });
     }
@@ -260,6 +260,9 @@ public class FindIOView {
 						imageExtensionLabel.setText(fileExtension.toUpperCase());
 						imageSizeLabel.setText(width + " x " + height);
                         handler.imageSelectHandle(file);
+                        if(sideBar.getTranslateX() < 0){
+                            animateSideBar();
+                        }
 					}
 			}
 		});

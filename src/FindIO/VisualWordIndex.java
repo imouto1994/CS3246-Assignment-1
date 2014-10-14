@@ -46,7 +46,7 @@ public class VisualWordIndex extends Index {
     private FileInputStream binIn;
 
     public VisualWordIndex() {
-        setIndexfile("./src/FindIO/index/visualWordIndex");
+        setIndexfile("./src/FindIO/index/vwIndex");
 
     }
 
@@ -119,6 +119,7 @@ public class VisualWordIndex extends Index {
                         }
                     }
                     br.close();
+                    f.delete();
                 } catch (FileNotFoundException e) {
                     System.out.println("Result file is not created");
                 } catch (IOException e) {
@@ -128,8 +129,7 @@ public class VisualWordIndex extends Index {
         }
     }
 
-
-    public void buildIndex(String dataFile) throws Throwable{
+    public void buildIndex() throws Throwable{
 
         VisualWordExtraction.createVisualWordsForDirectory("C:\\Users\\Nhan\\Documents\\FindIO\\src\\FindIO\\Datasets\\train\\data", true, "indexSiftPooling");
 
@@ -141,6 +141,7 @@ public class VisualWordIndex extends Index {
             addDoc(word, imgPairList);
             index_count++;
         }
+        System.out.println("Number of index: " + index_count);
         closeWriter();
     }
 
@@ -148,10 +149,10 @@ public class VisualWordIndex extends Index {
      * Add a document. The document contains two fields: one is the element id,
      * the other is the values on each dimension
      *
-     * @param tag: tag as the key of inverted index
+     * @param visualWord: tag as the key of inverted index
      * @param imgPairList: the posting list containing image pairs
      * */
-    public void addDoc(String tag, List<FindIOPair> imgPairList) {
+    public void addDoc(String visualWord, List<FindIOPair> imgPairList) {
 
         Document doc = new Document();
         // clear the StringBuffer
@@ -165,16 +166,16 @@ public class VisualWordIndex extends Index {
         strbuf_time += (System.currentTimeMillis() - start);
 
         // set fields for document
-        this.vw_field.setStringValue(tag);
-        this.img_field.setStringValue(strbuf.toString());
+        this.vw_field.setStringValue(visualWord);
+        this.img_field.setStringValue(Common.removeLast(strbuf.toString(), ","));
         doc.add(vw_field);
         doc.add(img_field);
 
         try {
             MMwriter.addDocument(doc);
+            System.out.println(Common.MESSAGE_FILE_INDEX_SUCCESS + " visual word " + visualWord);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            System.err.println("index writer error");
+            System.err.println(Common.MESSAGE_VW_INDEX_ERROR);
             if (test)
                 e.printStackTrace();
         }
@@ -230,22 +231,15 @@ public class VisualWordIndex extends Index {
     }
 
     public static void main(String[] args){
-          VisualWordIndex vwIndex = new VisualWordIndex();
-//        try{
-//            textIndex.initBuilding();
-//            textIndex.buildIndex("./src/FindIO/Datasets/train/image_tags.txt");
-//        } catch(Throwable e) {
-//            System.out.println(MESSAGE_TEXT_INDEX_ERROR);
-//            if(test)
-//                e.printStackTrace();
-//        }
-
+        VisualWordIndex vwIndex = new VisualWordIndex();
         try{
-            vwIndex.searchVisualWord("china bear");
-        }catch(Throwable e) {
+            vwIndex.initBuilding();
+            vwIndex.buildIndex();
+        } catch(Throwable e) {
             System.out.println(Common.MESSAGE_TEXT_INDEX_ERROR);
-            if(test)
+            if(test){
                 e.printStackTrace();
+            }
         }
     }
 

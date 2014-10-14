@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.BufferedWriter;
 import java.io.BufferedReader;
-import java.util.Arrays;
 import java.io.FileReader;
 import java.io.FileNotFoundException;
 
@@ -16,7 +15,7 @@ public class VisualConceptExtraction {
         String imageListFileName = "trainImageList.txt";
         String dataFolder = "./src/FindIO/Datasets/train/data";
         String demoFile = "demolist.txt";
-        initializeProcess(imageListFileName);
+        getVisualConceptsForImages(imageListFileName);
 //        try {
 //            generateImageList(imageListFileName, dataFolder);
 //        } catch (Throwable e){
@@ -25,8 +24,8 @@ public class VisualConceptExtraction {
 //        }
     }
 
-    public static void initializeProcess(String fileListName) {
-        File file = new File("./src/FindIO/Features/Visual Concept");
+    public static void getVisualConceptsForImages(String fileListName) {
+        File file = new File("src/FindIO/Features/Visual Concept");
         ProcessBuilder builder = new ProcessBuilder("cmd", "/c", "start", "/wait", "image_classification.exe", fileListName);
         builder.directory(file);
         builder.redirectInput(ProcessBuilder.Redirect.INHERIT);
@@ -35,14 +34,28 @@ public class VisualConceptExtraction {
         try {
             Process process = builder.start();
             process.waitFor();
+            System.out.println("Finish retreiving visual concepts in image list");
         } catch (Exception e) {
             System.out.println("There is problem in running the process");
             e.printStackTrace();
         }
     }
 
-    public static void generateImageList(String imageListFileName, String dataFolder) throws Throwable{
-        FileWriter fileWriter = new FileWriter(new File(imageListFileName));
+    public static void generateImageList(String imageListFileName, String dataFolder) {
+        FileWriter fileWriter = null;
+        File imageListFile = new File(imageListFileName);
+        if(!imageListFile.exists()){
+            try {
+                imageListFile.createNewFile();
+            } catch (IOException e) {
+                System.out.println("Cannot create image list file");
+            }
+        }
+        try {
+            fileWriter = new FileWriter(new File(imageListFileName));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         StringBuffer strbuf = new StringBuffer();
 
         File file = new File(dataFolder);
@@ -53,17 +66,23 @@ public class VisualConceptExtraction {
             if(folder.exists() && folder.isDirectory()){
                 File[] images = folder.listFiles();
                 for(File image : images){
-                    if(image.exists() && !image.isDirectory()){
-
-                        //write the image path to the list file
-                        String path="../../Datasets/train/data/"+folder.getName()+"/"+image.getName();
-                        strbuf.append(path + String.format("%n"));
+                    if(image.exists() && !image.isDirectory() && !image.getName().endsWith("txt")){
+                        strbuf.append(image.getAbsolutePath());
+                        if(i != imageFolders.length - 1){
+                            strbuf.append(String.format("%n"));
+                        }
                     }
                 }
             }
         }
-        fileWriter.write(strbuf.toString());
-        fileWriter.close();
+        try {
+            fileWriter.write(strbuf.toString());
+            fileWriter.close();
+        } catch (IOException e) {
+            System.out.println("There was error in writing to image list");
+        }
+
+        System.out.println("Finish generating for " + imageListFileName);
     }
 
     public static double[] getVisualConcepts(File file){
@@ -123,8 +142,6 @@ public class VisualConceptExtraction {
         }
 
         resultFile.delete();
-
-        System.out.println(Arrays.toString(concepts));
 
         return concepts;
     }

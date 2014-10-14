@@ -14,7 +14,7 @@ public class Index {
     static long strbuf_time = 0;
     static long index_count = 0;
 
-    static boolean test = true;
+    static boolean test = false;
 
     protected IndexWriter MMwriter;
 
