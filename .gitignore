@@ -1,2 +1,5 @@
 out/
 src/FindIO/Features/Visual Concept/model_imagenet.mat
+src/FindIO/index/
+src/FindIO/Datasets/train/data
+.idea/workspace.xml
