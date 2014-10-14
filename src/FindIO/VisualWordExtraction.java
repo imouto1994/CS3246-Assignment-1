@@ -4,15 +4,53 @@ import matlabcontrol.MatlabProxy;
 import matlabcontrol.MatlabProxyFactory;
 import matlabcontrol.MatlabProxyFactoryOptions;
 
-import java.io.File;
+import java.io.*;
 
 public class VisualWordExtraction {
 
     public static void main(String[] args){
-
+        getVisualWords(null);
     }
 
-    public static double[] getVisualConcepts(File file){
+    public static double[] getVisualWords(File file){
+        String fileName = file.getName();
+        String fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
+        String fileNameWithoutExtension = fileName.replace("." + fileExtension, "");
+        String fileParentDirectory = file.getAbsoluteFile().getParent();
+        String workingDirectory = System.getProperty("user.dir");
+        String featureDirectory = workingDirectory + "\\src\\FindIO\\Features\\Visual Word\\ScSPM\\";
+
+        createVisualWordsForDirectory(fileParentDirectory, false, "siftpooling");
+
+        File resultFile = new File(featureDirectory + "siftpooling\\" + fileNameWithoutExtension);
+        if(!resultFile.exists()){
+            System.out.println("Result file was not created");
+        }
+
+        double[] words = new double[Common.NUM_VISUAL_WORDS];
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(resultFile.getAbsolutePath()));
+            String line;
+            while((line = br.readLine()) != null){
+                String[] freqs = line.trim().split("\\s+");
+                words = new double[freqs.length];
+                for(int i = 0; i < freqs.length; i++){
+                    words[i] = Double.parseDouble(freqs[i]);
+                }
+            }
+            br.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Result file is not created");
+        } catch (IOException e) {
+            System.out.println("Cannot read line from results");
+        }
+
+        resultFile.delete();
+
+        return words;
+    }
+
+    public static void createVisualWordsForDirectory(String directory, boolean hasSubFolders, String poolingDirName){
         String workingDirectory = System.getProperty("user.dir");
         String featureDirectory = workingDirectory + "\\src\\FindIO\\Features\\Visual Word\\ScSPM\\";
 
@@ -25,16 +63,13 @@ public class VisualWordExtraction {
         MatlabProxy proxy = null;
         try {
             proxy = factory.getProxy();
-            // Call Built-In Function
             proxy.eval("addpath('" + featureDirectory + "')");
             proxy.eval("cd('" + featureDirectory + "')");
-            proxy.feval("generateSparsefeature",".\\Demo_test1", "true", ".\\siftfeature1",".\\siftpooling1");
+            proxy.feval("generateSparsefeature", directory, hasSubFolders,".\\siftfeature", ".\\" + poolingDirName);
             proxy.eval("rmpath('" + featureDirectory + "')");
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        return null;
     }
 
     // TODO: implement this method

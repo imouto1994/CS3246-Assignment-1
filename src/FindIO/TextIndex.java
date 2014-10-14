@@ -25,7 +25,6 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -42,14 +41,10 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopDocs;
-import org.apache.lucene.store.FSDirectory;
 
-import javax.print.Doc;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.*;
 
 /** Index all text files under a directory.
  */
@@ -77,6 +72,7 @@ public class TextIndex extends Index{
     private FileInputStream binIn;
 
     public TextIndex() {
+        setIndexfile("./src/FindIO/index/textIndex");
     }
 
     public void setIndexfile(String indexfilename) {
@@ -122,33 +118,31 @@ public class TextIndex extends Index{
 
     public void buildIndex(String dataFile) throws Throwable{
 
-
         BufferedReader reader = new BufferedReader(new FileReader(dataFile));
-        HashMap<String, ArrayList<ImagePair>> tagImgMap = new HashMap<String, ArrayList<ImagePair>>();
+        HashMap<String, ArrayList<FindIOPair>> tagImgMap = new HashMap<String, ArrayList<FindIOPair>>();
         String line = null;
 
         //add the image frequency pair to the tag posting list
         while ((line = reader.readLine()) != null) {
             String[] img_tags = line.split(" ");
-            String imgID = img_tags[0];
+            String imgID = Common.removeExtension(img_tags[0]);
             for(int i = 1; i < img_tags.length; i ++) {
                 String tag = img_tags[i];
-                ImagePair image_freq = new ImagePair(imgID, 1);
+                FindIOPair image_freq = new FindIOPair(imgID, 1);
 
                 if(!tagImgMap.containsKey(tag)){
-                    ArrayList<ImagePair> imgPairList = new ArrayList<ImagePair>();
+                    ArrayList<FindIOPair> imgPairList = new ArrayList<FindIOPair>();
                     imgPairList.add(image_freq);
                     tagImgMap.put(tag, imgPairList);
                 } else {
-                    ArrayList<ImagePair> imgPairList = tagImgMap.get(tag);
+                    ArrayList<FindIOPair> imgPairList = tagImgMap.get(tag);
                     imgPairList.add(image_freq);
-                    tagImgMap.put(tag, imgPairList);
                 }
             }
         }
 
         for(String tag : tagImgMap.keySet()){
-            ArrayList<ImagePair> imgPairList = tagImgMap.get(tag);
+            ArrayList<FindIOPair> imgPairList = tagImgMap.get(tag);
             addDoc(tag, imgPairList);
             index_count++;
         }
@@ -162,7 +156,7 @@ public class TextIndex extends Index{
      * @param tag: tag as the key of inverted index
      * @param imgPairList: the posting list containing image pairs
      * */
-    public void addDoc(String tag, ArrayList<ImagePair> imgPairList) {
+    public void addDoc(String tag, ArrayList<FindIOPair> imgPairList) {
 
         Document doc = new Document();
         // clear the StringBuffer
@@ -170,8 +164,8 @@ public class TextIndex extends Index{
         // set new Text for payload analyzer
         long start = System.currentTimeMillis();
         for (int i = 0; i < imgPairList.size(); i++) {
-            ImagePair imgPair = imgPairList.get(i);
-            strbuf.append(imgPair.getImageID() + " "+imgPair.getValue()+",");
+            FindIOPair imgPair = imgPairList.get(i);
+            strbuf.append(imgPair.getID() + " "+imgPair.getValue()+",");
         }
         strbuf_time += (System.currentTimeMillis() - start);
 
@@ -184,7 +178,6 @@ public class TextIndex extends Index{
         try {
             MMwriter.addDocument(doc);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             System.err.println("index writer error");
             if (test)
                 e.printStackTrace();
@@ -193,7 +186,9 @@ public class TextIndex extends Index{
 
 
 
-    public void searchText(String queryString) throws Throwable{
+    public Map<String, double[]> searchText(String queryString) throws Exception{
+        List<String> terms = Arrays.asList(queryString.trim().split("\\s+"));
+
         IndexReader reader = DirectoryReader.open(FSDirectory.open(indexFile));
         IndexSearcher searcher = new IndexSearcher(reader);
         // :Post-Release-Update-Version.LUCENE_XY:
@@ -220,13 +215,30 @@ public class TextIndex extends Index{
 
         ScoreDoc[] hits = topDocs.scoreDocs;
 
+        Map<String, double[]> mapResults = new HashMap<String, double[]>();
         //print out the top hits documents
         for(ScoreDoc hit : hits){
             Document doc = searcher.doc(hit.doc);
-            System.out.println(doc.get(fieldname1)+" "+doc.get(fieldname2));
+            String tag = doc.get(fieldname1);
+            int index = terms.indexOf(tag);
+            if(index == -1){
+                continue;
+            }
+            String[] images = doc.get(fieldname2).split(",");
+            for(String image : images) {
+                String[] infos = image.trim().split("\\s+");
+                String imageName = infos[0];
+                String freq = infos[1];
+                if(mapResults.get(imageName) == null){
+                    mapResults.put(imageName, new double[terms.size()]);
+                }
+                double[] docTerms = mapResults.get(imageName);
+                docTerms[index] = Double.parseDouble(freq);
+            }
         }
-
         reader.close();
+
+        return mapResults;
     }
 
     public static void main(String[] args){

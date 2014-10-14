@@ -51,11 +51,16 @@ public class FindIOView {
 	private FileChooser imageChooser;
     private TextField textField;
     private Button imageButton;
+    private Button settingsButton;
+    private Button searchButton;
 	private ImageView thumbNail;
 	private Label imageNameLabel;
 	private Label imageExtensionLabel;
 	private Label imageSizeLabel;
     private Rectangle overlayLayer;
+    private CheckBox checkBoxForHistogram;
+    private CheckBox checkBoxForSIFT;
+    private CheckBox checkBoxForConcept;
 
     /* Image Results List */
     ObservableList<ImageResult> imageList = FXCollections.observableArrayList();
@@ -70,17 +75,20 @@ public class FindIOView {
         return imageChooser;
     }
     public TextField getTextField() { return textField; }
+    public CheckBox getCheckBoxForHistogram() { return checkBoxForHistogram; }
+    public CheckBox getCheckBoxForSIFT() { return checkBoxForSIFT; }
+    public CheckBox getCheckBoxForConcept() { return checkBoxForConcept; }
 
 	/* Initialization Functions */
 	public void initGUI() {
-		mainRoot = initContent();
 		initStage();
+        mainRoot = initContent();
 		initScene();
 	}
 	
 	private void initStage() {
 		primaryStage.setTitle("find.io");
-		primaryStage.setMaximized(false);
+		primaryStage.setMaximized(true);
 		primaryStage.getIcons().add(new Image(getClass().getResource("./Images/logo.png").toExternalForm()));
 	}
 	
@@ -90,6 +98,7 @@ public class FindIOView {
 				.toExternalForm());
 		primaryStage.setScene(primaryScene);
 		primaryStage.show();
+        animateSideBar();
 	}
 	
 	private Pane initContent() {
@@ -134,7 +143,7 @@ public class FindIOView {
 		stackPane.getChildren().addAll(textField, imageButton);
 		
 		// Button Search
-		Button searchButton = new Button("Search");
+		searchButton = new Button("Search");
 		searchButton.getStyleClass().add("defaultButton");
 		searchButton.setId("searchButton");
 		searchButton.setPrefHeight(40.0);
@@ -145,7 +154,6 @@ public class FindIOView {
 		searchGlyph.setSmooth(true);
 		searchGlyph.setImage(new Image(getClass().getResourceAsStream("./Images/searchGlyph.png")));
 		searchButton.setGraphic(searchGlyph);
-		linkCollapseSidePane(searchButton);
 
 		// Logo
 		ImageView logo = new ImageView();
@@ -158,7 +166,7 @@ public class FindIOView {
 		subBox.setPrefHeight(top.getPrefHeight());
 		subBox.setAlignment(Pos.CENTER);
 		subBox.getChildren().addAll(stackPane, searchButton);
-		
+
 		HBox box = new HBox();
 		box.setPrefHeight(top.getPrefHeight());
 		box.getChildren().addAll(logo, subBox);
@@ -171,6 +179,15 @@ public class FindIOView {
 		
 		return top;
 	}
+
+    public void linkSearch(final FindIOSearchInterface handler){
+        searchButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                //handler.search();
+            }
+        });
+    }
 
     private void linkCollapseSidePane(Button button) {
         button.setOnAction(new EventHandler<ActionEvent>() {
@@ -208,6 +225,7 @@ public class FindIOView {
         }
         fadeTransition.setInterpolator(Interpolator.EASE_BOTH);
         fadeTransition.setAutoReverse(false);
+
         fadeTransition.setOnFinished(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
@@ -260,18 +278,40 @@ public class FindIOView {
 	
 	private Pane initCenterSection() {
 		StackPane center = new StackPane();
+        center.setPrefHeight(SCREEN_HEIGHT - navBar.getPrefHeight());
         center.setId("centerSection");
         sideBar = initSideBar();
         overlayLayer = initOverlayLayer();
+
+        StackPane subStack = new StackPane();
+        settingsButton = new Button("Settings");
+        settingsButton.getStyleClass().add("defaultButton");
+        settingsButton.setId("settingsButton");
+        settingsButton.setPrefHeight(50.0);
+        settingsButton.setPrefWidth(50.0);
+        ImageView settingsGlyph = new ImageView();
+        settingsGlyph.setId("settingsGlyph");
+        settingsGlyph.setFitHeight(30.0);
+        settingsGlyph.setPreserveRatio(true);
+        settingsGlyph.setSmooth(true);
+        settingsGlyph.setImage(new Image(getClass().getResourceAsStream("./Images/settingsGlyph.png")));
+        settingsButton.setGraphic(settingsGlyph);
+        settingsButton.setTranslateX(-25);
+        settingsButton.setTranslateY(-10);
+        linkCollapseSidePane(settingsButton);
         GridView<ImageResult> grid = initGridView();
+        subStack.setAlignment(Pos.BOTTOM_RIGHT);
+        subStack.getChildren().addAll(grid, settingsButton);
+
         center.setAlignment(Pos.CENTER_LEFT);
-        center.getChildren().addAll(grid, overlayLayer, sideBar);
+        center.getChildren().addAll(subStack, sideBar);
 
         return center;
 	}
 
     private Rectangle initOverlayLayer() {
         Rectangle rect = new Rectangle(SCREEN_WIDTH, SCREEN_HEIGHT);
+        rect.heightProperty().bind(sideBar.heightProperty());
         rect.setFill(Color.rgb(20, 20, 20));
         rect.setOpacity(0.45);
         rect.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -344,9 +384,9 @@ public class FindIOView {
         grid.add(imageSizeTitleLabel, 0, 2);
         grid.add(imageSizeLabel, 1, 2);
 
-        CheckBox checkBoxForHistogram = new CheckBox("Histogram".toUpperCase());
-        CheckBox checkBoxForSIFT = new CheckBox("Visual Word".toUpperCase());
-        CheckBox checkBoxForConcept = new CheckBox("Visual Concept".toUpperCase());
+        checkBoxForHistogram = new CheckBox("Histogram".toUpperCase());
+        checkBoxForSIFT = new CheckBox("Visual Word".toUpperCase());
+        checkBoxForConcept = new CheckBox("Visual Concept".toUpperCase());
         VBox subBox = new VBox();
         subBox.setPrefWidth(left.getPrefWidth());
         subBox.setSpacing(SCREEN_HEIGHT / 35.0);
