@@ -15,9 +15,8 @@ public class ColorHistogramExtraction {
 
 	private static final int dim = 64;
 
-
     /* Get color histogram function */
-	public static double[] getHist(File file) throws Throwable {
+	public static double[] getHist(File file) throws Exception {
         ImageInputStream stream = ImageIO.createImageInputStream(file);
         Iterator<ImageReader> iter = ImageIO.getImageReaders(stream);
         BufferedImage image = null;
@@ -99,16 +98,7 @@ public class ColorHistogramExtraction {
     }
 
     /* Calculate difference between 2 color histograms */
-	public static double calculateDistance(double[] array1, double[] array2)
-    {
-		// Euclidean distance
-        /*double Sum = 0.0;
-        for(int i = 0; i < array1.length; i++) {
-           Sum = Sum + Math.pow((array1[i]-array2[i]),2.0);
-        }
-        return Math.sqrt(Sum);
-        */
-        
+	public static double calculateDistance(double[] array1, double[] array2){
         // Bhattacharyya distance
 		double h1 = 0.0;
 		double h2 = 0.0;

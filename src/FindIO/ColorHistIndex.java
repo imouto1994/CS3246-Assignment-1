@@ -49,6 +49,7 @@ public class ColorHistIndex extends Index {
     private FileInputStream binIn;
 
     public ColorHistIndex() {
+        setIndexfile("./src/FindIO/index/colorHistIndex");
     }
 
     public void setIndexfile(String indexfilename) {
@@ -130,7 +131,7 @@ public class ColorHistIndex extends Index {
         long start = System.currentTimeMillis();
         for (int i = 0; i < colorHist.length; i++) {
             double histBinValue = colorHist[i];
-            if(histBinValue >= 1){
+            if(histBinValue > 0){
                 strbuf.append(i + " " + histBinValue + ",");
             }
         }
@@ -151,7 +152,7 @@ public class ColorHistIndex extends Index {
         }
     }
 
-    public Map<String, double[]> searchImgHist(String imageID) throws Throwable{
+    public Map<String, double[]> searchImgHist(String imageID) throws Exception{
         IndexReader reader = DirectoryReader.open(FSDirectory.open(indexFile));
         IndexSearcher searcher = new IndexSearcher(reader);
         // :Post-Release-Update-Version.LUCENE_XY:

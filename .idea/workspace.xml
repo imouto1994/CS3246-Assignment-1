@@ -64,37 +64,56 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="VisualWordExtraction.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/FindIO/VisualWordExtraction.java">
+      <file leaf-file-name="FindIOView.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/FindIO/FindIOView.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="48" column="28" selection-start="1856" selection-end="1856" vertical-scroll-proportion="0.0" vertical-offset="798" max-vertical-offset="1729">
+            <state line="336" column="28" selection-start="11525" selection-end="11525" vertical-scroll-proportion="0.66352624" vertical-offset="5454" max-vertical-offset="8208">
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#11228#11241#0" expanded="true" />
+                <element signature="e#11525#11811#0" expanded="true" />
+                <element signature="e#11800#11801#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="VisualWordIndex.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/FindIO/VisualWordIndex.java">
+      <file leaf-file-name="ImageResult.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/FindIO/ImageResult.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="149" column="42" selection-start="5330" selection-end="5330" vertical-scroll-proportion="0.41643837" vertical-offset="2527" max-vertical-offset="4959">
+            <state line="7" column="13" selection-start="225" selection-end="225" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1330">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FindIOPair.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/FindIO/FindIOPair.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="9" column="39" selection-start="215" selection-end="215" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="551">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FindIOController.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/FindIO/FindIOController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="71" column="9" selection-start="2106" selection-end="2106" vertical-scroll-proportion="0.0" vertical-offset="1387" max-vertical-offset="3021">
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#4948#4973#0" expanded="true" />
-                <element signature="e#7775#7804#0" expanded="true" />
+                <element signature="e#1868#1876#0" expanded="true" />
+                <element signature="e#2869#2881#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="VisualConceptExtraction.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/FindIO/VisualConceptExtraction.java">
+      <file leaf-file-name="ImageResultCell.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/FindIO/ImageResultCell.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="50" column="70" selection-start="1648" selection-end="1682" vertical-scroll-proportion="0.0" vertical-offset="744" max-vertical-offset="2033">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state line="6" column="13" selection-start="141" selection-end="141" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="608">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -122,18 +141,21 @@
         <option value="$PROJECT_DIR$/src/FindIO/ColorHist.java" />
         <option value="$PROJECT_DIR$/src/FindIO/Lib/TextExtraction.java" />
         <option value="$PROJECT_DIR$/src/FindIO/Lib/TextIndex.java" />
-        <option value="$PROJECT_DIR$/src/FindIO/ImagePair.java" />
         <option value="$PROJECT_DIR$/src/FindIO/Index.java" />
         <option value="$PROJECT_DIR$/src/FindIO/VisualWordHist.java" />
-        <option value="$PROJECT_DIR$/src/FindIO/FindIOView.java" />
-        <option value="$PROJECT_DIR$/src/FindIO/VisualConceptExtraction.java" />
-        <option value="$PROJECT_DIR$/src/FindIO/FindIOController.java" />
-        <option value="$PROJECT_DIR$/src/FindIO/ColorHistogramExtraction.java" />
+        <option value="$PROJECT_DIR$/src/FindIO/FindIOStyleSheet.css" />
+        <option value="$PROJECT_DIR$/src/FindIO/FindIOSearchInterface.java" />
         <option value="$PROJECT_DIR$/src/FindIO/VisualWordExtraction.java" />
+        <option value="$PROJECT_DIR$/src/FindIO/VisualConceptExtraction.java" />
+        <option value="$PROJECT_DIR$/src/FindIO/ColorHistogramExtraction.java" />
+        <option value="$PROJECT_DIR$/src/FindIO/Common.java" />
+        <option value="$PROJECT_DIR$/src/FindIO/ImagePair.java" />
+        <option value="$PROJECT_DIR$/src/FindIO/FindIOPair.java" />
         <option value="$PROJECT_DIR$/src/FindIO/TextIndex.java" />
         <option value="$PROJECT_DIR$/src/FindIO/ColorHistIndex.java" />
-        <option value="$PROJECT_DIR$/src/FindIO/Common.java" />
         <option value="$PROJECT_DIR$/src/FindIO/VisualWordIndex.java" />
+        <option value="$PROJECT_DIR$/src/FindIO/FindIOController.java" />
+        <option value="$PROJECT_DIR$/src/FindIO/FindIOView.java" />
       </list>
     </option>
   </component>
@@ -226,106 +248,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Lib" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CS3246-Assignment1" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FindIO" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FindIO" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="index" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CS3246-Assignment1" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FindIO" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FindIO" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Features" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Visual Word" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CS3246-Assignment1" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FindIO" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FindIO" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Features" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Visual Word" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="ScSPM" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CS3246-Assignment1" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FindIO" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FindIO" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="Features" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -355,6 +277,8 @@
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="dynamic.classpath" value="false" />
+    <property name="OverrideImplement.combined" value="true" />
+    <property name="OverrideImplement.overriding.sorted" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -675,17 +599,17 @@
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32897604" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27801418" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32769832" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27568272" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32899868" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3297619" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32769832" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3275649" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32897604" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.201875" sideWeight="0.6703755" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32769832" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32639793" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Problems" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -701,37 +625,6 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
     </layout>
-    <layout-to-restore>
-      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
-      <window_info id="Problems" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32899868" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32897604" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.201875" sideWeight="0.6703755" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32769832" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32897604" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27801418" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3297619" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32769832" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
-      <window_info id="Profiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-    </layout-to-restore>
   </component>
   <component name="Vcs.Log.UiProperties">
     <option name="RECENTLY_FILTERED_USERS">
@@ -781,7 +674,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state line="21" column="3" selection-start="868" selection-end="868" vertical-scroll-proportion="0.0" vertical-offset="57" max-vertical-offset="4826">
           <folding>
-            <element signature="e#7810#7839#0" expanded="true" />
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -974,33 +867,9 @@
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/FindIO/ImageResultCell.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/FindIO/FindIOStyleSheet.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/FindIO/Datasets/train/data/bear/0018_167630455.jpg">
       <provider selected="true" editor-type-id="images">
         <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/FindIO/FindIOImageChooserInterface.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/FindIO/ImageResult.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
-          <folding />
-        </state>
       </provider>
     </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_20/src.zip!/java/lang/System.java">
@@ -1022,82 +891,132 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/FindIO/FindIOView.java">
+    <entry file="file://$PROJECT_DIR$/src/FindIO/FindIOStyleSheet.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="351" column="8" selection-start="12068" selection-end="12068" vertical-scroll-proportion="0.0" vertical-offset="5358" max-vertical-offset="6954">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/FindIO/ImagePair.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="13" selection-start="79" selection-end="79" vertical-scroll-proportion="0.12786002" vertical-offset="0" max-vertical-offset="743">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/FindIO/ColorHistogramExtraction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="83" column="38" selection-start="3017" selection-end="3064" vertical-scroll-proportion="0.0" vertical-offset="247" max-vertical-offset="2869">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/FindIO/FindIOController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="38" column="0" selection-start="914" selection-end="914" vertical-scroll-proportion="0.0" vertical-offset="402" max-vertical-offset="1330">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/FindIO/TextIndex.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="128" column="62" selection-start="4544" selection-end="4544" vertical-scroll-proportion="0.0" vertical-offset="1710" max-vertical-offset="4579">
-          <folding>
-            <element signature="e#7810#7839#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/FindIO/ColorHistIndex.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="102" column="56" selection-start="3525" selection-end="3525" vertical-scroll-proportion="0.0" vertical-offset="1539" max-vertical-offset="3952">
+        <state line="96" column="27" selection-start="1873" selection-end="1873" vertical-scroll-proportion="0.0" vertical-offset="1572" max-vertical-offset="2356">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/FindIO/Common.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="12" selection-start="818" selection-end="818" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="532">
+        <state line="15" column="59" selection-start="832" selection-end="832" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="589">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/FindIO/VisualWordExtraction.java">
+    <entry file="file://$PROJECT_DIR$/src/FindIO/TextIndex.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="48" column="28" selection-start="1856" selection-end="1856" vertical-scroll-proportion="0.0" vertical-offset="798" max-vertical-offset="1729">
+        <state line="188" column="80" selection-start="6647" selection-end="6647" vertical-scroll-proportion="0.0" vertical-offset="3534" max-vertical-offset="5130">
           <folding>
             <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_20/src.zip!/java/util/Map.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="128" column="17" selection-start="5791" selection-end="5794" vertical-scroll-proportion="0.33243608" vertical-offset="1691" max-vertical-offset="22097">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/FindIO/ColorHistIndex.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="155" column="23" selection-start="5139" selection-end="5139" vertical-scroll-proportion="0.0" vertical-offset="2373" max-vertical-offset="3971">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/FindIO/VisualWordIndex.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="200" column="27" selection-start="7439" selection-end="7439" vertical-scroll-proportion="7.933194" vertical-offset="0" max-vertical-offset="4902">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#4973#4999#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/FindIO/VisualConceptExtraction.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="50" column="70" selection-start="1648" selection-end="1682" vertical-scroll-proportion="0.0" vertical-offset="744" max-vertical-offset="2033">
+        <state line="57" column="32" selection-start="2045" selection-end="2045" vertical-scroll-proportion="0.77642274" vertical-offset="701" max-vertical-offset="2014">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/FindIO/VisualWordIndex.java">
+    <entry file="file://$PROJECT_DIR$/src/FindIO/VisualWordExtraction.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="149" column="42" selection-start="5330" selection-end="5330" vertical-scroll-proportion="0.41643837" vertical-offset="2527" max-vertical-offset="4959">
+        <state line="36" column="48" selection-start="1481" selection-end="1481" vertical-scroll-proportion="0.0" vertical-offset="967" max-vertical-offset="1710">
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4948#4973#0" expanded="true" />
-            <element signature="e#7775#7804#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/FindIO/ColorHistogramExtraction.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="100" column="77" selection-start="3583" selection-end="3583" vertical-scroll-proportion="0.5731707" vertical-offset="1447" max-vertical-offset="2679">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/FindIO/FindIOSearchInterface.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="17" selection-start="34" selection-end="34" vertical-scroll-proportion="0.07723577" vertical-offset="0" max-vertical-offset="492">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/FindIO/FindIOImageChooserInterface.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="17" selection-start="56" selection-end="56" vertical-scroll-proportion="0.15447155" vertical-offset="0" max-vertical-offset="492">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/FindIO/ImageResultCell.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="13" selection-start="141" selection-end="141" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="608">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/FindIO/FindIOController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="71" column="9" selection-start="2106" selection-end="2106" vertical-scroll-proportion="0.0" vertical-offset="1387" max-vertical-offset="3021">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1868#1876#0" expanded="true" />
+            <element signature="e#2869#2881#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/FindIO/FindIOPair.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="39" selection-start="215" selection-end="215" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="627">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/FindIO/ImageResult.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="13" selection-start="225" selection-end="225" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1330">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/FindIO/FindIOView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="336" column="28" selection-start="11525" selection-end="11525" vertical-scroll-proportion="0.66352624" vertical-offset="5454" max-vertical-offset="8208">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#11228#11241#0" expanded="true" />
+            <element signature="e#11525#11811#0" expanded="true" />
+            <element signature="e#11800#11801#0" expanded="true" />
           </folding>
         </state>
       </provider>

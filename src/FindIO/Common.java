@@ -11,6 +11,9 @@ public class Common {
     public static final String MESSAGE_FILE_NOTEXIST = "Woops! File not existing";
 
     public static final int topK = 1024;
+    public static final int NUM_VISUAL_WORDS = 21504;
+    public static final int NUM_VISUAL_CONCEPTS = 1000;
+    public static final int MAXIMUM_NUMBER_OF_TERMS = 1000;
 
     public static String removeExtension(String fileName){
         if(!fileName.contains(".")){
