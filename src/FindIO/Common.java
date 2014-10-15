@@ -6,6 +6,7 @@ package FindIO;
 public class Common {
     static final String MESSAGE_TEXT_INDEX_ERROR = "Encounter some errors when indexing text annotations";
     static final String MESSAGE_TEXT_SEARCH_ERROR = "Some errors when searching text annotations";
+    static final String MESSAGE_TEXT_UPDATE_ERROR = "Some error occurs when updating text annotation scores";
     static final String MESSAGE_HIST_INDEX_ERROR = "Encounter some errors when indexing image color histogram";
     static final String MESSAGE_HIST_SEARCH_ERROR = "Some errors when searching image color histogram";
     static final String MESSAGE_VC_INDEX_ERROR = "Encounter some errors when indexing image visual concepts";

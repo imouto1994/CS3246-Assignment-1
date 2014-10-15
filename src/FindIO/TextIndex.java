@@ -28,15 +28,11 @@ import org.apache.lucene.analysis.snowball.SnowballAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.TextField;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.*;
 
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.MMapDirectory;
 import org.apache.lucene.util.Version;
-import org.apache.lucene.index.AtomicReader;
-import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.index.DirectoryReader;
 
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.IndexSearcher;
@@ -251,20 +247,109 @@ public class TextIndex extends Index{
     }
 
 
+    public void updateScore(String imageID, ArrayList<FindIOPair> tag_score_pairs) throws Throwable{
+        IndexReader reader = DirectoryReader.open(FSDirectory.open(indexFile));
+        IndexSearcher searcher = new IndexSearcher(reader);
+        // :Post-Release-Update-Version.LUCENE_XY:
+        Analyzer analyzer = new StandardAnalyzer();
+
+        BufferedReader in = null;
+        in = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
+        // :Post-Release-Update-Version.LUCENE_XY:
+        QueryParser parser = new QueryParser(fieldname1, analyzer);
+
+        for(FindIOPair pair : tag_score_pairs){
+            String tag = pair.getID();
+            double add_score = pair.getValue();
+
+            Query query = parser.parse(tag);
+
+            System.out.println("Searching for: " + query.toString(fieldname1));
+
+            TopDocs topDocs;
+            if (test) {                           // repeat & time as benchmark
+                long start = System.currentTimeMillis();
+                topDocs = searcher.search(query, null, Common.topK);
+                long end =  System.currentTimeMillis();
+                System.out.println("Time: "+(end - start)+" ms");
+            } else {
+                topDocs = searcher.search(query, null, Common.topK);
+            }
+
+            ScoreDoc[] hits = topDocs.scoreDocs;
+            if(hits.length == 0){ //It's a new tag
+                Document doc = new Document();
+                String img_score = imageID+" "+add_score+",";
+
+                // set fields for document
+                this.tag_field.setStringValue(this.textAnalyzer.getStem(tag));
+                this.img_field.setStringValue(img_score);
+                doc.add(tag_field);
+                doc.add(img_field);
+                MMwriter.addDocument(doc);
+            } else {
+            //The tag is included in the index
+                int docId = hits[0].doc;
+
+                //retrieve the old document
+                Document doc = searcher.doc(docId);
+
+                //replacement field value
+                String currentScores = doc.get(fieldname2);
+                String[] img_score_pairs = currentScores.split(",");
+                StringBuilder stringBuilder = new StringBuilder();
+
+                boolean isImageContained = false;
+
+                for(String img_score_pair : img_score_pairs){
+                    String[] img_score = img_score_pair.split(" ");
+                    String img = img_score[0];
+                    double old_score = Double.valueOf(img_score[1]);
+                    double new_score = old_score + add_score;
+                    if(img.equals(imageID)){
+                        img_score_pair = img+" "+new_score;
+                        isImageContained = true;
+                    }
+                    stringBuilder.append(img_score_pair+",");
+                }
+
+                if(!isImageContained) { //If the image was not covered by the tag, append it to the tail
+                    stringBuilder.append(imageID+" "+add_score+",");
+                }
+
+                //remove all occurrences of the old field
+                doc.removeFields(fieldname2);
+
+                this.img_field.setStringValue(stringBuilder.toString());
+                if(test)
+                    System.out.println(stringBuilder.toString());
+                //insert the replacement
+                doc.add(img_field);
+                Term tagTerm = new Term(this.fieldname1, tag);
+                MMwriter.updateDocument(tagTerm, doc);
+            }
+
+            MMwriter.commit();
+
+            reader.close();
+            closeWriter();
+        }
+    }
+
     public static void main(String[] args){
         TextIndex textIndex = new TextIndex();
         textIndex.setIndexfile("./src/FindIO/index/textIndex");
-//        try{
-//            textIndex.initBuilding();
-//            textIndex.buildIndex("./src/FindIO/Datasets/train/image_tags.txt");
-//        } catch(Throwable e) {
-//            System.out.println(Common.MESSAGE_TEXT_INDEX_ERROR);
-//            if(test)
-//                e.printStackTrace();
-//        }
+        try{
+            textIndex.initBuilding();
+            textIndex.buildIndex("./src/FindIO/Datasets/train/image_tags.txt");
+        } catch(Throwable e) {
+            System.out.println(Common.MESSAGE_TEXT_INDEX_ERROR);
+            if(test)
+                e.printStackTrace();
+        }
 
         try{
-            Map<String, double[]> resultMap = textIndex.searchText("bear");
+            Map<String, double[]> resultMap = textIndex.searchText("3");
             for(Map.Entry<String, double[]> entry : resultMap.entrySet()){
                 String imageName = entry.getKey();
                 double[] scores = entry.getValue();
@@ -279,5 +364,19 @@ public class TextIndex extends Index{
             if(test)
                 e.printStackTrace();
         }
+
+//        String imageID = "0087_2173846805";
+//        String tag = "panda";
+//        double added_score = 1.0;
+//        try{
+//            textIndex.initBuilding();
+//            ArrayList<FindIOPair> tag_scores_pairs = new ArrayList<FindIOPair>();
+//            FindIOPair pair = new FindIOPair(tag, added_score);
+//            tag_scores_pairs.add(pair);
+//            textIndex.updateScore(imageID, tag_scores_pairs);
+//        } catch(Throwable e){
+//            System.out.println(Common.MESSAGE_TEXT_UPDATE_ERROR);
+//            e.printStackTrace();
+//        }
     }
 }
