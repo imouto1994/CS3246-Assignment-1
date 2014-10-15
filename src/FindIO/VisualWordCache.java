@@ -115,6 +115,7 @@ public class VisualWordCache extends Index {
                         index_count++;
                     }
                     br.close();
+                    f.delete();
                 } catch (FileNotFoundException e) {
                     System.out.println("Result file is not created");
                 } catch (IOException e) {

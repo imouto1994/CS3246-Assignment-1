@@ -8,3 +8,4 @@ src/FindIO/Features/Visual Concept/queryList.txt
 src/FindIO/Features/Visual Word/ScSPM/cacheSiftPooling/
 src/FindIO/cache/colorHistCache/segments.gen
 src/FindIO/cache/
+src/FindIO/Features/Visual Word/ScSPM/indexSiftPooling/

@@ -68,9 +68,7 @@ public class VisualConceptExtraction {
                 for(File image : images){
                     if(image.exists() && !image.isDirectory() && !image.getName().endsWith("txt")){
                         strbuf.append(image.getAbsolutePath());
-                        if(i != imageFolders.length - 1){
-                            strbuf.append(String.format("%n"));
-                        }
+                        strbuf.append(String.format("%n"));
                     }
                 }
             }

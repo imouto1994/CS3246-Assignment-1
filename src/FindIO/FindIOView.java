@@ -388,8 +388,11 @@ public class FindIOView {
         grid.add(imageSizeLabel, 1, 2);
 
         checkBoxForHistogram = new CheckBox("Histogram".toUpperCase());
+        checkBoxForHistogram.setSelected(true);
         checkBoxForSIFT = new CheckBox("Visual Word".toUpperCase());
+        checkBoxForSIFT.setSelected(true);
         checkBoxForConcept = new CheckBox("Visual Concept".toUpperCase());
+        checkBoxForConcept.setSelected(true);
         VBox subBox = new VBox();
         subBox.setPrefWidth(left.getPrefWidth());
         subBox.setSpacing(SCREEN_HEIGHT / 35.0);

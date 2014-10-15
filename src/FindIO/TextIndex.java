@@ -172,7 +172,7 @@ public class TextIndex extends Index{
 
         // set fields for document
         this.tag_field.setStringValue(tag);
-        this.img_field.setStringValue(strbuf.toString());
+        this.img_field.setStringValue(Common.removeLast(strbuf.toString(), ","));
         doc.add(tag_field);
         doc.add(img_field);
 

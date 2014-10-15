@@ -53,6 +53,7 @@ public class FindIOController extends Application implements  FindIOImageChooser
 	}
 
     public void imageSelectHandle(File file) {
+        long startTime = System.currentTimeMillis();
         /* Extract Color Histogram */
         colorHist = null;
         visualWords = null;
@@ -61,27 +62,64 @@ public class FindIOController extends Application implements  FindIOImageChooser
         try {
             colorHist = extractHistogram(file);
         } catch (Exception e) {
-            e.printStackTrace();
             System.out.println("There is problem in retrieving histogram for the picture");
         }
 
         /* Extract Visual Words */
-        visualWords = extractVisualWords(file);
+        try {
+            visualWords = extractVisualWords(file);
+        } catch (Exception e) {
+            System.err.println("There is problem in retrieving visual words for the picture");
+        }
 
         /* Extract Visual Concepts */
-        visualConcepts = extractVisualConcepts(file);
+        try {
+            visualConcepts = extractVisualConcepts(file);
+        } catch (Exception e) {
+            System.err.println("There is problem in retrieving visual concepts for the picture");
+        }
     }
 
     private double[] extractHistogram(File file) throws Exception {
-        return ColorHistExtraction.getHist(file);
+        String imageID = Common.removeExtension(file.getName());
+        ColorHistCache colorHistCache = new ColorHistCache();
+        double[] result = null;
+        Map<String, double[]> cacheResults = colorHistCache.searchImgHist(imageID);
+        if(cacheResults.containsKey(imageID)){
+            result = cacheResults.get(imageID);
+            //System.out.println("Histogram: " + Arrays.toString(result));
+        } else {
+            result = ColorHistExtraction.getHist(file);
+        }
+        return result;
     }
 
-    private double[] extractVisualWords(File file) {
-        return VisualWordExtraction.getVisualWords(file);
+    private double[] extractVisualWords(File file) throws Exception{
+        String imageID = Common.removeExtension(file.getName());
+        VisualWordCache vwCache = new VisualWordCache();
+        double[] result = null;
+        Map<String, double[]> cacheResults = vwCache.searchVisualWordsForImage(imageID);
+        if(cacheResults.containsKey(imageID)){
+            result = cacheResults.get(imageID);
+            //System.out.println(Arrays.toString(result));
+        } else {
+            result = VisualWordExtraction.getVisualWords(file);
+        }
+        return result;
     }
 
-    private double[] extractVisualConcepts(File file) {
-        return VisualConceptExtraction.getVisualConcepts(file);
+    private double[] extractVisualConcepts(File file) throws Exception {
+        String imageID = Common.removeExtension(file.getName());
+        VisualConceptCache vcCache = new VisualConceptCache();
+        double[] result = null;
+        Map<String, double[]> cacheResults = vcCache.searchVisualConceptsForImage(imageID);
+        if(cacheResults.containsKey(imageID)) {
+            result = cacheResults.get(imageID);
+            //System.out.println(Arrays.toString(result));
+        } else {
+            result = VisualConceptExtraction.getVisualConcepts(file);
+        }
+        return result;
     }
 
     private String extractTerms() {
@@ -129,6 +167,9 @@ public class FindIOController extends Application implements  FindIOImageChooser
             imagePool.addAll(textResults.keySet());
         }
 
+        System.out.println("Length: " + imagePool.size());
+
+        /*
         Map<String, double[]> colorHistResults = null;
         if(hasColorHistogramFeature){
             if(hasColorHistogramFeature || hasVisualConceptFeature || hasTextFeature){
@@ -139,15 +180,21 @@ public class FindIOController extends Application implements  FindIOImageChooser
             }
         }
 
+        System.out.println("Result: ");
+        for(String image : imagePool){
+            System.out.println(image);
+        }
+        */
+
         return null;
     }
 
     private Map<String, double[]> searchVisualWord(){
         List<FindIOPair> wordsList = new ArrayList<FindIOPair>();
         int index = 0;
-        for(double freq : visualWords){
-            if(freq > 0){
-                wordsList.add(new FindIOPair(String.valueOf(index++), freq));
+        for(int i = 0; i < visualWords.length; i++){
+            if(visualWords[i] > 0){
+                wordsList.add(new FindIOPair(String.valueOf(i), visualWords[i]));
             }
         }
         Collections.sort(wordsList);
@@ -210,6 +257,7 @@ public class FindIOController extends Application implements  FindIOImageChooser
         try {
             results = colorHistIndex.searchImgHist(strBuilder.toString().trim());
         } catch (Exception e){
+            e.printStackTrace();
             System.out.println("There was error in searching in the index database for color histogram");
         }
         return results;

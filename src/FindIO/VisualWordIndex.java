@@ -1,5 +1,6 @@
 package FindIO;
 
+import com.sun.java.swing.plaf.windows.resources.windows_pt_BR;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -17,10 +18,7 @@ import org.apache.lucene.util.Version;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class VisualWordIndex extends Index {
 
@@ -107,19 +105,26 @@ public class VisualWordIndex extends Index {
                     String line;
                     while((line = br.readLine()) != null){
                         String[] freqs = line.trim().split("\\s+");
+                        List<FindIOPair> wordsList = new ArrayList<FindIOPair>();
+                        int index = 0;
                         for(int i = 0; i < freqs.length; i++){
-                            double freq = Double.parseDouble(freqs[i]);
-                            if(freq != 0.0){
-                                if(vwImageMap.get(String.valueOf(i)) == null){
-                                    vwImageMap.put(String.valueOf(i), new ArrayList<FindIOPair>());
-                                }
-                                List<FindIOPair> imagesList = vwImageMap.get(String.valueOf(i));
-                                imagesList.add(new FindIOPair(fileName, (float) freq));
+                            if(Double.parseDouble(freqs[i]) > 0){
+                                wordsList.add(new FindIOPair(String.valueOf(i), Double.parseDouble(freqs[i])));
                             }
+                        }
+                        Collections.sort(wordsList);
+
+                        for(int i = wordsList.size() - 1; i >= 0 && i >= wordsList.size() - Common.MAXIMUM_NUMBER_OF_TERMS; i--){
+                            FindIOPair word = wordsList.get(i);
+                            if(vwImageMap.get(word.getID()) == null){
+                                vwImageMap.put(word.getID(), new ArrayList<FindIOPair>());
+                            }
+                            List<FindIOPair> imagesList = vwImageMap.get(word.getID());
+                            imagesList.add(new FindIOPair(fileName, word.getValue()));
                         }
                     }
                     br.close();
-                    f.delete();
+                    //f.delete();
                 } catch (FileNotFoundException e) {
                     System.out.println("Result file is not created");
                 } catch (IOException e) {
@@ -131,7 +136,7 @@ public class VisualWordIndex extends Index {
 
     public void buildIndex() throws Throwable{
 
-        VisualWordExtraction.createVisualWordsForDirectory("C:\\Users\\Nhan\\Documents\\FindIO\\src\\FindIO\\Datasets\\train\\data", true, "indexSiftPooling");
+        //VisualWordExtraction.createVisualWordsForDirectory("C:\\Users\\Nhan\\Documents\\FindIO\\src\\FindIO\\Datasets\\train\\data", true, "indexSiftPooling");
 
         Map<String, List<FindIOPair>> vwImageMap = new HashMap<String, List<FindIOPair>>();
         walk("src/FindIO/Features/Visual Word/ScSPM/indexSiftPooling", vwImageMap);
