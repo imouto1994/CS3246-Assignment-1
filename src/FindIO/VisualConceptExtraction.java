@@ -143,14 +143,4 @@ public class VisualConceptExtraction {
 
         return concepts;
     }
-
-    // TODO: implement this method
-    public static double calculateSimilarity(double[] arr1, double[] arr2){
-        return 1;
-    }
-
-    // TODO: implement this method
-    public static double calculateDistance(double[] arr1, double[] arr2) {
-        return 0;
-    }
 }

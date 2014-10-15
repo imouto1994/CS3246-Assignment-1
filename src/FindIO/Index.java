@@ -1,11 +1,7 @@
 package FindIO;
 
-
 import org.apache.lucene.index.IndexWriter;
 
-/**
- * Created by Beyond on 10/12/2014 0012.
- */
 public class Index {
 
     static long startbuilding_time = 0;

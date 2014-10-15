@@ -55,7 +55,9 @@ public class VisualConceptCache extends Index{
 
     public void setIndexfile(String indexfilename) {
         this.indexFile = new File(indexfilename);
-        System.out.println("The Index File is set: " + indexfilename);
+        if(test){
+            System.out.println("The Index File is set: " + indexfilename);
+        }
     }
 
     /**
@@ -139,7 +141,7 @@ public class VisualConceptCache extends Index{
 
         //add the image score pair to the visual concept posting list
         while ((line = reader.readLine()) != null) {
-            String[] img_scores = line.trim().split("\\s+");
+            String[] img_scores = line.trim().split(" ");
             for(int concept = 0; concept < img_scores.length; concept++) {
                 double score = Double.parseDouble(img_scores[concept]);
                 concepts[concept] = score;
@@ -172,14 +174,14 @@ public class VisualConceptCache extends Index{
         for (int i = 0; i < concepts.length; i++) {
             double conceptRelateValue = concepts[i];
             if(conceptRelateValue > 0){
-                strbuf.append(i + " " + conceptRelateValue + ",");
+                strbuf.append(i + " " + conceptRelateValue + " ");
             }
         }
         strbuf_time += (System.currentTimeMillis() - start);
 
         // set fields for document
         this.img_field.setStringValue(imageID);
-        this.concept_field.setStringValue(Common.removeLast(strbuf.toString(), ","));
+        this.concept_field.setStringValue(strbuf.toString().trim());
         doc.add(img_field);
         doc.add(concept_field);
 
@@ -226,14 +228,13 @@ public class VisualConceptCache extends Index{
         for(ScoreDoc hit : hits){
             Document doc = searcher.doc(hit.doc);
             String imageName = doc.get(fieldname1);
-            String[] conceptsInfo = doc.get(fieldname2).split(",");
+            String[] conceptsInfo = doc.get(fieldname2).split(" ");
             if(mapResults.get(imageName) == null){
                 mapResults.put(imageName, new double[Common.NUM_VISUAL_CONCEPTS]);
             }
             double[] concepts = mapResults.get(imageName);
-            for(String conceptInfo: conceptsInfo){
-                String[] infos = conceptInfo.trim().split("\\s+");
-                concepts[Integer.parseInt(infos[0])] = Double.parseDouble(infos[1]);
+            for(int i = 0; i < conceptsInfo.length; i += 2){
+                concepts[Integer.parseInt(conceptsInfo[i])] = Double.parseDouble(conceptsInfo[i + 1]);
             }
         }
         reader.close();

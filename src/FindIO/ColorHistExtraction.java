@@ -127,31 +127,6 @@ public class ColorHistExtraction {
         return new double[dim * dim * dim];
     }
 
-    /* Calculate similarity between 2 color histograms */
-    public static double calculateSimilarity(double[] array1, double[] array2){
-
-        return 1 - calculateDistance(array1, array2);
-    }
-
-    /* Calculate difference between 2 color histograms */
-	public static double calculateDistance(double[] array1, double[] array2){
-        // Bhattacharyya distance
-		double h1 = 0.0;
-		double h2 = 0.0;
-		int N = array1.length;
-        for(int i = 0; i < N; i++) {
-        	h1 = h1 + array1[i];
-        	h2 = h2 + array2[i];
-        }
-
-        double Sum = 0.0;
-        for(int i = 0; i < N; i++) {
-           Sum = Sum + Math.sqrt(array1[i]*array2[i]);
-        }
-        double dist = Math.sqrt( 1 - Sum / Math.sqrt(h1*h2));
-        return dist;
-    }
-
     //Test the main funciton
     public static void main(String[] args){
         String sampleImgPath = "./src/FindIO/Datasets/train/data/tower/0097_159739573.jpg";

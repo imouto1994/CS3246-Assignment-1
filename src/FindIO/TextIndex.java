@@ -1,9 +1,5 @@
 package FindIO;
 
-/**
- * Created by Beyond on 10/11/2014 0011.
- */
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -22,9 +18,7 @@ package FindIO;
  */
 
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.core.StopAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.analysis.snowball.SnowballAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.TextField;
@@ -82,7 +76,9 @@ public class TextIndex extends Index{
         } catch(IOException e){
             System.out.println(Common.MESSAGE_TEXT_ANALYZER_ERROR);
         }
-        System.out.println("The Index File is set: " + indexfilename);
+        if(test){
+            System.out.println("The Index File is set: " + indexfilename);
+        }
     }
 
     /**
@@ -171,12 +167,12 @@ public class TextIndex extends Index{
         long start = System.currentTimeMillis();
         for (int i = 0; i < imgPairList.size(); i++) {
             FindIOPair imgPair = imgPairList.get(i);
-            strbuf.append(imgPair.getID() + " "+imgPair.getValue()+",");
+            strbuf.append(imgPair.getID() + " "+imgPair.getValue()+ " ");
         }
         strbuf_time += (System.currentTimeMillis() - start);
 
         // set fields for document
-        this.img_field.setStringValue(Common.removeLast(strbuf.toString(), ","));
+        this.img_field.setStringValue(strbuf.toString().trim());
         this.tag_field.setStringValue(this.textAnalyzer.getStem(tag));
         doc.add(tag_field);
         doc.add(img_field);
@@ -193,7 +189,7 @@ public class TextIndex extends Index{
     }
 
     public Map<String, double[]> searchText(String queryString) throws Exception{
-        List<String> terms = Arrays.asList(queryString.trim().split("\\s+"));
+        List<String> terms = Arrays.asList(queryString.trim().split(" "));
 
         IndexReader reader = DirectoryReader.open(FSDirectory.open(indexFile));
         IndexSearcher searcher = new IndexSearcher(reader);
@@ -230,11 +226,10 @@ public class TextIndex extends Index{
             if(index == -1){
                 continue;
             }
-            String[] images = doc.get(fieldname2).split(",");
-            for(String image : images) {
-                String[] infos = image.trim().split("\\s+");
-                String imageName = infos[0];
-                String freq = infos[1];
+            String[] images = doc.get(fieldname2).split(" ");
+            for(int i = 0; i < images.length; i += 2) {
+                String imageName = images[i];
+                String freq = images[i + 1];
                 if(mapResults.get(imageName) == null){
                     mapResults.put(imageName, new double[terms.size()]);
                 }

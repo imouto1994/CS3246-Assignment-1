@@ -17,9 +17,7 @@ import org.apache.lucene.util.Version;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class VisualWordCache extends Index {
@@ -52,7 +50,9 @@ public class VisualWordCache extends Index {
 
     public void setIndexfile(String indexfilename) {
         this.indexFile = new File(indexfilename);
-        System.out.println("The Index File is set: " + indexfilename);
+        if(test){
+            System.out.println("The Index File is set: " + indexfilename);
+        }
     }
 
     /**
@@ -115,7 +115,6 @@ public class VisualWordCache extends Index {
                         index_count++;
                     }
                     br.close();
-                    f.delete();
                 } catch (FileNotFoundException e) {
                     System.out.println("Result file is not created");
                 } catch (IOException e) {
@@ -127,7 +126,7 @@ public class VisualWordCache extends Index {
 
     public void buildIndex() throws Throwable{
 
-        VisualWordExtraction.createVisualWordsForDirectory("C:\\Users\\Nhan\\Documents\\FindIO\\src\\FindIO\\Datasets\\test\\query", true, "cacheSiftPooling");
+        //VisualWordExtraction.createVisualWordsForDirectory("C:\\Users\\Nhan\\Documents\\FindIO\\src\\FindIO\\Datasets\\test\\query", true, "cacheSiftPooling");
 
         walk("src/FindIO/Features/Visual Word/ScSPM/cacheSiftPooling");
         System.out.println("Number of index: " + index_count);
@@ -151,14 +150,14 @@ public class VisualWordCache extends Index {
         for (int i = 0; i < words.length; i++) {
             double wordValue = words[i];
             if(wordValue > 0){
-                strbuf.append(i + " " + wordValue + ",");
+                strbuf.append(i + " " + wordValue + " ");
             }
         }
         strbuf_time += (System.currentTimeMillis() - start);
 
         // set fields for document
         this.img_field.setStringValue(imageID);
-        this.vw_field.setStringValue(Common.removeLast(strbuf.toString(), ","));
+        this.vw_field.setStringValue(strbuf.toString().trim());
         doc.add(img_field);
         doc.add(vw_field);
 
@@ -205,14 +204,13 @@ public class VisualWordCache extends Index {
         for(ScoreDoc hit : hits){
             Document doc = searcher.doc(hit.doc);
             String imageName= doc.get(fieldname1);
-            String[] wordsInfo = doc.get(fieldname2).split(",");
+            String[] wordsInfo = doc.get(fieldname2).split(" ");
             if(mapResults.get(imageName) == null){
                 mapResults.put(imageName, new double[Common.NUM_VISUAL_WORDS]);
             }
             double[] words = mapResults.get(imageName);
-            for(String wordInfo : wordsInfo){
-                String[] infos = wordInfo.trim().split("\\s+");
-                words[Integer.parseInt(infos[0])] = Double.parseDouble(infos[1]);
+            for(int i = 0; i < wordsInfo.length; i += 2){
+                words[Integer.parseInt(wordsInfo[i])] = Double.parseDouble(wordsInfo[i + 1]);
             }
         }
         reader.close();
@@ -226,6 +224,7 @@ public class VisualWordCache extends Index {
             vwCache.initBuilding();
             vwCache.buildIndex();
         } catch(Throwable e) {
+            e.printStackTrace();
             System.out.println(Common.MESSAGE_TEXT_INDEX_ERROR);
             if(test){
                 e.printStackTrace();

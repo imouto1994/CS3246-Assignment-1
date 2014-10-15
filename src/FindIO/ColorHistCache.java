@@ -49,7 +49,9 @@ public class ColorHistCache extends Index {
 
     public void setIndexfile(String indexfilename) {
         this.indexFile = new File(indexfilename);
-        System.out.println("The Index File is set: " + indexfilename);
+        if(test){
+            System.out.println("The Index File is set: " + indexfilename);
+        }
     }
 
     /**
@@ -131,14 +133,14 @@ public class ColorHistCache extends Index {
         for (int i = 0; i < colorHist.length; i++) {
             double histBinValue = colorHist[i];
             if(histBinValue > 0){
-                strbuf.append(i + " " + histBinValue + ",");
+                strbuf.append(i + " " + histBinValue + " ");
             }
         }
         strbuf_time += (System.currentTimeMillis() - start);
 
         // set fields for document
         this.img_field.setStringValue(imgID);
-        this.hist_field.setStringValue(Common.removeLast(strbuf.toString(), ","));
+        this.hist_field.setStringValue(strbuf.toString().trim());
         doc.add(img_field);
         doc.add(hist_field);
 
@@ -185,14 +187,13 @@ public class ColorHistCache extends Index {
         for(ScoreDoc hit : hits){
             Document doc = searcher.doc(hit.doc);
             String imageName = doc.get(fieldname1);
-            String[] colorBins = doc.get(fieldname2).split(",");
+            String[] colorBins = doc.get(fieldname2).split(" ");
             if(mapResults.get(imageName) == null){
                 mapResults.put(imageName, ColorHistExtraction.getDefaultColorHist());
             }
             double[] colorHist = mapResults.get(imageName);
-            for(String colorBin: colorBins){
-                String[] infos = colorBin.trim().split("\\s+");
-                colorHist[Integer.parseInt(infos[0])] = Double.parseDouble(infos[1]);
+            for(int i = 0; i < colorBins.length - 1; i += 2){
+                colorHist[Integer.parseInt(colorBins[i])] = Double.parseDouble(colorBins[i + 1]);
             }
         }
         reader.close();
