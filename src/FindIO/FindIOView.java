@@ -1,7 +1,7 @@
 package FindIO;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.List;
 
 import javafx.animation.*;
 import javafx.collections.FXCollections;
@@ -16,9 +16,6 @@ import javafx.util.Callback;
 import javafx.util.Duration;
 import org.controlsfx.control.GridCell;
 import org.controlsfx.control.GridView;
-import org.imgscalr.Scalr;
-
-import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -28,7 +25,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -184,7 +180,12 @@ public class FindIOView {
         searchButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                handler.search();
+                List<String> results = handler.search();
+                imageList.clear();
+                for(int i = 0; i < results.size(); i++){
+                    imageList.add(new ImageResult(results.get(i), i));
+                }
+                System.out.println("Length: " + imageList.size());
             }
         });
     }
@@ -254,7 +255,11 @@ public class FindIOView {
 						Image queryImage = new Image(file.toURI().toString());
 						int width = (int) queryImage.getWidth();
 						int height = (int) queryImage.getHeight();
-						queryImage = resizeImageWithSpecifiedHeight(queryImage, SCREEN_HEIGHT / 3.5);
+                        if((width / height) >= ((SCREEN_WIDTH / 4.5) / (SCREEN_HEIGHT / 3.5))){
+                            thumbNail.setFitWidth(SCREEN_WIDTH / 4.5);
+                        } else {
+                            thumbNail.setFitHeight(SCREEN_HEIGHT / 3.5);
+                        }
 						thumbNail.setImage(queryImage);
 						imageNameLabel.setText(fileName.toUpperCase());
 						imageExtensionLabel.setText(fileExtension.toUpperCase());
@@ -329,10 +334,6 @@ public class FindIOView {
     private GridView<ImageResult> initGridView() {
         final GridView<ImageResult> grid = new GridView<ImageResult>();
 
-        for(int i = 0; i < 25; i++){
-            imageList.add(new ImageResult());
-        }
-
         grid.setItems(imageList);
         grid.setId("grid");
         grid.setCellWidth(SCREEN_WIDTH / 4.5);
@@ -355,8 +356,8 @@ public class FindIOView {
 
 		thumbNail = new ImageView();
 		thumbNail.setFitHeight(SCREEN_HEIGHT / 3.5);
+        thumbNail.setPreserveRatio(true);
         Image defaultImage = new Image(getClass().getResourceAsStream("./Images/EmptyImage.png"));
-        defaultImage = resizeImageWithSpecifiedHeight(defaultImage, SCREEN_HEIGHT / 3.5);
         thumbNail.setImage(defaultImage);
         thumbNail.setId("thumbNail");
 		
@@ -418,38 +419,4 @@ public class FindIOView {
             node.getStyleClass().add(singleClass);
         }
     }
-	
-	private Image resizeImageWithSpecifiedWidth(Image image, double width) {
-		double originalWidth = image.getWidth();
-		double originalHeight = image.getHeight();
-		
-		double height = (originalHeight / originalWidth) * width;
-		
-		BufferedImage img = new BufferedImage((int) originalWidth, (int) originalHeight, BufferedImage.TYPE_INT_ARGB);
-		SwingFXUtils.fromFXImage(image, img);
-		BufferedImage rescaled = Scalr.resize(img, Scalr.Method.QUALITY, Scalr.Mode.FIT_TO_WIDTH,
-	               (int) width, (int) height, Scalr.OP_ANTIALIAS);
-		
-		WritableImage rescaledFX = new WritableImage((int)width, (int)height);
-		SwingFXUtils.toFXImage(rescaled, rescaledFX);
-		
-		return rescaledFX;
-	}
-	
-	private Image resizeImageWithSpecifiedHeight(Image image, double height) {
-		double originalWidth = image.getWidth();
-		double originalHeight = image.getHeight();
-		
-		double width = (originalWidth / originalHeight) * height;
-		
-		BufferedImage img = new BufferedImage((int) originalWidth, (int) originalHeight, BufferedImage.TYPE_INT_ARGB);
-		SwingFXUtils.fromFXImage(image, img);
-		BufferedImage rescaled = Scalr.resize(img, Scalr.Method.QUALITY, Scalr.Mode.FIT_TO_HEIGHT,
-	               (int) width, (int) height, Scalr.OP_ANTIALIAS);
-		
-		WritableImage rescaledFX = new WritableImage((int)width, (int)height);
-		SwingFXUtils.toFXImage(rescaled, rescaledFX);
-		
-		return rescaledFX;
-	}
 }

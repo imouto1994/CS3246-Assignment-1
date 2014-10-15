@@ -6,9 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.io.FileWriter;
 
-/**
- * Created by Beyond on 10/12/2014 0012.
- */
 public class FolderScanner {
 
     String dataFolder;

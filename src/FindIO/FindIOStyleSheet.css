@@ -74,6 +74,10 @@
     -fx-background-repeat: stretch;
 }
 
+.imageResult {
+    -fx-background-color: red;
+}
+
 
 /* ID Elements */
 

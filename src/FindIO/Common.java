@@ -1,8 +1,5 @@
 package FindIO;
 
-/**
- * Created by Beyond on 10/12/2014 0012.
- */
 public class Common {
 
     public static final String MESSAGE_TEXT_INDEX_ERROR = "Encounter some errors when indexing text annotations";
@@ -23,6 +20,12 @@ public class Common {
     public static final int NUM_VISUAL_WORDS = 21504;
     public static final int NUM_VISUAL_CONCEPTS = 1000;
     public static final int MAXIMUM_NUMBER_OF_TERMS = 50;
+    public static final int MAX_RESULTS = 20;
+
+    public static final int COLOR_HIST_WEIGHT_INDEX = 0;
+    public static final int TEXT_WEIGHT_INDEX = 1;
+    public static final int VISUAL_CONCEPT_WEIGHT_INDEX = 2;
+    public static final int VISUAL_WORD_WEIGHT_INDEX = 3;
 
     public static String removeExtension(String fileName){
         if(!fileName.contains(".")){
@@ -38,5 +41,27 @@ public class Common {
             originalString = originalString.substring(0, index);
         }
         return originalString;
+    }
+
+    public static double calculateSimilarity(double[] arr1, double[] arr2){
+        return 1 - calculateDistance(arr1, arr2);
+    }
+
+    public static double calculateDistance(double[] arr1, double[] arr2) {
+        // Bhattacharyya distance
+        double h1 = 0.0;
+        double h2 = 0.0;
+        int N = arr1.length;
+        for(int i = 0; i < N; i++) {
+            h1 = h1 + arr1[i];
+            h2 = h2 + arr2[i];
+        }
+
+        double Sum = 0.0;
+        for(int i = 0; i < N; i++) {
+            Sum = Sum + Math.sqrt(arr1[i]*arr2[i]);
+        }
+        double dist = Math.sqrt( 1 - Sum / Math.sqrt(h1*h2));
+        return dist;
     }
 }

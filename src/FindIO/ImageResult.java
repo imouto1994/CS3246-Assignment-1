@@ -12,6 +12,12 @@ public class ImageResult implements  Comparable<ImageResult>{
     private StringProperty path;
     private IntegerProperty rank;
 
+    public ImageResult(String path, int rank) {
+        checkProperty();
+        setPath(path);
+        setRank(rank);
+    }
+
     public ImageResult() {
         checkProperty();
         initialize();
