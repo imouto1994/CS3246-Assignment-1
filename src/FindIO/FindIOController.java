@@ -123,10 +123,16 @@ public class FindIOController extends Application implements  FindIOImageChooser
     }
 
     private String extractTerms() {
-        String[] terms = findIOView.getTextField().getText().trim().split("\\s+");
-
-        //TODO: Add removing stop words
-
+        String text = findIOView.getTextField().getText().trim();
+        String[] terms = new String[10];
+        try {
+            TextAnalyzer analyzer = new TextAnalyzer();
+            String filteredText = analyzer.filterWords(text);
+            terms = filteredText.split("\\s+");
+        } catch(IOException e){
+            System.out.println(Common.MESSAGE_TEXT_ANALYZER_ERROR);
+            e.printStackTrace();
+        }
         Set<String> termsSet = new HashSet<String>(Arrays.asList(terms));
         StringBuilder strBuilder = new StringBuilder();
         String queryTerm = "";
