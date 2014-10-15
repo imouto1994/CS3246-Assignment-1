@@ -247,6 +247,12 @@ public class TextIndex extends Index{
     }
 
 
+    /**
+     * update score mainly used for relevance feedback, the input should be stemmed
+     * @param imageID
+     * @param tag_score_pairs
+     * @throws Throwable
+     */
     public void updateScore(String imageID, ArrayList<FindIOPair> tag_score_pairs) throws Throwable{
         IndexReader reader = DirectoryReader.open(FSDirectory.open(indexFile));
         IndexSearcher searcher = new IndexSearcher(reader);
