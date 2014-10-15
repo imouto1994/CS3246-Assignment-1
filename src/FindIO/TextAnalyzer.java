@@ -190,6 +190,7 @@ public class TextAnalyzer {
             String key = list.get(i).getKey();
             Double tf_idf = list.get(i).getValue() * idfmap.get(key);
             tf_idf_map.put(key, tf_idf);
+            System.out.println(key+" "+tf_idf);
         }
 
         Collections.sort(list, new Comparator<Map.Entry<String, Double>>() {
@@ -223,8 +224,16 @@ public class TextAnalyzer {
     //for testing
     public static void main (String a[])throws IOException {
         TextAnalyzer analyzer = new TextAnalyzer();
-		System.out.println(analyzer.filterWords("Cool! This is an example, a good one. We'd better to get it down. and a good one"));
-
+		System.out.println(analyzer.filterWords("cool! This is an example, a good one. We'd better to get it down. and a bear"));
+        analyzer.analyzeLine("cool! This is an example, a good car. We'd better to get bear down . and a ");
+        for(String coreWord : analyzer.core_words){
+            System.out.print(coreWord+" ");
+        }
+        System.out.println();
+        for(String noncoreword : analyzer.non_core_words){
+            System.out.print(noncoreword+" ");
+        }
+        System.out.println();
 		/*
 		String path = "E:/MyFiles/Research/code/Corecorpus/corpus/2M.eng";
 		BufferedReader buf = new BufferedReader(new InputStreamReader(new FileInputStream(path)));
