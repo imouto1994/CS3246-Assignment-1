@@ -67,8 +67,8 @@ public class FolderScanner {
     }
 
     public static void main(String[] args){
-        String trainFolder = "./src/FindIO/Datasets/train/data";
-        String gtFile = "./src/FindIO/Datasets/train/image_gt.txt";
+        String trainFolder = "./src/FindIO/Datasets/test/query";
+        String gtFile = "./src/FindIO/query_groundTruth.txt";
         FolderScanner folderScanner = new FolderScanner(trainFolder, gtFile);
         folderScanner.scanTrainSetFolder();
         try{
