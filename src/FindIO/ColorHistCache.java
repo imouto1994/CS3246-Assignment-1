@@ -20,10 +20,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by Beyond on 10/12/2014 0012.
- */
-public class ColorHistIndex extends Index {
+public class ColorHistCache extends Index {
 
     private File indexFile;
     private MMapDirectory MMapDir;
@@ -46,8 +43,8 @@ public class ColorHistIndex extends Index {
 
     private FileInputStream binIn;
 
-    public ColorHistIndex() {
-        setIndexfile("src/FindIO/index/colorHistIndex");
+    public ColorHistCache() {
+        setIndexfile("src/FindIO/cache/colorHistCache");
     }
 
     public void setIndexfile(String indexfilename) {
@@ -83,7 +80,7 @@ public class ColorHistIndex extends Index {
     }
 
     /* Build the index */
-    public void buildIndex(String groundTruthFile) throws Throwable{
+    public void buildCache(String groundTruthFile) throws Throwable{
 
         BufferedReader reader = new BufferedReader(new FileReader(groundTruthFile));
         String line = null;
@@ -97,7 +94,7 @@ public class ColorHistIndex extends Index {
             String folder = img_folders[1];
             boolean isFileExists = false;
             for(int i = 1; i < img_folders.length; i++){
-               String imgPath = "./src/FindIO/Datasets/train/data/"+folder+"/"+imgID;
+                String imgPath = "./src/FindIO/Datasets/test/query/"+folder+"/"+imgID;
                 File image = new File(imgPath);
                 if(image.exists() && !image.isDirectory()){
                     isFileExists = true;
@@ -205,10 +202,10 @@ public class ColorHistIndex extends Index {
 
     /* Main Function for building the index */
     public static void main(String[] args){
-        ColorHistIndex colorIndex = new ColorHistIndex();
+        ColorHistCache colorCache = new ColorHistCache();
         try{
-            colorIndex.initBuilding();
-            colorIndex.buildIndex("src/FindIO/image_groundTruth.txt");
+            colorCache.initBuilding();
+            colorCache.buildCache("src/FindIO/query_groundTruth.txt");
         } catch(Throwable e) {
             System.out.println(Common.MESSAGE_HIST_INDEX_ERROR);
             if(test){

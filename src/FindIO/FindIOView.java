@@ -184,7 +184,7 @@ public class FindIOView {
         searchButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                //handler.search();
+                handler.search();
             }
         });
     }
@@ -260,6 +260,9 @@ public class FindIOView {
 						imageExtensionLabel.setText(fileExtension.toUpperCase());
 						imageSizeLabel.setText(width + " x " + height);
                         handler.imageSelectHandle(file);
+                        if(sideBar.getTranslateX() < 0){
+                            animateSideBar();
+                        }
 					}
 			}
 		});
@@ -385,8 +388,11 @@ public class FindIOView {
         grid.add(imageSizeLabel, 1, 2);
 
         checkBoxForHistogram = new CheckBox("Histogram".toUpperCase());
+        checkBoxForHistogram.setSelected(true);
         checkBoxForSIFT = new CheckBox("Visual Word".toUpperCase());
+        checkBoxForSIFT.setSelected(true);
         checkBoxForConcept = new CheckBox("Visual Concept".toUpperCase());
+        checkBoxForConcept.setSelected(true);
         VBox subBox = new VBox();
         subBox.setPrefWidth(left.getPrefWidth());
         subBox.setSpacing(SCREEN_HEIGHT / 35.0);

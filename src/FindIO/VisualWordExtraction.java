@@ -57,7 +57,7 @@ public class VisualWordExtraction {
         // Create Proxy
         MatlabProxyFactoryOptions options = new MatlabProxyFactoryOptions.Builder()
                 .setUsePreviouslyControlledSession(true)
-                .setHidden(true)
+                .setHidden(false)
                 .build();
         MatlabProxyFactory factory = new MatlabProxyFactory(options);
         MatlabProxy proxy = null;

@@ -86,7 +86,7 @@ public class TextIndex extends Index{
     }
 
     /**
-     * initialization for building the index
+     * Initialization for building the index
      *
      * @throws Throwable
      * */
@@ -120,7 +120,7 @@ public class TextIndex extends Index{
         initbuilding_time = System.currentTimeMillis() - startbuilding_time;
     }
 
-
+    /* Build the index */
     public void buildIndex(String dataFile) throws Throwable{
 
         BufferedReader reader = new BufferedReader(new FileReader(dataFile));
@@ -151,6 +151,7 @@ public class TextIndex extends Index{
             addDoc(tag, imgPairList);
             index_count++;
         }
+        System.out.println("Number of index: " + index_count);
         closeWriter();
     }
 
@@ -175,21 +176,21 @@ public class TextIndex extends Index{
         strbuf_time += (System.currentTimeMillis() - start);
 
         // set fields for document
+        this.img_field.setStringValue(Common.removeLast(strbuf.toString(), ","));
         this.tag_field.setStringValue(this.textAnalyzer.getStem(tag));
-        this.img_field.setStringValue(strbuf.toString());
         doc.add(tag_field);
         doc.add(img_field);
 
         try {
             MMwriter.addDocument(doc);
+            System.out.println(Common.MESSAGE_FILE_INDEX_SUCCESS + tag);
         } catch (IOException e) {
-            System.err.println("index writer error");
-            if (test)
+            System.err.println(Common.MESSAGE_TEXT_INDEX_ERROR);
+            if (test){
                 e.printStackTrace();
+            }
         }
     }
-
-
 
     public Map<String, double[]> searchText(String queryString) throws Exception{
         List<String> terms = Arrays.asList(queryString.trim().split("\\s+"));
@@ -246,6 +247,16 @@ public class TextIndex extends Index{
         return mapResults;
     }
 
+    /* Main Function For Indexing */
+    public static void main(String[] args){
+        TextIndex textIndex = new TextIndex();
+        try{
+            textIndex.initBuilding();
+            textIndex.buildIndex("./src/FindIO/Datasets/train/image_tags.txt");
+        } catch(Throwable e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * update score mainly used for relevance feedback, the input should be stemmed
@@ -340,49 +351,5 @@ public class TextIndex extends Index{
             reader.close();
             closeWriter();
         }
-    }
-
-    public static void main(String[] args){
-        TextIndex textIndex = new TextIndex();
-        textIndex.setIndexfile("./src/FindIO/index/textIndex");
-        try{
-            textIndex.initBuilding();
-            textIndex.buildIndex("./src/FindIO/Datasets/train/image_tags.txt");
-        } catch(Throwable e) {
-            System.out.println(Common.MESSAGE_TEXT_INDEX_ERROR);
-            if(test)
-                e.printStackTrace();
-        }
-
-        try{
-            Map<String, double[]> resultMap = textIndex.searchText("3");
-            for(Map.Entry<String, double[]> entry : resultMap.entrySet()){
-                String imageName = entry.getKey();
-                double[] scores = entry.getValue();
-                System.out.print(imageName+"\t");
-                for (double score : scores){
-                    System.out.print(score+" ");
-                }
-                System.out.println();
-            }
-        }catch(Throwable e) {
-            System.out.println(Common.MESSAGE_TEXT_INDEX_ERROR);
-            if(test)
-                e.printStackTrace();
-        }
-
-//        String imageID = "0087_2173846805";
-//        String tag = "panda";
-//        double added_score = 1.0;
-//        try{
-//            textIndex.initBuilding();
-//            ArrayList<FindIOPair> tag_scores_pairs = new ArrayList<FindIOPair>();
-//            FindIOPair pair = new FindIOPair(tag, added_score);
-//            tag_scores_pairs.add(pair);
-//            textIndex.updateScore(imageID, tag_scores_pairs);
-//        } catch(Throwable e){
-//            System.out.println(Common.MESSAGE_TEXT_UPDATE_ERROR);
-//            e.printStackTrace();
-//        }
     }
 }

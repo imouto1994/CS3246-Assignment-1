@@ -1,5 +1,6 @@
 package FindIO;
 
+import com.sun.java.swing.plaf.windows.resources.windows_pt_BR;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -17,10 +18,7 @@ import org.apache.lucene.util.Version;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class VisualWordIndex extends Index {
 
@@ -46,7 +44,7 @@ public class VisualWordIndex extends Index {
     private FileInputStream binIn;
 
     public VisualWordIndex() {
-        setIndexfile("./src/FindIO/index/visualWordIndex");
+        setIndexfile("./src/FindIO/index/vwIndex");
 
     }
 
@@ -107,18 +105,26 @@ public class VisualWordIndex extends Index {
                     String line;
                     while((line = br.readLine()) != null){
                         String[] freqs = line.trim().split("\\s+");
+                        List<FindIOPair> wordsList = new ArrayList<FindIOPair>();
+                        int index = 0;
                         for(int i = 0; i < freqs.length; i++){
-                            double freq = Double.parseDouble(freqs[i]);
-                            if(freq != 0.0){
-                                if(vwImageMap.get(String.valueOf(i)) == null){
-                                    vwImageMap.put(String.valueOf(i), new ArrayList<FindIOPair>());
-                                }
-                                List<FindIOPair> imagesList = vwImageMap.get(String.valueOf(i));
-                                imagesList.add(new FindIOPair(fileName, (float) freq));
+                            if(Double.parseDouble(freqs[i]) > 0){
+                                wordsList.add(new FindIOPair(String.valueOf(i), Double.parseDouble(freqs[i])));
                             }
+                        }
+                        Collections.sort(wordsList);
+
+                        for(int i = wordsList.size() - 1; i >= 0 && i >= wordsList.size() - Common.MAXIMUM_NUMBER_OF_TERMS; i--){
+                            FindIOPair word = wordsList.get(i);
+                            if(vwImageMap.get(word.getID()) == null){
+                                vwImageMap.put(word.getID(), new ArrayList<FindIOPair>());
+                            }
+                            List<FindIOPair> imagesList = vwImageMap.get(word.getID());
+                            imagesList.add(new FindIOPair(fileName, word.getValue()));
                         }
                     }
                     br.close();
+                    //f.delete();
                 } catch (FileNotFoundException e) {
                     System.out.println("Result file is not created");
                 } catch (IOException e) {
@@ -128,10 +134,9 @@ public class VisualWordIndex extends Index {
         }
     }
 
+    public void buildIndex() throws Throwable{
 
-    public void buildIndex(String dataFile) throws Throwable{
-
-        VisualWordExtraction.createVisualWordsForDirectory("C:\\Users\\Nhan\\Documents\\FindIO\\src\\FindIO\\Datasets\\train\\data", true, "indexSiftPooling");
+        //VisualWordExtraction.createVisualWordsForDirectory("C:\\Users\\Nhan\\Documents\\FindIO\\src\\FindIO\\Datasets\\train\\data", true, "indexSiftPooling");
 
         Map<String, List<FindIOPair>> vwImageMap = new HashMap<String, List<FindIOPair>>();
         walk("src/FindIO/Features/Visual Word/ScSPM/indexSiftPooling", vwImageMap);
@@ -141,6 +146,7 @@ public class VisualWordIndex extends Index {
             addDoc(word, imgPairList);
             index_count++;
         }
+        System.out.println("Number of index: " + index_count);
         closeWriter();
     }
 
@@ -148,10 +154,10 @@ public class VisualWordIndex extends Index {
      * Add a document. The document contains two fields: one is the element id,
      * the other is the values on each dimension
      *
-     * @param tag: tag as the key of inverted index
+     * @param visualWord: tag as the key of inverted index
      * @param imgPairList: the posting list containing image pairs
      * */
-    public void addDoc(String tag, List<FindIOPair> imgPairList) {
+    public void addDoc(String visualWord, List<FindIOPair> imgPairList) {
 
         Document doc = new Document();
         // clear the StringBuffer
@@ -165,16 +171,16 @@ public class VisualWordIndex extends Index {
         strbuf_time += (System.currentTimeMillis() - start);
 
         // set fields for document
-        this.vw_field.setStringValue(tag);
-        this.img_field.setStringValue(strbuf.toString());
+        this.vw_field.setStringValue(visualWord);
+        this.img_field.setStringValue(Common.removeLast(strbuf.toString(), ","));
         doc.add(vw_field);
         doc.add(img_field);
 
         try {
             MMwriter.addDocument(doc);
+            System.out.println(Common.MESSAGE_FILE_INDEX_SUCCESS + " visual word " + visualWord);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            System.err.println("index writer error");
+            System.err.println(Common.MESSAGE_VW_INDEX_ERROR);
             if (test)
                 e.printStackTrace();
         }
@@ -230,22 +236,15 @@ public class VisualWordIndex extends Index {
     }
 
     public static void main(String[] args){
-          VisualWordIndex vwIndex = new VisualWordIndex();
-//        try{
-//            textIndex.initBuilding();
-//            textIndex.buildIndex("./src/FindIO/Datasets/train/image_tags.txt");
-//        } catch(Throwable e) {
-//            System.out.println(MESSAGE_TEXT_INDEX_ERROR);
-//            if(test)
-//                e.printStackTrace();
-//        }
-
+        VisualWordIndex vwIndex = new VisualWordIndex();
         try{
-            vwIndex.searchVisualWord("china bear");
-        }catch(Throwable e) {
+            vwIndex.initBuilding();
+            vwIndex.buildIndex();
+        } catch(Throwable e) {
             System.out.println(Common.MESSAGE_TEXT_INDEX_ERROR);
-            if(test)
+            if(test){
                 e.printStackTrace();
+            }
         }
     }
 
