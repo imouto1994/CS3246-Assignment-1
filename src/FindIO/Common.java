@@ -11,6 +11,7 @@ public class Common {
     static final String MESSAGE_VC_INDEX_ERROR = "Encounter some errors when indexing image visual concepts";
     static final String MESSAGE_VC_SEARCH_ERROR = "Some errors when searching image visual concepts";
     static final String MESSAGE_FILE_NOTEXIST = "Woops! File not existing";
+    static final String MESSAGE_TEXT_ANALYZER_ERROR = "Loading text analyzer failed";
 
     public static final int topK = 1024;
     public static final int NUM_VISUAL_WORDS = 21504;

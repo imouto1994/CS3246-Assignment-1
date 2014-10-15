@@ -22,7 +22,9 @@ package FindIO;
  */
 
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.core.StopAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.snowball.SnowballAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.TextField;
@@ -61,6 +63,8 @@ public class TextIndex extends Index{
     private Field tag_field;
     private Field img_field;
 
+    private TextAnalyzer textAnalyzer;
+
     // Maximum Buffer Size
     private int MAX_BUFF = 48;
 
@@ -77,6 +81,11 @@ public class TextIndex extends Index{
 
     public void setIndexfile(String indexfilename) {
         this.indexFile = new File(indexfilename);
+        try {
+            this.textAnalyzer = new TextAnalyzer();
+        } catch(IOException e){
+            System.out.println(Common.MESSAGE_TEXT_ANALYZER_ERROR);
+        }
         System.out.println("The Index File is set: " + indexfilename);
     }
 
@@ -170,7 +179,7 @@ public class TextIndex extends Index{
         strbuf_time += (System.currentTimeMillis() - start);
 
         // set fields for document
-        this.tag_field.setStringValue(tag);
+        this.tag_field.setStringValue(this.textAnalyzer.getStem(tag));
         this.img_field.setStringValue(strbuf.toString());
         doc.add(tag_field);
         doc.add(img_field);
@@ -241,6 +250,7 @@ public class TextIndex extends Index{
         return mapResults;
     }
 
+
     public static void main(String[] args){
         TextIndex textIndex = new TextIndex();
         textIndex.setIndexfile("./src/FindIO/index/textIndex");
@@ -248,13 +258,22 @@ public class TextIndex extends Index{
 //            textIndex.initBuilding();
 //            textIndex.buildIndex("./src/FindIO/Datasets/train/image_tags.txt");
 //        } catch(Throwable e) {
-//            System.out.println(MESSAGE_TEXT_INDEX_ERROR);
+//            System.out.println(Common.MESSAGE_TEXT_INDEX_ERROR);
 //            if(test)
 //                e.printStackTrace();
 //        }
 
         try{
-            textIndex.searchText("china bear");
+            Map<String, double[]> resultMap = textIndex.searchText("bear");
+            for(Map.Entry<String, double[]> entry : resultMap.entrySet()){
+                String imageName = entry.getKey();
+                double[] scores = entry.getValue();
+                System.out.print(imageName+"\t");
+                for (double score : scores){
+                    System.out.print(score+" ");
+                }
+                System.out.println();
+            }
         }catch(Throwable e) {
             System.out.println(Common.MESSAGE_TEXT_INDEX_ERROR);
             if(test)
