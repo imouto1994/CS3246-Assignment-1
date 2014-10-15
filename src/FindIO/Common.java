@@ -9,6 +9,7 @@ public class Common {
     static final String MESSAGE_TEXT_UPDATE_ERROR = "Some error occurs when updating text annotation scores";
     static final String MESSAGE_HIST_INDEX_ERROR = "Encounter some errors when indexing image color histogram";
     static final String MESSAGE_HIST_SEARCH_ERROR = "Some errors when searching image color histogram";
+    static final String MESSAGE_HIST_SCAN_ERROR = "Some errors occur when scanning all images and retrieve the color histogram";
     static final String MESSAGE_VC_INDEX_ERROR = "Encounter some errors when indexing image visual concepts";
     static final String MESSAGE_VC_SEARCH_ERROR = "Some errors when searching image visual concepts";
     static final String MESSAGE_FILE_NOTEXIST = "Woops! File not existing";

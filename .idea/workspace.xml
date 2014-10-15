@@ -120,8 +120,8 @@
       <file leaf-file-name="Common.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/FindIO/Common.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="595">
-              <caret line="8" column="109" selection-start-line="8" selection-start-column="109" selection-end-line="8" selection-end-column="109" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="612">
+              <caret line="11" column="86" selection-start-line="11" selection-start-column="86" selection-end-line="11" selection-end-column="86" />
               <folding />
             </state>
           </provider>
@@ -139,11 +139,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TextIndex.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="TextIndex.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/FindIO/TextIndex.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.29781023" vertical-offset="4012" max-vertical-offset="6664">
-              <caret line="250" column="83" selection-start-line="250" selection-start-column="83" selection-end-line="250" selection-end-column="83" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="4012" max-vertical-offset="6664">
+              <caret line="265" column="0" selection-start-line="265" selection-start-column="0" selection-end-line="265" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -154,9 +154,21 @@
       <file leaf-file-name="ColorHistExtraction.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/FindIO/ColorHistExtraction.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1666" max-vertical-offset="2890">
-              <caret line="112" column="46" selection-start-line="112" selection-start-column="46" selection-end-line="112" selection-end-column="46" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1632" max-vertical-offset="2890">
+              <caret line="125" column="40" selection-start-line="125" selection-start-column="0" selection-end-line="128" selection-end-column="0" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ColorHistIndex.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/FindIO/ColorHistIndex.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.5284672" vertical-offset="3327" max-vertical-offset="4624">
+              <caret line="219" column="13" selection-start-line="219" selection-start-column="13" selection-end-line="219" selection-end-column="13" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -190,7 +202,6 @@
         <option value="$PROJECT_DIR$/src/FindIO/VisualWordExtraction.java" />
         <option value="$PROJECT_DIR$/src/FindIO/ImagePair.java" />
         <option value="$PROJECT_DIR$/src/FindIO/FindIOPair.java" />
-        <option value="$PROJECT_DIR$/src/FindIO/ColorHistIndex.java" />
         <option value="$PROJECT_DIR$/src/FindIO/VisualWordIndex.java" />
         <option value="$PROJECT_DIR$/src/FindIO/VisualConceptExtraction.java" />
         <option value="$PROJECT_DIR$/src/FindIO/ColorHistogramExtraction.java" />
@@ -205,8 +216,9 @@
         <option value="$PROJECT_DIR$/src/FindIO/Stemmer.java" />
         <option value="$PROJECT_DIR$/src/FindIO/FindIOController.java" />
         <option value="$PROJECT_DIR$/src/FindIO/TextAnalyzer.java" />
-        <option value="$PROJECT_DIR$/src/FindIO/Common.java" />
         <option value="$PROJECT_DIR$/src/FindIO/TextIndex.java" />
+        <option value="$PROJECT_DIR$/src/FindIO/Common.java" />
+        <option value="$PROJECT_DIR$/src/FindIO/ColorHistIndex.java" />
       </list>
     </option>
   </component>
@@ -337,7 +349,7 @@
       <recent name="$PROJECT_DIR$/src/FindIO/Features/Color Histogram" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.TextIndex">
+  <component name="RunManager" selected="Application.ColorHistIndex">
     <configuration default="false" name="VisualWordExtraction" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -382,23 +394,6 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <configuration default="false" name="VisualConceptExtraction" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <option name="MAIN_CLASS_NAME" value="FindIO.VisualConceptExtraction" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="CS3246-Assignment1" />
-      <envs />
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method />
-    </configuration>
     <configuration default="false" name="TextAnalyzer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -429,6 +424,28 @@
         </pattern>
       </extension>
       <option name="MAIN_CLASS_NAME" value="FindIO.Stemmer" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="CS3246-Assignment1" />
+      <envs />
+      <RunnerSettings RunnerId="Run" />
+      <ConfigurationWrapper RunnerId="Run" />
+      <method />
+    </configuration>
+    <configuration default="false" name="ColorHistIndex" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="FindIO.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="MAIN_CLASS_NAME" value="FindIO.ColorHistIndex" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -682,17 +699,17 @@
       <item index="0" class="java.lang.String" itemvalue="Application.Main" />
       <item index="1" class="java.lang.String" itemvalue="Application.VisualWordExtraction" />
       <item index="2" class="java.lang.String" itemvalue="Application.TextIndex" />
-      <item index="3" class="java.lang.String" itemvalue="Application.VisualConceptExtraction" />
-      <item index="4" class="java.lang.String" itemvalue="Application.TextAnalyzer" />
-      <item index="5" class="java.lang.String" itemvalue="Application.Stemmer" />
+      <item index="3" class="java.lang.String" itemvalue="Application.TextAnalyzer" />
+      <item index="4" class="java.lang.String" itemvalue="Application.Stemmer" />
+      <item index="5" class="java.lang.String" itemvalue="Application.ColorHistIndex" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Application.TextIndex" />
-        <item index="1" class="java.lang.String" itemvalue="Application.TextAnalyzer" />
-        <item index="2" class="java.lang.String" itemvalue="Application.Stemmer" />
-        <item index="3" class="java.lang.String" itemvalue="Application.VisualWordExtraction" />
-        <item index="4" class="java.lang.String" itemvalue="Application.VisualConceptExtraction" />
+        <item index="0" class="java.lang.String" itemvalue="Application.ColorHistIndex" />
+        <item index="1" class="java.lang.String" itemvalue="Application.TextIndex" />
+        <item index="2" class="java.lang.String" itemvalue="Application.TextAnalyzer" />
+        <item index="3" class="java.lang.String" itemvalue="Application.Stemmer" />
+        <item index="4" class="java.lang.String" itemvalue="Application.VisualWordExtraction" />
       </list>
     </recent_temporary>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
@@ -720,12 +737,12 @@
       <workItem from="1413029764533" duration="11957000" />
       <workItem from="1413080950737" duration="23685000" />
       <workItem from="1413302059968" duration="4236000" />
-      <workItem from="1413339257590" duration="12898000" />
+      <workItem from="1413339257590" duration="16733000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="55966000" />
+    <option name="totallyTimeSpent" value="59801000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -1055,14 +1072,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/FindIO/ColorHistIndex.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2373" max-vertical-offset="3971">
-          <caret line="155" column="23" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/FindIO/ImageResult.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.10228802" vertical-offset="0" max-vertical-offset="1330">
@@ -1191,14 +1200,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/FindIO/ColorHistExtraction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2000" max-vertical-offset="2890">
-          <caret line="112" column="46" selection-start-line="112" selection-start-column="46" selection-end-line="112" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/FindIO/FindIOImageChooserInterface.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="221">
@@ -1207,18 +1208,36 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/FindIO/TextIndex.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="4012" max-vertical-offset="6664">
+          <caret line="265" column="0" selection-start-line="265" selection-start-column="0" selection-end-line="265" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/FindIO/Common.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="595">
-          <caret line="8" column="109" selection-start-line="8" selection-start-column="109" selection-end-line="8" selection-end-column="109" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="612">
+          <caret line="11" column="86" selection-start-line="11" selection-start-column="86" selection-end-line="11" selection-end-column="86" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/FindIO/TextIndex.java">
+    <entry file="file://$PROJECT_DIR$/src/FindIO/ColorHistExtraction.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.29781023" vertical-offset="4012" max-vertical-offset="6664">
-          <caret line="250" column="83" selection-start-line="250" selection-start-column="83" selection-end-line="250" selection-end-column="83" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="1632" max-vertical-offset="2890">
+          <caret line="125" column="40" selection-start-line="125" selection-start-column="0" selection-end-line="128" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/FindIO/ColorHistIndex.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5284672" vertical-offset="3327" max-vertical-offset="4624">
+          <caret line="219" column="13" selection-start-line="219" selection-start-column="13" selection-end-line="219" selection-end-column="13" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
