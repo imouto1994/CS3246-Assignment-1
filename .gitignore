@@ -3,3 +3,8 @@ src/FindIO/Features/Visual Concept/model_imagenet.mat
 src/FindIO/index/
 src/FindIO/Datasets/train/data
 .idea/workspace.xml
+src/FindIO/Features/Visual Word/ScSPM/siftfeature/
+src/FindIO/Features/Visual Word/ScSPM/indexSiftPooling/statue/0015_438968687
+src/FindIO/Features/Visual Word/ScSPM/indexSiftPooling/
+src/FindIO/cache/
+src/FindIO/Features/Visual Concept/queryList.txt
