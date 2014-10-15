@@ -127,7 +127,6 @@ public class TextAnalyzer {
                 i++;
             }
         }
-//		System.out.println(out.toString());
         return out.toString();
     }
 
@@ -145,9 +144,6 @@ public class TextAnalyzer {
         }
         return outstr;
     }
-
-
-
 
     /**
      *get tf-idf score
@@ -216,12 +212,15 @@ public class TextAnalyzer {
 
         long end = System.currentTimeMillis();
         System.out.println("analyzation done! Time(s): " + (end-start)/1000);
-		/*for(i = 0; i < list.size(); i++)
-			System.out.println(list.get(i).getKey()+"--"+list.get(i).getValue());*/
+		/*
+		for(i = 0; i < list.size(); i++){
+			System.out.println(list.get(i).getKey()+"--"+list.get(i).getValue());
+	    }
+		*/
 
     }
 
-    //for testing
+    // Main function used for testing
     public static void main (String a[])throws IOException {
         TextAnalyzer analyzer = new TextAnalyzer();
 		System.out.println(analyzer.filterWords("cool! This is an example, a good one. We'd better to get it down. and a bear"));

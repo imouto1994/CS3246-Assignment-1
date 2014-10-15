@@ -3,12 +3,12 @@ package FindIO;
 import javafx.application.Application;
 import java.io.*;
 import java.util.*;
-
 import javafx.stage.Stage;
 
 public class FindIOController extends Application implements  FindIOImageChooserInterface, FindIOSearchInterface {
 	private FindIOView findIOView;
     private double[] colorHist = null;
+    private double[] terms = null;
     private double[] visualWords = null;
     private double[] visualConcepts = null;
     private Map<String, String> imageFilePaths = null;
@@ -87,7 +87,6 @@ public class FindIOController extends Application implements  FindIOImageChooser
         Map<String, double[]> cacheResults = colorHistCache.searchImgHist(imageID);
         if(cacheResults.containsKey(imageID)){
             result = cacheResults.get(imageID);
-            //System.out.println("Histogram: " + Arrays.toString(result));
         } else {
             result = ColorHistExtraction.getHist(file);
         }
@@ -101,7 +100,6 @@ public class FindIOController extends Application implements  FindIOImageChooser
         Map<String, double[]> cacheResults = vwCache.searchVisualWordsForImage(imageID);
         if(cacheResults.containsKey(imageID)){
             result = cacheResults.get(imageID);
-            //System.out.println(Arrays.toString(result));
         } else {
             result = VisualWordExtraction.getVisualWords(file);
         }
@@ -115,7 +113,6 @@ public class FindIOController extends Application implements  FindIOImageChooser
         Map<String, double[]> cacheResults = vcCache.searchVisualConceptsForImage(imageID);
         if(cacheResults.containsKey(imageID)) {
             result = cacheResults.get(imageID);
-            //System.out.println(Arrays.toString(result));
         } else {
             result = VisualConceptExtraction.getVisualConcepts(file);
         }
@@ -124,18 +121,21 @@ public class FindIOController extends Application implements  FindIOImageChooser
 
     private String extractTerms() {
         String text = findIOView.getTextField().getText().trim();
-        String[] terms = new String[10];
+        String[] termStrings = new String[10];
         try {
             TextAnalyzer analyzer = new TextAnalyzer();
             String filteredText = analyzer.filterWords(text);
-            terms = filteredText.split("\\s+");
-        } catch(IOException e){
+            termStrings = filteredText.split("\\s+");
+        } catch (IOException e){
             System.out.println(Common.MESSAGE_TEXT_ANALYZER_ERROR);
             e.printStackTrace();
         }
-        Set<String> termsSet = new HashSet<String>(Arrays.asList(terms));
+        Set<String> termsSet = new HashSet<String>(Arrays.asList(termStrings));
+        this.terms = new double[termsSet.size()];
+        for(int i = 0; i < terms.length; i++){
+            this.terms[i] = 1.0;
+        }
         StringBuilder strBuilder = new StringBuilder();
-        String queryTerm = "";
         for(String term : termsSet){
             strBuilder.append(term);
             strBuilder.append(" ");
@@ -173,9 +173,6 @@ public class FindIOController extends Application implements  FindIOImageChooser
             imagePool.addAll(textResults.keySet());
         }
 
-        System.out.println("Length: " + imagePool.size());
-
-        /*
         Map<String, double[]> colorHistResults = null;
         if(hasColorHistogramFeature){
             if(hasColorHistogramFeature || hasVisualConceptFeature || hasTextFeature){
@@ -186,15 +183,105 @@ public class FindIOController extends Application implements  FindIOImageChooser
             }
         }
 
-        System.out.println("Result: ");
+        List<FindIOPair> rankList = new ArrayList<FindIOPair>();
         for(String image : imagePool){
-            System.out.println(image);
+            double similarity = calculateSimilarity(image, colorHistResults, textResults, vcResults, vwResults);
+            rankList.add(new FindIOPair(image, similarity));
         }
-        */
+        rankList.sort(new Comparator<FindIOPair>() {
+            @Override
+            public int compare(FindIOPair o1, FindIOPair o2) {
+                return -1 * new Double(o1.getValue()).compareTo(new Double(o2.getValue()));
+            }
+        });
 
-        return null;
+        List<String> results = new ArrayList<String>();
+        for(FindIOPair pair : rankList){
+            System.out.println("Image " + pair.getID() + " : " + pair.getValue());
+            results.add(pair.getID());
+        }
+
+        return results;
     }
 
+    private double calculateSimilarity(
+            String image,
+            Map<String, double[]> colorHistResults,
+            Map<String, double[]> textResults,
+            Map<String, double[]> vcResults,
+            Map<String, double[]> vwResults){
+        boolean hasColorHistogramFeature = findIOView.getCheckBoxForHistogram().isSelected();
+        boolean hasVisualWordFeature = findIOView.getCheckBoxForSIFT().isSelected();
+        boolean hasVisualConceptFeature = findIOView.getCheckBoxForConcept().isSelected();
+        boolean hasTextFeature = !findIOView.getTextField().getText().trim().isEmpty();
+
+        double[] weights = retrieveWeights(hasColorHistogramFeature, hasTextFeature,hasVisualConceptFeature, hasVisualWordFeature);
+        double colorHistSim, textSim, vcSim, vwSim;
+        colorHistSim = textSim = vcSim = vwSim = 0.0;
+
+        if(hasColorHistogramFeature && colorHistResults.containsKey(image)){
+            colorHistSim = Common.calculateSimilarity(colorHist, colorHistResults.get(image));
+        }
+
+        if(hasTextFeature && textResults.containsKey(image)){
+            textSim = Common.calculateSimilarity(terms, textResults.get(image));
+        }
+
+        if(hasVisualConceptFeature && vcResults.containsKey(image)){
+            vcSim = Common.calculateSimilarity(visualConcepts, vcResults.get(image));
+        }
+
+        if(hasVisualWordFeature && vwResults.containsKey(image)) {
+            vwSim = Common.calculateSimilarity(visualWords, vwResults.get(image));
+        }
+
+        return weights[Common.COLOR_HIST_WEIGHT_INDEX] * colorHistSim
+                + weights[Common.TEXT_WEIGHT_INDEX] * textSim
+                + weights[Common.VISUAL_CONCEPT_WEIGHT_INDEX] * vcSim
+                + weights[Common.VISUAL_WORD_WEIGHT_INDEX] * vwSim;
+    }
+
+    private double[] retrieveWeights(
+            boolean hasColorHistogramFeature,
+            boolean hasTextFeature,
+            boolean hasVisualConceptFeature,
+            boolean hasVisualWordFeature) {
+
+        if(hasColorHistogramFeature && !hasTextFeature && !hasVisualConceptFeature && !hasVisualWordFeature){
+            return new double[]{1.0, 0.0, 0.0, 0.0}; // only histogram
+        } else if(!hasColorHistogramFeature && hasTextFeature && !hasVisualConceptFeature && !hasVisualWordFeature){
+            return new double[]{0.0, 1.0, 0.0, 0.0}; // only text
+        } else if(!hasColorHistogramFeature && !hasTextFeature && hasVisualConceptFeature && !hasVisualWordFeature){
+            return new double[]{0.0, 0.0, 1.0, 0.0}; // only visual concept
+        } else if(!hasColorHistogramFeature && !hasTextFeature && !hasVisualConceptFeature && hasVisualWordFeature){
+            return new double[]{0.0, 0.0, 0.0, 1.0}; // only visual word
+        } else if(hasColorHistogramFeature && hasTextFeature && !hasVisualConceptFeature && !hasVisualWordFeature){
+            return new double[]{0.25, 0.75, 0.0, 0.0}; // only hist and text
+        } else if(hasColorHistogramFeature && !hasTextFeature && hasVisualConceptFeature && !hasVisualWordFeature){
+            return new double[]{0.25, 0.0, 0.75, 0.0}; // only hist and visual concept
+        } else if(hasColorHistogramFeature && !hasTextFeature && !hasVisualConceptFeature && hasVisualWordFeature){
+            return new double[]{0.25, 0.0, 0.0, 0.75}; // only hist and visual word
+        } else if(!hasColorHistogramFeature && hasTextFeature && hasVisualConceptFeature && !hasVisualWordFeature){
+            return new double[]{0.0, 0.6, 0.4, 0.0}; // only text and visual concept
+        } else if(!hasColorHistogramFeature && hasTextFeature && !hasVisualConceptFeature && hasVisualWordFeature){
+            return new double[]{0.0, 0.4, 0.0, 0.6}; // only text and visual word
+        } else if(!hasColorHistogramFeature && !hasTextFeature && hasVisualConceptFeature && hasVisualWordFeature){
+            return new double[]{0.0, 0.35, 0.0, 0.65}; // only visual concept and visual word
+        } else if(hasColorHistogramFeature && hasTextFeature && hasVisualConceptFeature && !hasVisualWordFeature){
+            return new double[]{0.1, 0.55, 0.35, 0.0}; // only hist, text and visual concept
+        } else if(!hasColorHistogramFeature && hasTextFeature && hasVisualConceptFeature && hasVisualWordFeature){
+            return new double[]{0.2, 0.0, 0.2, 0.6}; // only text, visual concept and visual word
+        } else if(hasColorHistogramFeature && hasTextFeature && !hasVisualConceptFeature && hasVisualWordFeature){
+            return new double[]{0.1, 0.4, 0.0, 0.5}; // only hist, text and visual word
+        } else if(hasColorHistogramFeature && !hasTextFeature && hasVisualConceptFeature && hasVisualWordFeature){
+            return new double[]{0.1, 0.3, 0.0, 0.6}; // only hist, visual concept and visual word
+        } else if(hasColorHistogramFeature && hasTextFeature && hasVisualConceptFeature && hasVisualWordFeature){
+            return new double[]{0.1, 0.2, 0.2, 0.5}; // all features
+        }
+
+        System.out.println("Invalid case");
+        return null;
+    }
     private Map<String, double[]> searchVisualWord(){
         List<FindIOPair> wordsList = new ArrayList<FindIOPair>();
         int index = 0;
