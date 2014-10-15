@@ -14,6 +14,7 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.MMapDirectory;
 import org.apache.lucene.util.Version;
+import org.apache.lucene.util.Bits;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -133,7 +134,7 @@ public class ColorHistIndex extends Index {
         long start = System.currentTimeMillis();
         for (int i = 0; i < colorHist.length; i++) {
             double histBinValue = colorHist[i];
-            if(histBinValue > 0){
+            if(histBinValue >= 0.1){
                 strbuf.append(i + " " + histBinValue + ",");
             }
         }
@@ -203,17 +204,70 @@ public class ColorHistIndex extends Index {
         return mapResults;
     }
 
-    /* Main Function for building the index */
-    public static void main(String[] args){
-        ColorHistIndex colorIndex = new ColorHistIndex();
-        try{
-            colorIndex.initBuilding();
-            colorIndex.buildIndex("src/FindIO/image_groundTruth.txt");
-        } catch(Throwable e) {
-            System.out.println(Common.MESSAGE_HIST_INDEX_ERROR);
-            if(test){
-                e.printStackTrace();
+    public Map<String, double[]> scanImgHist() throws Exception {
+
+        Map<String, double[]> mapResults = new HashMap<String, double[]>();
+
+        IndexReader reader = DirectoryReader.open(FSDirectory.open(indexFile));
+
+        Bits liveDocs = MultiFields.getLiveDocs(reader);
+        for (int i=0; i<reader.maxDoc(); i++) {
+            if (liveDocs != null && !liveDocs.get(i))
+                continue;
+
+            Document doc = reader.document(i);
+            String imageName = doc.get(fieldname1);
+            String[] colorBins = doc.get(fieldname2).split(",");
+            double[] colorHist = ColorHistExtraction.getDefaultColorHist();
+            for(String colorBin: colorBins){
+                String[] infos = colorBin.trim().split("\\s+");
+                colorHist[Integer.parseInt(infos[0])] = Double.parseDouble(infos[1]);
             }
+            mapResults.put(imageName, colorHist);
+        }
+
+        return mapResults;
+    }
+
+
+    public static void main(String[] args) {
+        ColorHistIndex colorIndex = new ColorHistIndex();
+        colorIndex.setIndexfile("./src/FindIO/index/colorHistIndex");
+//        try{
+//            colorIndex.initBuilding();
+//            colorIndex.buildIndex("./src/FindIO/image_groundTruth.txt");
+//        } catch(Throwable e) {
+//            System.out.println(Common.MESSAGE_HIST_INDEX_ERROR);
+//            if(test)
+//                e.printStackTrace();
+//        }
+
+//        try{
+//            textIndex.searchText("china bear");
+//        }catch(Throwable e) {
+//            System.out.println(Common.MESSAGE_TEXTINDEX_ERROR);
+//            if(test)
+//                e.printStackTrace();
+//        }
+
+        try {
+            Map<String, double[]> resultMap = colorIndex.scanImgHist();
+            int count = 0;
+            for (Map.Entry<String, double[]> entry : resultMap.entrySet()) {
+                if (count % 100 == 0) {
+                    System.out.print(entry.getKey() + "\t");
+                    for (int i = 0; i < entry.getValue().length; i++) {
+                        double value = entry.getValue()[i];
+                        if (value > 0)
+                            System.out.print(i + "" + value + "  ");
+                    }
+                    System.out.println();
+                }
+                count++;
+            }
+        } catch (Exception e) {
+            System.out.println(Common.MESSAGE_HIST_SCAN_ERROR);
+            e.printStackTrace();
         }
     }
 }

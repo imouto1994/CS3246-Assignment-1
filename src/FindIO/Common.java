@@ -4,7 +4,10 @@ package FindIO;
  * Created by Beyond on 10/12/2014 0012.
  */
 public class Common {
+
     public static final String MESSAGE_TEXT_INDEX_ERROR = "Encounter some errors when indexing text annotations";
+    public static final String MESSAGE_TEXT_UPDATE_ERROR = "Some error occurs when updating text annotation scores";
+    public static final String MESSAGE_HIST_SCAN_ERROR = "Some errors occur when scanning all images and retrieve the color histogram";
     public static final String MESSAGE_TEXT_SEARCH_ERROR = "Some errors when searching text annotations";
     public static final String MESSAGE_HIST_INDEX_ERROR = "Encounter some errors when indexing image color histogram";
     public static final String MESSAGE_HIST_SEARCH_ERROR = "Some errors when searching image color histogram";
