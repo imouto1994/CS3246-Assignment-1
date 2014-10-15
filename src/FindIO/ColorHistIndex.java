@@ -21,9 +21,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by Beyond on 10/12/2014 0012.
- */
 public class ColorHistIndex extends Index {
 
     private File indexFile;
@@ -53,7 +50,9 @@ public class ColorHistIndex extends Index {
 
     public void setIndexfile(String indexfilename) {
         this.indexFile = new File(indexfilename);
-        System.out.println("The Index File is set: " + indexfilename);
+        if(test){
+            System.out.println("The Index File is set: " + indexfilename);
+        }
     }
 
     /**
@@ -134,15 +133,15 @@ public class ColorHistIndex extends Index {
         long start = System.currentTimeMillis();
         for (int i = 0; i < colorHist.length; i++) {
             double histBinValue = colorHist[i];
-            if(histBinValue >= 0.1){
-                strbuf.append(i + " " + histBinValue + ",");
+            if(histBinValue > 0){
+                strbuf.append(i + " " + histBinValue + " ");
             }
         }
         strbuf_time += (System.currentTimeMillis() - start);
 
         // set fields for document
         this.img_field.setStringValue(imgID);
-        this.hist_field.setStringValue(Common.removeLast(strbuf.toString(), ","));
+        this.hist_field.setStringValue(strbuf.toString().trim());
         doc.add(img_field);
         doc.add(hist_field);
 
@@ -189,14 +188,13 @@ public class ColorHistIndex extends Index {
         for(ScoreDoc hit : hits){
             Document doc = searcher.doc(hit.doc);
             String imageName = doc.get(fieldname1);
-            String[] colorBins = doc.get(fieldname2).split(",");
+            String[] colorBins = doc.get(fieldname2).split(" ");
             if(mapResults.get(imageName) == null){
                 mapResults.put(imageName, ColorHistExtraction.getDefaultColorHist());
             }
             double[] colorHist = mapResults.get(imageName);
-            for(String colorBin: colorBins){
-                String[] infos = colorBin.trim().split("\\s+");
-                colorHist[Integer.parseInt(infos[0])] = Double.parseDouble(infos[1]);
+            for(int i = 0; i < colorBins.length - 1; i += 2){
+                colorHist[Integer.parseInt(colorBins[i])] = Double.parseDouble(colorBins[i + 1]);
             }
         }
         reader.close();
@@ -217,11 +215,10 @@ public class ColorHistIndex extends Index {
 
             Document doc = reader.document(i);
             String imageName = doc.get(fieldname1);
-            String[] colorBins = doc.get(fieldname2).split(",");
+            String[] colorBins = doc.get(fieldname2).split(" ");
             double[] colorHist = ColorHistExtraction.getDefaultColorHist();
-            for(String colorBin: colorBins){
-                String[] infos = colorBin.trim().split("\\s+");
-                colorHist[Integer.parseInt(infos[0])] = Double.parseDouble(infos[1]);
+            for(int j = 0; j < colorBins.length - 1; j += 2){
+                colorHist[Integer.parseInt(colorBins[j])] = Double.parseDouble(colorBins[j + 1]);
             }
             mapResults.put(imageName, colorHist);
         }
@@ -232,42 +229,13 @@ public class ColorHistIndex extends Index {
 
     public static void main(String[] args) {
         ColorHistIndex colorIndex = new ColorHistIndex();
-        colorIndex.setIndexfile("./src/FindIO/index/colorHistIndex");
-//        try{
-//            colorIndex.initBuilding();
-//            colorIndex.buildIndex("./src/FindIO/image_groundTruth.txt");
-//        } catch(Throwable e) {
-//            System.out.println(Common.MESSAGE_HIST_INDEX_ERROR);
-//            if(test)
-//                e.printStackTrace();
-//        }
-
-//        try{
-//            textIndex.searchText("china bear");
-//        }catch(Throwable e) {
-//            System.out.println(Common.MESSAGE_TEXTINDEX_ERROR);
-//            if(test)
-//                e.printStackTrace();
-//        }
-
-        try {
-            Map<String, double[]> resultMap = colorIndex.scanImgHist();
-            int count = 0;
-            for (Map.Entry<String, double[]> entry : resultMap.entrySet()) {
-                if (count % 100 == 0) {
-                    System.out.print(entry.getKey() + "\t");
-                    for (int i = 0; i < entry.getValue().length; i++) {
-                        double value = entry.getValue()[i];
-                        if (value > 0)
-                            System.out.print(i + "" + value + "  ");
-                    }
-                    System.out.println();
-                }
-                count++;
-            }
-        } catch (Exception e) {
-            System.out.println(Common.MESSAGE_HIST_SCAN_ERROR);
-            e.printStackTrace();
+        try{
+            colorIndex.initBuilding();
+            colorIndex.buildIndex("./src/FindIO/image_groundTruth.txt");
+        } catch(Throwable e) {
+            System.out.println(Common.MESSAGE_HIST_INDEX_ERROR);
+            if(test)
+                e.printStackTrace();
         }
     }
 }

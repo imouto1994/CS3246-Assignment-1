@@ -8,9 +8,6 @@ import java.util.Map.Entry;
 import java.util.regex.*;
 import java.util.*;
 
-/**
- * Created by Beyond on 10/15/2014 0015.
- */
 public class TextAnalyzer {
 
     //stop words

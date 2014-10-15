@@ -15,7 +15,7 @@ public class FindIOController extends Application implements  FindIOImageChooser
 
 	@Override
 	public void start(Stage primaryStage) {
-        //initDb();
+        initDb();
 		findIOView = new FindIOView(primaryStage);
 		findIOView.initGUI();
         injectLogicIntoView();
@@ -25,7 +25,7 @@ public class FindIOController extends Application implements  FindIOImageChooser
         imageFilePaths = new HashMap<String, String>();
         BufferedReader reader = null;
         try {
-            reader = new BufferedReader(new FileReader("src/FindIO/image_mainGroundTruth.txt"));
+            reader = new BufferedReader(new FileReader("src/FindIO/image_groundTruth.txt"));
         } catch (FileNotFoundException e) {
             System.out.println("Ground truth file does not exist");
         }
@@ -35,7 +35,7 @@ public class FindIOController extends Application implements  FindIOImageChooser
                 String[] img_folders = line.split("\\s+");
                 String imageID = img_folders[0];
                 String folderName = img_folders[1];
-                String filePath = "./src/FindIO/Datasets/train/data/"+folderName+"/"+ imageID;
+                String filePath = "src/FindIO/Datasets/train/data/"+folderName+"/"+ imageID;
                 imageFilePaths.put(Common.removeExtension(imageID), filePath);
             }
         } catch (IOException e) {
@@ -53,8 +53,7 @@ public class FindIOController extends Application implements  FindIOImageChooser
 	}
 
     public void imageSelectHandle(File file) {
-        long startTime = System.currentTimeMillis();
-        /* Extract Color Histogram */
+        /* Extract Color Hist */
         colorHist = null;
         visualWords = null;
         visualConcepts = null;
@@ -76,6 +75,7 @@ public class FindIOController extends Application implements  FindIOImageChooser
         try {
             visualConcepts = extractVisualConcepts(file);
         } catch (Exception e) {
+            e.printStackTrace();
             System.err.println("There is problem in retrieving visual concepts for the picture");
         }
     }
@@ -145,9 +145,9 @@ public class FindIOController extends Application implements  FindIOImageChooser
     }
 
     public List<String> search() {
-        boolean hasColorHistogramFeature = findIOView.getCheckBoxForHistogram().isSelected();
-        boolean hasVisualWordFeature = findIOView.getCheckBoxForSIFT().isSelected();
-        boolean hasVisualConceptFeature = findIOView.getCheckBoxForConcept().isSelected();
+        boolean hasColorHistogramFeature = findIOView.getCheckBoxForHistogram().isSelected() && colorHist != null;
+        boolean hasVisualWordFeature = findIOView.getCheckBoxForSIFT().isSelected() && visualWords != null;
+        boolean hasVisualConceptFeature = findIOView.getCheckBoxForConcept().isSelected() && visualConcepts != null;
         boolean hasTextFeature = !findIOView.getTextField().getText().trim().isEmpty();
 
         boolean isSearchValid = hasColorHistogramFeature || hasVisualWordFeature || hasVisualConceptFeature || hasTextFeature;
@@ -175,7 +175,7 @@ public class FindIOController extends Application implements  FindIOImageChooser
 
         Map<String, double[]> colorHistResults = null;
         if(hasColorHistogramFeature){
-            if(hasColorHistogramFeature || hasVisualConceptFeature || hasTextFeature){
+            if(hasVisualWordFeature || hasVisualConceptFeature || hasTextFeature){
                 colorHistResults = searchColorHistogram(new ArrayList<String>(imagePool));
             } else {
                 colorHistResults = searchAllColorHistograms();
@@ -196,9 +196,8 @@ public class FindIOController extends Application implements  FindIOImageChooser
         });
 
         List<String> results = new ArrayList<String>();
-        for(FindIOPair pair : rankList){
-            System.out.println("Image " + pair.getID() + " : " + pair.getValue());
-            results.add(pair.getID());
+        for(int i = 0; i < rankList.size() && i < Common.MAX_RESULTS; i++){
+            results.add(imageFilePaths.get(rankList.get(i).getID()));
         }
 
         return results;
@@ -210,9 +209,9 @@ public class FindIOController extends Application implements  FindIOImageChooser
             Map<String, double[]> textResults,
             Map<String, double[]> vcResults,
             Map<String, double[]> vwResults){
-        boolean hasColorHistogramFeature = findIOView.getCheckBoxForHistogram().isSelected();
-        boolean hasVisualWordFeature = findIOView.getCheckBoxForSIFT().isSelected();
-        boolean hasVisualConceptFeature = findIOView.getCheckBoxForConcept().isSelected();
+        boolean hasColorHistogramFeature = findIOView.getCheckBoxForHistogram().isSelected() && colorHist != null;
+        boolean hasVisualWordFeature = findIOView.getCheckBoxForSIFT().isSelected() && visualWords != null;
+        boolean hasVisualConceptFeature = findIOView.getCheckBoxForConcept().isSelected() && visualConcepts != null;
         boolean hasTextFeature = !findIOView.getTextField().getText().trim().isEmpty();
 
         double[] weights = retrieveWeights(hasColorHistogramFeature, hasTextFeature,hasVisualConceptFeature, hasVisualWordFeature);
@@ -357,6 +356,14 @@ public class FindIOController extends Application implements  FindIOImageChooser
     }
 
     private Map<String, double[]> searchAllColorHistograms() {
-        return null;
+        ColorHistIndex colorHistIndex = new ColorHistIndex();
+        Map<String, double[]> results = null;
+        try {
+            results = colorHistIndex.scanImgHist();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("There was error in searching in the index database for color histogram");
+        }
+        return results;
     }
 }

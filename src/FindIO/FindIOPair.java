@@ -1,8 +1,5 @@
 package FindIO;
 
-/**
- * Created by Beyond on 10/12/2014 0012.
- */
 public class FindIOPair implements Comparable<FindIOPair> {
     private String id;
     private double value;

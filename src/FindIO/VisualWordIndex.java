@@ -1,6 +1,5 @@
 package FindIO;
 
-import com.sun.java.swing.plaf.windows.resources.windows_pt_BR;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -50,7 +49,9 @@ public class VisualWordIndex extends Index {
 
     public void setIndexfile(String indexfilename) {
         this.indexFile = new File(indexfilename);
-        System.out.println("The Index File is set: " + indexfilename);
+        if(test){
+            System.out.println("The Index File is set: " + indexfilename);
+        }
     }
 
     /**
@@ -166,13 +167,13 @@ public class VisualWordIndex extends Index {
         long start = System.currentTimeMillis();
         for (int i = 0; i < imgPairList.size(); i++) {
             FindIOPair imgPair = imgPairList.get(i);
-            strbuf.append(imgPair.getID() + " "+imgPair.getValue()+",");
+            strbuf.append(imgPair.getID() + " " + imgPair.getValue() + " ");
         }
         strbuf_time += (System.currentTimeMillis() - start);
 
         // set fields for document
         this.vw_field.setStringValue(visualWord);
-        this.img_field.setStringValue(Common.removeLast(strbuf.toString(), ","));
+        this.img_field.setStringValue(strbuf.toString().trim());
         doc.add(vw_field);
         doc.add(img_field);
 
@@ -218,11 +219,10 @@ public class VisualWordIndex extends Index {
         for(ScoreDoc hit : hits){
             Document doc = searcher.doc(hit.doc);
             String visualWord = doc.get(fieldname1);
-            String[] images = doc.get(fieldname2).split(",");
-            for(String image : images){
-                String[] infos = image.trim().split("\\s+");
-                String imageName = infos[0];
-                String frequency = infos[1];
+            String[] images = doc.get(fieldname2).split(" ");
+            for(int i = 0; i < images.length; i += 2){
+                String imageName = images[i];
+                String frequency = images[i + 1];
                 if(mapResults.get(imageName) == null){
                     mapResults.put(imageName, new double[Common.NUM_VISUAL_WORDS]);
                 }
