@@ -60,6 +60,8 @@ public class FindIOController extends Application implements  FindIOImageChooser
 	}
 
     public void imageSelectHandle(File file) {
+
+
         /* Extract Color Hist */
         colorHist = null;
         visualWords = null;
@@ -284,19 +286,19 @@ public class FindIOController extends Application implements  FindIOImageChooser
         } else if(!hasColorHistogramFeature && hasTextFeature && hasVisualConceptFeature && !hasVisualWordFeature){
             return new double[]{0.0, 0.6, 0.4, 0.0}; // only text and visual concept
         } else if(!hasColorHistogramFeature && hasTextFeature && !hasVisualConceptFeature && hasVisualWordFeature){
-            return new double[]{0.0, 0.4, 0.0, 0.6}; // only text and visual word
+            return new double[]{0.0, 0.6, 0.0, 0.4}; // only text and visual word
         } else if(!hasColorHistogramFeature && !hasTextFeature && hasVisualConceptFeature && hasVisualWordFeature){
-            return new double[]{0.0, 0.35, 0.0, 0.65}; // only visual concept and visual word
+            return new double[]{0.0, 0.0, 0.55, 0.45}; // only visual concept and visual word
         } else if(hasColorHistogramFeature && hasTextFeature && hasVisualConceptFeature && !hasVisualWordFeature){
             return new double[]{0.1, 0.55, 0.35, 0.0}; // only hist, text and visual concept
         } else if(!hasColorHistogramFeature && hasTextFeature && hasVisualConceptFeature && hasVisualWordFeature){
-            return new double[]{0.2, 0.0, 0.2, 0.6}; // only text, visual concept and visual word
+            return new double[]{0.0, 0.4, 0.4, 0.3}; // only text, visual concept and visual word
         } else if(hasColorHistogramFeature && hasTextFeature && !hasVisualConceptFeature && hasVisualWordFeature){
-            return new double[]{0.1, 0.4, 0.0, 0.5}; // only hist, text and visual word
+            return new double[]{0.1, 0.5, 0.0, 0.4}; // only hist, text and visual word
         } else if(hasColorHistogramFeature && !hasTextFeature && hasVisualConceptFeature && hasVisualWordFeature){
-            return new double[]{0.1, 0.3, 0.0, 0.6}; // only hist, visual concept and visual word
+            return new double[]{0.1, 0.0, 0.5, 0.4}; // only hist, visual concept and visual word
         } else if(hasColorHistogramFeature && hasTextFeature && hasVisualConceptFeature && hasVisualWordFeature){
-            return new double[]{0.1, 0.2, 0.2, 0.5}; // all features
+            return new double[]{0.1, 0.4, 0.3, 0.2}; // all features
         }
 
         System.out.println("Invalid case");
