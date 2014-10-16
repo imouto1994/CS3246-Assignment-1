@@ -15,6 +15,9 @@ public class Common {
     public static final String MESSAGE_FILE_NOTEXIST = "Woops! File not existing";
     public static final String MESSAGE_FILE_INDEX_SUCCESS = "Index successfully image ";
     public static final String MESSAGE_TEXT_ANALYZER_ERROR = "Some errors when analyzing text";
+    public static final String MESSAGE_LOAD_TEXT_ERROR = "Some errors when loading text index";
+    public static final String MESSAGE_BENCHMARK_ERROR = "Some errors when benchmarking";
+
 
     public static final int topK = 1024;
     public static final int NUM_VISUAL_WORDS = 21504;

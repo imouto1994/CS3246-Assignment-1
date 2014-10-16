@@ -111,14 +111,8 @@ public class ImageResultCell extends GridCell<ImageResult> {
 
             StackPane.setAlignment(imageView, Pos.CENTER);
             StackPane.setAlignment(hBox, Pos.BOTTOM_CENTER);
-
-            setOpacity(0.0);
             setGraphic(stack);
             setAlignment(Pos.CENTER);
-            FadeTransition fadeTransition = new FadeTransition(Duration.millis(1000), this);
-            fadeTransition.setFromValue(0.0);
-            fadeTransition.setToValue(1.0);
-            fadeTransition.play();
         }
     }
 }

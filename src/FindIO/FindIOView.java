@@ -58,6 +58,7 @@ public class FindIOView {
     private CheckBox checkBoxForHistogram;
     private CheckBox checkBoxForSIFT;
     private CheckBox checkBoxForConcept;
+    private GridView<ImageResult> grid;
 
     /* Image Results List */
     ObservableList<ImageResult> imageList = FXCollections.observableArrayList();
@@ -198,6 +199,11 @@ public class FindIOView {
                                 for(int i = 0; i < results.size(); i++){
                                     imageList.add(new ImageResult(results.get(i), i));
                                 }
+                                FadeTransition fadeTransition = new FadeTransition(Duration.millis(1000), grid);
+                                fadeTransition.setInterpolator(Interpolator.EASE_BOTH);
+                                fadeTransition.setFromValue(0.0);
+                                fadeTransition.setToValue(1.0);
+                                fadeTransition.play();
                                 centerSection.getChildren().remove(preloadPane);
                             }
                         });
@@ -359,7 +365,7 @@ public class FindIOView {
     }
 
     private GridView<ImageResult> initGridView() {
-        final GridView<ImageResult> grid = new GridView<ImageResult>();
+        grid = new GridView<ImageResult>();
 
         grid.setItems(imageList);
         grid.setId("grid");

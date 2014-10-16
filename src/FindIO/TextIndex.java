@@ -81,6 +81,19 @@ public class TextIndex extends Index{
         }
     }
 
+
+    /* Main Function For Indexing */
+    public static void main(String[] args){
+        TextIndex textIndex = new TextIndex();
+        try{
+            textIndex.initBuilding();
+            textIndex.buildIndex("./src/FindIO/Datasets/train/image_tags.txt");
+        } catch(Throwable e) {
+            e.printStackTrace();
+        }
+    }
+
+
     /**
      * Initialization for building the index
      *
@@ -149,6 +162,7 @@ public class TextIndex extends Index{
         }
         System.out.println("Number of index: " + index_count);
         closeWriter();
+        reader.close();
     }
 
     /**
@@ -203,7 +217,7 @@ public class TextIndex extends Index{
         QueryParser parser = new QueryParser(fieldname1, analyzer);
 
         Query query = parser.parse(queryString);
-        System.out.println("Searching for: " + query.toString(fieldname1));
+        System.out.println("Searching for text: " + query.toString(fieldname1));
 
         TopDocs topDocs;
         if (test) {                           // repeat & time as benchmark
@@ -226,7 +240,7 @@ public class TextIndex extends Index{
             if(index == -1){
                 continue;
             }
-            String[] images = doc.get(fieldname2).split(" ");
+            String[] images = doc.get(fieldname2).split("\\s+");
             for(int i = 0; i < images.length; i += 2) {
                 String imageName = images[i];
                 String freq = images[i + 1];
@@ -242,24 +256,13 @@ public class TextIndex extends Index{
         return mapResults;
     }
 
-    /* Main Function For Indexing */
-    public static void main(String[] args){
-        TextIndex textIndex = new TextIndex();
-        try{
-            textIndex.initBuilding();
-            textIndex.buildIndex("./src/FindIO/Datasets/train/image_tags.txt");
-        } catch(Throwable e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * update score mainly used for relevance feedback, the input should be stemmed
      * @param imageID
      * @param tag_score_pairs
      * @throws Throwable
      */
-    public void updateScore(String imageID, ArrayList<FindIOPair> tag_score_pairs) throws Throwable{
+    public void updateScore(String imageID, List<FindIOPair> tag_score_pairs) throws Throwable{
         IndexReader reader = DirectoryReader.open(FSDirectory.open(indexFile));
         IndexSearcher searcher = new IndexSearcher(reader);
         // :Post-Release-Update-Version.LUCENE_XY:
@@ -276,10 +279,10 @@ public class TextIndex extends Index{
 
             Query query = parser.parse(tag);
 
-            System.out.println("Searching for: " + query.toString(fieldname1));
+            System.out.println("Updating Text: " + query.toString(fieldname1));
 
             TopDocs topDocs;
-            if (test) {                           // repeat & time as benchmark
+            if (test) { // repeat & time as benchmark
                 long start = System.currentTimeMillis();
                 topDocs = searcher.search(query, null, Common.topK);
                 long end =  System.currentTimeMillis();
@@ -291,7 +294,7 @@ public class TextIndex extends Index{
             ScoreDoc[] hits = topDocs.scoreDocs;
             if(hits.length == 0){ //It's a new tag
                 Document doc = new Document();
-                String img_score = imageID+" "+add_score+",";
+                String img_score = imageID + " " + add_score + " ";
 
                 // set fields for document
                 this.tag_field.setStringValue(this.textAnalyzer.getStem(tag));
@@ -300,7 +303,7 @@ public class TextIndex extends Index{
                 doc.add(img_field);
                 MMwriter.addDocument(doc);
             } else {
-            //The tag is included in the index
+                //The tag is included in the index
                 int docId = hits[0].doc;
 
                 //retrieve the old document
@@ -308,31 +311,36 @@ public class TextIndex extends Index{
 
                 //replacement field value
                 String currentScores = doc.get(fieldname2);
-                String[] img_score_pairs = currentScores.split(",");
+                String[] img_score_pairs = currentScores.split(" ");
                 StringBuilder stringBuilder = new StringBuilder();
 
                 boolean isImageContained = false;
 
-                for(String img_score_pair : img_score_pairs){
-                    String[] img_score = img_score_pair.split(" ");
-                    String img = img_score[0];
-                    double old_score = Double.valueOf(img_score[1]);
+                for(int i = 0; i < img_score_pairs.length; i += 2){
+                    String img = img_score_pairs[i];
+                    double old_score = Double.valueOf(img_score_pairs[i + 1]);
                     double new_score = old_score + add_score;
+                    if(new_score < 0){
+                        new_score = 0;
+                    }
+                    String img_score_pair;
                     if(img.equals(imageID)){
                         img_score_pair = img+" "+new_score;
                         isImageContained = true;
+                    } else {
+                        img_score_pair = img + " " + old_score + " ";
                     }
-                    stringBuilder.append(img_score_pair+",");
+                    stringBuilder.append(img_score_pair);
                 }
 
                 if(!isImageContained) { //If the image was not covered by the tag, append it to the tail
-                    stringBuilder.append(imageID+" "+add_score+",");
+                    stringBuilder.append(imageID + " " + add_score + " ");
                 }
 
                 //remove all occurrences of the old field
                 doc.removeFields(fieldname2);
 
-                this.img_field.setStringValue(stringBuilder.toString());
+                this.img_field.setStringValue(stringBuilder.toString().trim());
                 if(test)
                     System.out.println(stringBuilder.toString());
                 //insert the replacement
