@@ -194,8 +194,9 @@ public class FindIOController extends Application implements  FindIOImageChooser
 
         Map<String, double[]> vwResults = null;
         if(hasVisualWordFeature ){
-            vwResults  = searchVisualWord();
-            imagePool.addAll(vwResults.keySet());
+            vwResults  = searchVisualWordsForAllImages();
+            List<String> vwPool = filterVWResults(visualWords, vwResults);
+            imagePool.addAll(vwPool);
         }
         Map<String, double[]> vcResults = null;
         if(hasVisualConceptFeature){
@@ -238,6 +239,21 @@ public class FindIOController extends Application implements  FindIOImageChooser
         return results;
     }
 
+    private List<String> filterVWResults(double[] visualWords, Map<String, double[]> vwResults) {
+        List<FindIOPair> top40 = new ArrayList<FindIOPair>();
+        for(String imageID: vwResults.keySet()){
+            double[] imageWords = vwResults.get(imageID);
+            top40.add(new FindIOPair(imageID, Common.calculateSimilarity(visualWords, imageWords, Common.CORRELATION_DISTANCE)));
+        }
+        Collections.sort(top40);
+        List<String> pool = new ArrayList<String>();
+        for(int i = top40.size() - 1; i >= (top40.size() - 40); i--){
+            pool.add(top40.get(i).getID());
+        }
+
+        return pool;
+    }
+
     private double calculateSimilarity(
             String image,
             Map<String, double[]> colorHistResults,
@@ -255,19 +271,19 @@ public class FindIOController extends Application implements  FindIOImageChooser
         colorHistSim = textSim = vcSim = vwSim = 0.0;
 
         if(hasColorHistogramFeature && colorHistResults.containsKey(image)){
-            colorHistSim = Common.calculateSimilarity(colorHist, colorHistResults.get(image));
+            colorHistSim = Common.calculateSimilarity(colorHist, colorHistResults.get(image), Common.CORRELATION_DISTANCE);
         }
 
         if(hasTextFeature && textResults.containsKey(image)){
-            textSim = Common.calculateSimilarity(terms, textResults.get(image));
+            textSim = Common.calculateSimilarity(terms, textResults.get(image), Common.BHATTACHARYYA_DISTANCE);
         }
 
         if(hasVisualConceptFeature && vcResults.containsKey(image)){
-            vcSim = Common.calculateSimilarity(visualConcepts, vcResults.get(image));
+            vcSim = Common.calculateSimilarity(visualConcepts, vcResults.get(image), Common.BHATTACHARYYA_DISTANCE);
         }
 
         if(hasVisualWordFeature && vwResults.containsKey(image)) {
-            vwSim = Common.calculateSimilarity(visualWords, vwResults.get(image));
+            vwSim = Common.calculateSimilarity(visualWords, vwResults.get(image), Common.CORRELATION_DISTANCE);
         }
 
         return weights[Common.COLOR_HIST_WEIGHT_INDEX] * colorHistSim
@@ -318,30 +334,15 @@ public class FindIOController extends Application implements  FindIOImageChooser
         return null;
     }
 
-    private Map<String, double[]> searchVisualWord(){
-        List<FindIOPair> wordsList = new ArrayList<FindIOPair>();
-        int index = 0;
-        for(int i = 0; i < visualWords.length; i++){
-            if(visualWords[i] > 0){
-                wordsList.add(new FindIOPair(String.valueOf(i), visualWords[i]));
-            }
-        }
-        Collections.sort(wordsList);
-        StringBuilder strBuilder = new StringBuilder();
-        for(int i = wordsList.size() - 1; i >= 0 && (wordsList.size() - i) <= Common.MAXIMUM_NUMBER_OF_TERMS; i--){
-            FindIOPair word = wordsList.get(i);
-            strBuilder.append(word.getID());
-            strBuilder.append(" ");
-        }
-        VisualWordIndex vwIndex = new VisualWordIndex();
+    private Map<String, double[]> searchVisualWordsForAllImages(){
+        VisualWordIndex visualWordIndex = new VisualWordIndex();
         Map<String, double[]> results = null;
         try {
-            results = vwIndex.searchVisualWord(strBuilder.toString().trim());
+            results = visualWordIndex.scanVisualWords();
         } catch (Exception e) {
             results = new HashMap<String, double[]>();
             System.out.println("There was error in searching in the index database for visual words");
         }
-
         return results;
     }
 

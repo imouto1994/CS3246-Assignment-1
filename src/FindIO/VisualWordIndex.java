@@ -6,28 +6,22 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.*;
-import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.MMapDirectory;
-import org.apache.lucene.util.Version;
+import org.apache.lucene.util.*;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class VisualWordIndex extends Index {
-
     private File indexFile;
     private MMapDirectory MMapDir;
     private IndexWriterConfig config;
     private IndexReader indexReader;
     private AtomicReader areader;
-    private String fieldname1 = "vw";
-    private String fieldname2 = "img_freq";
+    private String fieldname1 = "imageID";
+    private String fieldname2 = "words";
 
     private Field vw_field;
     private Field img_field;
@@ -81,15 +75,15 @@ public class VisualWordIndex extends Index {
         // use Memory Map to store the index
         MMwriter = new IndexWriter(MMapDir, config);
 
-        vw_field = new TextField(this.fieldname1, "-1", Field.Store.YES);
-        img_field = new TextField(this.fieldname2, "-1", Field.Store.YES);
+        img_field = new TextField(this.fieldname1, "-1", Field.Store.YES);
+        vw_field = new TextField(this.fieldname2, "-1", Field.Store.YES);
 
         strbuf = new StringBuffer();
         databuf = new StringBuffer();
         initbuilding_time = System.currentTimeMillis() - startbuilding_time;
     }
 
-    private void walk(String path, Map<String, List<FindIOPair>> vwImageMap){
+    private void walk(String path){
         File root = new File( path );
         File[] list = root.listFiles();
 
@@ -97,7 +91,7 @@ public class VisualWordIndex extends Index {
 
         for ( File f : list ) {
             if ( f.isDirectory() ) {
-                walk(f.getAbsolutePath(), vwImageMap);
+                walk(f.getAbsolutePath());
             }
             else {
                 String fileName = f.getName();
@@ -106,26 +100,14 @@ public class VisualWordIndex extends Index {
                     String line;
                     while((line = br.readLine()) != null){
                         String[] freqs = line.trim().split("\\s+");
-                        List<FindIOPair> wordsList = new ArrayList<FindIOPair>();
-                        int index = 0;
+                        double[] words = new double[Common.NUM_VISUAL_WORDS];
                         for(int i = 0; i < freqs.length; i++){
-                            if(Double.parseDouble(freqs[i]) > 0){
-                                wordsList.add(new FindIOPair(String.valueOf(i), Double.parseDouble(freqs[i])));
-                            }
+                            words[i] = Double.parseDouble(freqs[i]);
                         }
-                        Collections.sort(wordsList);
-
-                        for(int i = wordsList.size() - 1; i >= 0 && i >= wordsList.size() - Common.MAXIMUM_NUMBER_OF_TERMS; i--){
-                            FindIOPair word = wordsList.get(i);
-                            if(vwImageMap.get(word.getID()) == null){
-                                vwImageMap.put(word.getID(), new ArrayList<FindIOPair>());
-                            }
-                            List<FindIOPair> imagesList = vwImageMap.get(word.getID());
-                            imagesList.add(new FindIOPair(fileName, word.getValue()));
-                        }
+                        addDoc(fileName, words);
+                        index_count++;
                     }
                     br.close();
-                    //f.delete();
                 } catch (FileNotFoundException e) {
                     System.out.println("Result file is not created");
                 } catch (IOException e) {
@@ -137,16 +119,9 @@ public class VisualWordIndex extends Index {
 
     public void buildIndex() throws Throwable{
 
-        //VisualWordExtraction.createVisualWordsForDirectory("C:\\Users\\Nhan\\Documents\\FindIO\\src\\FindIO\\Datasets\\train\\data", true, "indexSiftPooling");
+        //VisualWordExtraction.createVisualWordsForDirectory("C:\\Users\\Nhan\\Documents\\FindIO\\src\\FindIO\\Datasets\\test\\query", true, "cacheSiftPooling");
 
-        Map<String, List<FindIOPair>> vwImageMap = new HashMap<String, List<FindIOPair>>();
-        walk("src/FindIO/Features/Visual Word/ScSPM/indexSiftPooling", vwImageMap);
-
-        for(String word : vwImageMap.keySet()){
-            List<FindIOPair> imgPairList = vwImageMap.get(word);
-            addDoc(word, imgPairList);
-            index_count++;
-        }
+        walk("src/FindIO/Features/Visual Word/ScSPM/indexSiftPooling");
         System.out.println("Number of index: " + index_count);
         closeWriter();
     }
@@ -155,84 +130,62 @@ public class VisualWordIndex extends Index {
      * Add a document. The document contains two fields: one is the element id,
      * the other is the values on each dimension
      *
-     * @param visualWord: tag as the key of inverted index
-     * @param imgPairList: the posting list containing image pairs
+     * @param imageID: tag as the key of inverted index
+     * @param words: the posting list containing image pairs
      * */
-    public void addDoc(String visualWord, List<FindIOPair> imgPairList) {
+    public void addDoc(String imageID, double[] words) {
 
         Document doc = new Document();
         // clear the StringBuffer
         strbuf.setLength(0);
         // set new Text for payload analyzer
         long start = System.currentTimeMillis();
-        for (int i = 0; i < imgPairList.size(); i++) {
-            FindIOPair imgPair = imgPairList.get(i);
-            strbuf.append(imgPair.getID() + " " + imgPair.getValue() + " ");
+        for (int i = 0; i < words.length; i++) {
+            double wordValue = words[i];
+            if(wordValue > 0){
+                strbuf.append(i + " " + wordValue + " ");
+            }
         }
         strbuf_time += (System.currentTimeMillis() - start);
 
         // set fields for document
-        this.vw_field.setStringValue(visualWord);
-        this.img_field.setStringValue(strbuf.toString().trim());
-        doc.add(vw_field);
+        this.img_field.setStringValue(imageID);
+        this.vw_field.setStringValue(strbuf.toString().trim());
         doc.add(img_field);
+        doc.add(vw_field);
 
         try {
             MMwriter.addDocument(doc);
-            System.out.println(Common.MESSAGE_FILE_INDEX_SUCCESS + " visual word " + visualWord);
+            System.out.println(Common.MESSAGE_FILE_INDEX_SUCCESS + imageID);
         } catch (IOException e) {
-            System.err.println(Common.MESSAGE_VW_INDEX_ERROR);
-            if (test)
+            System.err.println(Common.MESSAGE_HIST_INDEX_ERROR);
+            if (test){
                 e.printStackTrace();
+            }
         }
     }
 
-    public Map<String, double[]> searchVisualWord(String visualWords) throws Exception {
-        IndexReader reader = DirectoryReader.open(FSDirectory.open(indexFile));
-        IndexSearcher searcher = new IndexSearcher(reader);
-        // :Post-Release-Update-Version.LUCENE_XY:
-        Analyzer analyzer = new StandardAnalyzer();
-
-        BufferedReader in = null;
-        in = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
-
-        // :Post-Release-Update-Version.LUCENE_XY:
-        QueryParser parser = new QueryParser(fieldname1, analyzer);
-
-        Query query = parser.parse(visualWords);
-        if(test)
-        System.out.println("Searching for VW: " + query.toString(fieldname1));
-
-        TopDocs topDocs;
-        if (test) {                           // repeat & time as benchmark
-            long start = System.currentTimeMillis();
-            topDocs = searcher.search(query, null, Common.topK);
-            long end =  System.currentTimeMillis();
-            System.out.println("Time: "+(end - start)+" ms");
-        } else {
-            topDocs = searcher.search(query, null, Common.topK);
-        }
-
-        ScoreDoc[] hits = topDocs.scoreDocs;
+    public Map<String, double[]> scanVisualWords() throws Exception {
 
         Map<String, double[]> mapResults = new HashMap<String, double[]>();
-        //print out the top hits documents
-        for(ScoreDoc hit : hits){
-            Document doc = searcher.doc(hit.doc);
-            String visualWord = doc.get(fieldname1);
-            String[] images = doc.get(fieldname2).split(" ");
-            for(int i = 0; i < images.length; i += 2){
-                String imageName = images[i];
-                String frequency = images[i + 1];
-                if(mapResults.get(imageName) == null){
-                    mapResults.put(imageName, new double[Common.NUM_VISUAL_WORDS]);
-                }
-                double[] imageVisualWords = mapResults.get(imageName);
-                imageVisualWords[Integer.parseInt(visualWord)] = Double.parseDouble(frequency);
+
+        IndexReader reader = DirectoryReader.open(FSDirectory.open(indexFile));
+
+        Bits liveDocs = MultiFields.getLiveDocs(reader);
+        for (int i=0; i<reader.maxDoc(); i++) {
+            if (liveDocs != null && !liveDocs.get(i))
+                continue;
+
+            Document doc = reader.document(i);
+            String imageName = doc.get(fieldname1);
+            String[] wordsString = doc.get(fieldname2).split(" ");
+            double[] words = new double[Common.NUM_VISUAL_WORDS];
+            for(int j = 0; j < wordsString.length - 1; j += 2){
+                words[Integer.parseInt(wordsString[j])] = Double.parseDouble(wordsString[j + 1]);
             }
+            mapResults.put(imageName, words);
         }
 
-        reader.close();
         return mapResults;
     }
 
@@ -242,11 +195,11 @@ public class VisualWordIndex extends Index {
             vwIndex.initBuilding();
             vwIndex.buildIndex();
         } catch(Throwable e) {
+            e.printStackTrace();
             System.out.println(Common.MESSAGE_TEXT_INDEX_ERROR);
             if(test){
                 e.printStackTrace();
             }
         }
     }
-
 }
