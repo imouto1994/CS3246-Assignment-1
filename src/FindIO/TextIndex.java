@@ -81,6 +81,19 @@ public class TextIndex extends Index{
         }
     }
 
+
+    /* Main Function For Indexing */
+    public static void main(String[] args){
+        TextIndex textIndex = new TextIndex();
+        try{
+            textIndex.initBuilding();
+            textIndex.buildIndex("./src/FindIO/Datasets/train/image_tags.txt");
+        } catch(Throwable e) {
+            e.printStackTrace();
+        }
+    }
+
+
     /**
      * Initialization for building the index
      *
@@ -149,6 +162,7 @@ public class TextIndex extends Index{
         }
         System.out.println("Number of index: " + index_count);
         closeWriter();
+        reader.close();
     }
 
     /**
@@ -203,7 +217,7 @@ public class TextIndex extends Index{
         QueryParser parser = new QueryParser(fieldname1, analyzer);
 
         Query query = parser.parse(queryString);
-        System.out.println("Searching for: " + query.toString(fieldname1));
+        System.out.println("Searching for text: " + query.toString(fieldname1));
 
         TopDocs topDocs;
         if (test) {                           // repeat & time as benchmark
@@ -242,17 +256,6 @@ public class TextIndex extends Index{
         return mapResults;
     }
 
-    /* Main Function For Indexing */
-    public static void main(String[] args){
-        TextIndex textIndex = new TextIndex();
-        try{
-            textIndex.initBuilding();
-            textIndex.buildIndex("./src/FindIO/Datasets/train/image_tags.txt");
-        } catch(Throwable e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * update score mainly used for relevance feedback, the input should be stemmed
      * @param imageID
@@ -276,7 +279,7 @@ public class TextIndex extends Index{
 
             Query query = parser.parse(tag);
 
-            System.out.println("Searching for: " + query.toString(fieldname1));
+            System.out.println("Updating Text: " + query.toString(fieldname1));
 
             TopDocs topDocs;
             if (test) {                           // repeat & time as benchmark

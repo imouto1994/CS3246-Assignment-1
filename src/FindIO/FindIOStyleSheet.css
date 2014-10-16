@@ -33,6 +33,7 @@
 
 .defaultButton:hover {
     -fx-background-color: rgb(242, 79, 62);
+    -fx-cursor: hand;
 }
 
 .defaultButton:armed {
@@ -90,6 +91,7 @@
 
 #imageButton:hover #imageGlyph{
     -fx-image: url("./Images/imageGlyphHover.png");
+    -fx-cursor: hand;
 }
 
 #imageButton:armed #imageGlyph{
@@ -104,6 +106,7 @@
 
 #settingsButton:hover {
     -fx-background-color: rgb(0, 203, 108);
+    -fx-cursor: hand;
 }
 
 #settingsButton:armed {

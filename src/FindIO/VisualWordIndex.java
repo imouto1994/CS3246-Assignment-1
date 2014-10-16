@@ -200,7 +200,7 @@ public class VisualWordIndex extends Index {
         QueryParser parser = new QueryParser(fieldname1, analyzer);
 
         Query query = parser.parse(visualWords);
-        System.out.println("Searching for: " + query.toString(fieldname1));
+        System.out.println("Searching for VW: " + query.toString(fieldname1));
 
         TopDocs topDocs;
         if (test) {                           // repeat & time as benchmark
