@@ -13,6 +13,9 @@ public class FindIOController extends Application implements  FindIOImageChooser
     private double[] visualConcepts = null;
     private String queryString;
     private Map<String, String> imageFilePaths = null;
+    private ColorHistCache colorHistCache;
+    private VisualConceptCache visualConceptCache;
+    private VisualWordCache visualWordCache;
 
     private boolean isCHSelected = false;
     private boolean isVWSelected = false;
@@ -48,6 +51,20 @@ public class FindIOController extends Application implements  FindIOImageChooser
         } catch (Exception e) {
             System.out.println("There was error during the process of reading the ground truth file");
         }
+
+        /* Initialize Caches */
+        colorHistCache = new ColorHistCache();
+        visualConceptCache = new VisualConceptCache();
+        visualWordCache = new VisualWordCache();
+        try {
+            colorHistCache.initBuilding();
+            visualConceptCache.initBuilding();
+            visualWordCache.initBuilding();
+        } catch (Throwable throwable) {
+            System.err.println("There is error in the process of initializing the caches");
+        }
+
+
     }
 
     public void injectLogicIntoView() {
@@ -89,39 +106,39 @@ public class FindIOController extends Application implements  FindIOImageChooser
 
     private double[] extractHistogram(File file) throws Exception {
         String imageID = Common.removeExtension(file.getName());
-        ColorHistCache colorHistCache = new ColorHistCache();
         double[] result = null;
         Map<String, double[]> cacheResults = colorHistCache.searchImgHist(imageID);
         if(cacheResults.containsKey(imageID)){
             result = cacheResults.get(imageID);
         } else {
             result = ColorHistExtraction.getHist(file);
+            colorHistCache.addDoc(imageID, result);
         }
         return result;
     }
 
     private double[] extractVisualWords(File file) throws Exception{
         String imageID = Common.removeExtension(file.getName());
-        VisualWordCache vwCache = new VisualWordCache();
         double[] result = null;
-        Map<String, double[]> cacheResults = vwCache.searchVisualWordsForImage(imageID);
+        Map<String, double[]> cacheResults = visualWordCache.searchVisualWordsForImage(imageID);
         if(cacheResults.containsKey(imageID)){
             result = cacheResults.get(imageID);
         } else {
             result = VisualWordExtraction.getVisualWords(file);
+            visualWordCache.addDoc(imageID, result);
         }
         return result;
     }
 
     private double[] extractVisualConcepts(File file) throws Exception {
         String imageID = Common.removeExtension(file.getName());
-        VisualConceptCache vcCache = new VisualConceptCache();
         double[] result = null;
-        Map<String, double[]> cacheResults = vcCache.searchVisualConceptsForImage(imageID);
+        Map<String, double[]> cacheResults = visualConceptCache.searchVisualConceptsForImage(imageID);
         if(cacheResults.containsKey(imageID)) {
             result = cacheResults.get(imageID);
         } else {
             result = VisualConceptExtraction.getVisualConcepts(file);
+            visualConceptCache.addDoc(imageID, result);
         }
         return result;
     }
@@ -172,7 +189,7 @@ public class FindIOController extends Application implements  FindIOImageChooser
         boolean hasVisualConceptFeature = isVCSelected && visualConcepts != null;
         boolean isSearchValid = hasColorHistogramFeature || hasVisualWordFeature || hasVisualConceptFeature || isTextSelected;
         if(!isSearchValid){
-            return null;
+            return new ArrayList<String>();
         }
 
         Set<String> imagePool = new HashSet<String>();
