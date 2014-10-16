@@ -168,6 +168,7 @@ public class ColorHistCache extends Index {
         QueryParser parser = new QueryParser(fieldname1, analyzer);
 
         Query query = parser.parse(imageID);
+        if(test)
         System.out.println("Searching for: " + query.toString(fieldname1));
 
         TopDocs topDocs;

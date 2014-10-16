@@ -63,8 +63,6 @@ public class FindIOController extends Application implements  FindIOImageChooser
         } catch (Throwable throwable) {
             System.err.println("There is error in the process of initializing the caches");
         }
-
-
     }
 
     public void injectLogicIntoView() {
@@ -293,30 +291,30 @@ public class FindIOController extends Application implements  FindIOImageChooser
         } else if(!hasColorHistogramFeature && !hasTextFeature && !hasVisualConceptFeature && hasVisualWordFeature){
             return new double[]{0.0, 0.0, 0.0, 1.0}; // only visual word
         } else if(hasColorHistogramFeature && hasTextFeature && !hasVisualConceptFeature && !hasVisualWordFeature){
-            return new double[]{0.25, 0.75, 0.0, 0.0}; // only hist and text
+            return new double[]{0.1, 0.9, 0.0, 0.0}; // only hist and text
         } else if(hasColorHistogramFeature && !hasTextFeature && hasVisualConceptFeature && !hasVisualWordFeature){
-            return new double[]{0.25, 0.0, 0.75, 0.0}; // only hist and visual concept
+            return new double[]{0.2, 0.0, 0.8, 0.0}; // only hist and visual concept
         } else if(hasColorHistogramFeature && !hasTextFeature && !hasVisualConceptFeature && hasVisualWordFeature){
-            return new double[]{0.25, 0.0, 0.0, 0.75}; // only hist and visual word
+            return new double[]{0.3, 0.0, 0.0, 0.7}; // only hist and visual word
         } else if(!hasColorHistogramFeature && hasTextFeature && hasVisualConceptFeature && !hasVisualWordFeature){
-            return new double[]{0.0, 0.6, 0.4, 0.0}; // only text and visual concept
+            return new double[]{0.0, 0.7, 0.3, 0.0}; // only text and visual concept
         } else if(!hasColorHistogramFeature && hasTextFeature && !hasVisualConceptFeature && hasVisualWordFeature){
-            return new double[]{0.0, 0.4, 0.0, 0.6}; // only text and visual word
+            return new double[]{0.0, 0.75, 0.0, 0.25}; // only text and visual word
         } else if(!hasColorHistogramFeature && !hasTextFeature && hasVisualConceptFeature && hasVisualWordFeature){
-            return new double[]{0.0, 0.35, 0.0, 0.65}; // only visual concept and visual word
+            return new double[]{0.0, 0.7, 0.0, 0.3}; // only visual concept and visual word
         } else if(hasColorHistogramFeature && hasTextFeature && hasVisualConceptFeature && !hasVisualWordFeature){
-            return new double[]{0.1, 0.55, 0.35, 0.0}; // only hist, text and visual concept
+            return new double[]{0.1, 0.7, 0.2, 0.0}; // only hist, text and visual concept
         } else if(!hasColorHistogramFeature && hasTextFeature && hasVisualConceptFeature && hasVisualWordFeature){
-            return new double[]{0.2, 0.0, 0.2, 0.6}; // only text, visual concept and visual word
+            return new double[]{0.0, 0.6, 0.2, 0.2}; // only text, visual concept and visual word
         } else if(hasColorHistogramFeature && hasTextFeature && !hasVisualConceptFeature && hasVisualWordFeature){
-            return new double[]{0.1, 0.4, 0.0, 0.5}; // only hist, text and visual word
+            return new double[]{0.1, 0.75, 0.0, 0.15}; // only hist, text and visual word
         } else if(hasColorHistogramFeature && !hasTextFeature && hasVisualConceptFeature && hasVisualWordFeature){
-            return new double[]{0.1, 0.3, 0.0, 0.6}; // only hist, visual concept and visual word
+            return new double[]{0.1, 0.0, 0.6, 0.3}; // only hist, visual concept and visual word
         } else if(hasColorHistogramFeature && hasTextFeature && hasVisualConceptFeature && hasVisualWordFeature){
-            return new double[]{0.1, 0.2, 0.2, 0.5}; // all features
+            return new double[]{0.05, 0.6, 0.2, 0.15}; // all features
         }
 
-        System.out.println("Invalid case");
+        System.err.println("Invalid case");
         return null;
     }
 

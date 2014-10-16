@@ -217,6 +217,7 @@ public class TextIndex extends Index{
         QueryParser parser = new QueryParser(fieldname1, analyzer);
 
         Query query = parser.parse(queryString);
+        if(test)
         System.out.println("Searching for text: " + query.toString(fieldname1));
 
         TopDocs topDocs;

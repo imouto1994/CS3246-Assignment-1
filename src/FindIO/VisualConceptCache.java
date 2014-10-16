@@ -209,6 +209,7 @@ public class VisualConceptCache extends Index{
         QueryParser parser = new QueryParser(fieldname1, analyzer);
 
         Query query = parser.parse(imageID);
+        if(test)
         System.out.println("Searching VC for image: " + query.toString(fieldname1));
 
         TopDocs topDocs;
