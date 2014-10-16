@@ -60,6 +60,8 @@ public class FindIOView {
     private CheckBox checkBoxForConcept;
     private GridView<ImageResult> grid;
 
+    private String lastInputImagePath;
+
     /* Image Results List */
     ObservableList<ImageResult> imageList = FXCollections.observableArrayList();
     List<String> results = null;
@@ -273,6 +275,8 @@ public class FindIOView {
 					File file = imageChooser.showOpenDialog(primaryStage);
 					
 					if(file != null){
+                        lastInputImagePath = file.getPath();
+                        resetImageChooserPath();
 						String fileName = file.getName().substring(0, file.getName().lastIndexOf('.'));
 						String fileExtension = file.getName().substring(file.getName().lastIndexOf('.') + 1);
 						Image queryImage = new Image(file.toURI().toString());
@@ -298,13 +302,40 @@ public class FindIOView {
 	
 	private void configureImageChooser(FileChooser imageChooser) {
 		imageChooser.setTitle("Image Query");
-		imageChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-		imageChooser.getExtensionFilters().addAll(
+        imageChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        imageChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("All Images", "*.jpg", "*.png", "*.gif"),
                 new FileChooser.ExtensionFilter("JPG", "*.jpg"),
                 new FileChooser.ExtensionFilter("PNG", "*.png"),
                 new FileChooser.ExtensionFilter("GIF", "*.gif")
         );
+    }
+
+
+    //Take the last input image folder as opening directory
+    private void resetImageChooserPath(){
+        System.out.println("path "+lastInputImagePath);
+        String imageFolderPath = getImageFolder(lastInputImagePath);
+        System.out.println("folder "+imageFolderPath);
+        if(validateImagePath(imageFolderPath))
+            imageChooser.setInitialDirectory(new File(imageFolderPath));
+        else
+            imageChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+    }
+
+    private String getImageFolder(String imagePath){
+        if(imagePath == null)
+            return null;
+        if(imagePath.lastIndexOf("\\") == -1)
+            return null;
+        return imagePath.substring(0, imagePath.lastIndexOf("\\"));
+    }
+
+    private boolean validateImagePath(String imageFolderPath){
+        if(imageFolderPath == null || imageFolderPath.trim().equals(""))
+            return false;
+        File folder = new File(imageFolderPath);
+        return folder.exists() && folder.isDirectory();
     }
 	
 	private Pane initCenterSection() {
