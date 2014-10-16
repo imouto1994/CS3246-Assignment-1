@@ -5,12 +5,13 @@ import java.io.*;
 import java.util.*;
 import javafx.stage.Stage;
 
-public class FindIOController extends Application implements  FindIOImageChooserInterface, FindIOSearchInterface {
+public class FindIOController extends Application implements  FindIOImageChooserInterface, FindIOSearchInterface, RelevanceFeedbackInterface {
 	private FindIOView findIOView;
     private double[] colorHist = null;
     private double[] terms = null;
     private double[] visualWords = null;
     private double[] visualConcepts = null;
+    private String queryString;
     private Map<String, String> imageFilePaths = null;
 
     private boolean isCHSelected = false;
@@ -21,7 +22,7 @@ public class FindIOController extends Application implements  FindIOImageChooser
 	@Override
 	public void start(Stage primaryStage) {
         initDb();
-		findIOView = new FindIOView(primaryStage);
+		findIOView = new FindIOView(primaryStage, this);
 		findIOView.initGUI();
         injectLogicIntoView();
 	}
@@ -34,8 +35,9 @@ public class FindIOController extends Application implements  FindIOImageChooser
         } catch (FileNotFoundException e) {
             System.out.println("Ground truth file does not exist");
         }
-        String line = null;
         try {
+            String line;
+            assert reader != null;
             while ((line = reader.readLine()) != null) {
                 String[] img_folders = line.split("\\s+");
                 String imageID = img_folders[0];
@@ -43,7 +45,7 @@ public class FindIOController extends Application implements  FindIOImageChooser
                 String filePath = "src/FindIO/Datasets/train/data/"+folderName+"/"+ imageID;
                 imageFilePaths.put(Common.removeExtension(imageID), filePath);
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.out.println("There was error during the process of reading the ground truth file");
         }
     }
@@ -150,11 +152,6 @@ public class FindIOController extends Application implements  FindIOImageChooser
     }
 
     public List<String> search() {
-        boolean hasColorHistogramFeature = findIOView.getCheckBoxForHistogram().isSelected() && colorHist != null;
-        boolean hasVisualWordFeature = findIOView.getCheckBoxForSIFT().isSelected() && visualWords != null;
-        boolean hasVisualConceptFeature = findIOView.getCheckBoxForConcept().isSelected() && visualConcepts != null;
-        boolean hasTextFeature = !findIOView.getTextField().getText().trim().isEmpty();
-
         boolean isCHSelected = findIOView.getCheckBoxForHistogram().isSelected();
         boolean isVWSelected = findIOView.getCheckBoxForSIFT().isSelected();
         boolean isVCSelected = findIOView.getCheckBoxForConcept().isSelected();
@@ -173,8 +170,7 @@ public class FindIOController extends Application implements  FindIOImageChooser
         boolean hasColorHistogramFeature = isCHSelected && colorHist != null;
         boolean hasVisualWordFeature = isVWSelected && visualWords != null;
         boolean hasVisualConceptFeature = isVCSelected && visualConcepts != null;
-        boolean hasTextFeature = isTextSelected;
-        boolean isSearchValid = hasColorHistogramFeature || hasVisualWordFeature || hasVisualConceptFeature || hasTextFeature;
+        boolean isSearchValid = hasColorHistogramFeature || hasVisualWordFeature || hasVisualConceptFeature || isTextSelected;
         if(!isSearchValid){
             return null;
         }
@@ -192,14 +188,14 @@ public class FindIOController extends Application implements  FindIOImageChooser
             imagePool.addAll(vcResults.keySet());
         }
         Map<String, double[]> textResults = null;
-        if(hasTextFeature) {
+        if(isTextSelected) {
             textResults = searchText();
             imagePool.addAll(textResults.keySet());
         }
 
         Map<String, double[]> colorHistResults = null;
         if(hasColorHistogramFeature){
-            if(hasVisualWordFeature || hasVisualConceptFeature || hasTextFeature){
+            if(hasVisualWordFeature || hasVisualConceptFeature || isTextSelected){
                 colorHistResults = searchColorHistogram(new ArrayList<String>(imagePool));
             } else {
                 colorHistResults = searchAllColorHistograms();
@@ -215,7 +211,7 @@ public class FindIOController extends Application implements  FindIOImageChooser
         rankList.sort(new Comparator<FindIOPair>() {
             @Override
             public int compare(FindIOPair o1, FindIOPair o2) {
-                return -1 * new Double(o1.getValue()).compareTo(new Double(o2.getValue()));
+                return -1 * new Double(o1.getValue()).compareTo(o2.getValue());
             }
         });
 
@@ -300,12 +296,13 @@ public class FindIOController extends Application implements  FindIOImageChooser
         } else if(hasColorHistogramFeature && !hasTextFeature && hasVisualConceptFeature && hasVisualWordFeature){
             return new double[]{0.1, 0.3, 0.0, 0.6}; // only hist, visual concept and visual word
         } else if(hasColorHistogramFeature && hasTextFeature && hasVisualConceptFeature && hasVisualWordFeature){
-            return new double[]{0.1, 0.3, 0.4, 0.2}; // all features
+            return new double[]{0.1, 0.2, 0.2, 0.5}; // all features
         }
 
         System.out.println("Invalid case");
         return null;
     }
+
     private Map<String, double[]> searchVisualWord(){
         List<FindIOPair> wordsList = new ArrayList<FindIOPair>();
         int index = 0;
@@ -326,6 +323,7 @@ public class FindIOController extends Application implements  FindIOImageChooser
         try {
             results = vwIndex.searchVisualWord(strBuilder.toString().trim());
         } catch (Exception e) {
+            results = new HashMap<String, double[]>();
             System.out.println("There was error in searching in the index database for visual words");
         }
 
@@ -345,22 +343,22 @@ public class FindIOController extends Application implements  FindIOImageChooser
         try {
             results = vcIndex.searchVisualConcept(strBuilder.toString().trim());
         } catch (Exception e) {
+            results = new HashMap<String, double[]>();
             System.out.println("There was error in searching in the index database for visual concepts");
-            e.printStackTrace();
         }
 
         return results;
     }
 
     private Map<String, double[]> searchText() {
-        String queryString = extractTerms();
+        queryString = extractTerms();
         TextIndex textIndex = new TextIndex();
         Map<String, double[]> results = null;
         try {
             results = textIndex.searchText(queryString);
         } catch (Exception e) {
+            results = new HashMap<String, double[]>();
             System.out.println("There was error in searching in the index database for text annotation");
-            e.printStackTrace();
         }
         return results;
     }
@@ -376,8 +374,8 @@ public class FindIOController extends Application implements  FindIOImageChooser
         try {
             results = colorHistIndex.searchImgHist(strBuilder.toString().trim());
         } catch (Exception e){
+            results = new HashMap<String, double[]>();
             System.out.println("There was error in searching in the index database for color histogram");
-            e.printStackTrace();
         }
         return results;
     }
@@ -388,9 +386,37 @@ public class FindIOController extends Application implements  FindIOImageChooser
         try {
             results = colorHistIndex.scanImgHist();
         } catch (Exception e) {
-            e.printStackTrace();
+            results = new HashMap<String, double[]>();
             System.out.println("There was error in searching in the index database for color histogram");
         }
         return results;
+    }
+
+    public void upvote(String imageID) {
+        List<FindIOPair> updateTermsList = new ArrayList<FindIOPair>();
+        for(String term : queryString.trim().split("\\s+")){
+            updateTermsList.add(new FindIOPair(term, 0.5));
+        }
+        TextIndex textIndex = new TextIndex();
+        try {
+            textIndex.initBuilding();
+            textIndex.updateScore(imageID, updateTermsList);
+        } catch (Throwable throwable) {
+            System.err.println("There is problem in updating text index");
+        }
+    }
+
+    public void downvote(String imageID) {
+        List<FindIOPair> updateTermsList = new ArrayList<FindIOPair>();
+        for(String term : queryString.trim().split("\\s+")){
+            updateTermsList.add(new FindIOPair(term, -0.3));
+        }
+        TextIndex textIndex = new TextIndex();
+        try {
+            textIndex.initBuilding();
+            textIndex.updateScore(imageID, updateTermsList);
+        } catch (Throwable throwable) {
+            System.err.println("There is problem in updating text index");
+        }
     }
 }

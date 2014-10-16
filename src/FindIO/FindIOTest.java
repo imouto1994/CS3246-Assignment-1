@@ -5,9 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by Beyond on 10/16/2014 0016.
- */
 public class FindIOTest {
 
     FindIOController controller;
