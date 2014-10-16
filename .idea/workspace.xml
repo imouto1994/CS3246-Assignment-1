@@ -64,59 +64,22 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="FindIOController.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="FindIOController.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/FindIO/FindIOController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="214" column="42" selection-start="8348" selection-end="8348" vertical-scroll-proportion="0.6830266" vertical-offset="3675" max-vertical-offset="7068">
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#4804#4812#0" expanded="true" />
-                <element signature="e#5909#5917#0" expanded="true" />
-                <element signature="e#6970#6982#0" expanded="true" />
-                <element signature="e#7510#7518#0" expanded="true" />
-                <element signature="e#12943#12955#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Common.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/FindIO/Common.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="48" column="0" selection-start="2573" selection-end="2573" vertical-scroll-proportion="0.0" vertical-offset="898" max-vertical-offset="1387">
+            <state line="22" column="0" selection-start="691" selection-end="691" vertical-scroll-proportion="0.0" vertical-offset="418" max-vertical-offset="7277">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="FindIOView.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="FindIOView.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/FindIO/FindIOView.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="262" column="50" selection-start="8860" selection-end="8860" vertical-scroll-proportion="0.0" vertical-offset="4431" max-vertical-offset="7676">
+            <state line="366" column="38" selection-start="13012" selection-end="13012" vertical-scroll-proportion="-0.6904442" vertical-offset="6954" max-vertical-offset="8075">
               <folding>
                 <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ImageResultCell.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/FindIO/ImageResultCell.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="40" column="0" selection-start="1129" selection-end="1129" vertical-scroll-proportion="0.0" vertical-offset="372" max-vertical-offset="874">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="FindIOStyleSheet.css" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/FindIO/FindIOStyleSheet.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="76" column="30" selection-start="1517" selection-end="1517" vertical-scroll-proportion="0.0" vertical-offset="1170" max-vertical-offset="2432">
-              <folding>
-                <marker date="1413387515974" expanded="true" signature="1485:1519" placeholder="{...}" />
+                <element signature="e#12847#12860#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -155,19 +118,20 @@
         <option value="$PROJECT_DIR$/src/FindIO/ColorHistIndex.java" />
         <option value="$PROJECT_DIR$/src/FindIO/ColorHistCache.java" />
         <option value="$PROJECT_DIR$/src/FindIO/VisualConceptIndex.java" />
-        <option value="$PROJECT_DIR$/src/FindIO/VisualConceptCache.java" />
         <option value="$PROJECT_DIR$/src/FindIO/FindIOPair.java" />
         <option value="$PROJECT_DIR$/src/FindIO/FolderScanner.java" />
         <option value="$PROJECT_DIR$/src/FindIO/Index.java" />
         <option value="$PROJECT_DIR$/src/FindIO/TextAnalyzer.java" />
         <option value="$PROJECT_DIR$/src/FindIO/TextIndex.java" />
-        <option value="$PROJECT_DIR$/src/FindIO/VisualWordCache.java" />
         <option value="$PROJECT_DIR$/src/FindIO/VisualWordIndex.java" />
         <option value="$PROJECT_DIR$/src/FindIO/ImageResult.java" />
-        <option value="$PROJECT_DIR$/src/FindIO/FindIOStyleSheet.css" />
-        <option value="$PROJECT_DIR$/src/FindIO/FindIOView.java" />
-        <option value="$PROJECT_DIR$/src/FindIO/ImageResultCell.java" />
         <option value="$PROJECT_DIR$/src/FindIO/Common.java" />
+        <option value="$PROJECT_DIR$/src/FindIO/VisualConceptCache.java" />
+        <option value="$PROJECT_DIR$/src/FindIO/VisualWordCache.java" />
+        <option value="$PROJECT_DIR$/src/FindIO/FindIOStyleSheet.css" />
+        <option value="$PROJECT_DIR$/src/FindIO/RelevanceFeedbackInterface.java" />
+        <option value="$PROJECT_DIR$/src/FindIO/ImageResultCell.java" />
+        <option value="$PROJECT_DIR$/src/FindIO/FindIOView.java" />
         <option value="$PROJECT_DIR$/src/FindIO/FindIOController.java" />
       </list>
     </option>
@@ -208,6 +172,7 @@
     </navigator>
     <panes>
       <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -246,7 +211,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -558,23 +522,21 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32769832" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27568272" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32769832" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3297619" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32639793" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32897604" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.201875" sideWeight="0.6703755" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.313394" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27568272" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3297619" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32769832" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25097528" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Problems" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -585,42 +547,13 @@
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32769832" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32639793" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Profiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
     </layout>
-    <layout-to-restore>
-      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
-      <window_info id="Problems" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32769832" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32897604" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.201875" sideWeight="0.6703755" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.39011705" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
-      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32769832" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27568272" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3297619" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32639793" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
-      <window_info id="Profiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-    </layout-to-restore>
   </component>
   <component name="Vcs.Log.UiProperties">
     <option name="RECENTLY_FILTERED_USERS">
@@ -665,14 +598,7 @@
     <entry file="file://$PROJECT_DIR$/src/FindIO/FindIOController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#4804#4812#0" expanded="true" />
-            <element signature="e#5909#5917#0" expanded="true" />
-            <element signature="e#6970#6982#0" expanded="true" />
-            <element signature="e#7510#7518#0" expanded="true" />
-            <element signature="e#12943#12955#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -693,6 +619,7 @@
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#12847#12860#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -781,9 +708,7 @@
     </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_20/src.zip!/java/util/Map.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="128" column="17" selection-start="5791" selection-end="5794" vertical-scroll-proportion="0.33243608" vertical-offset="1691" max-vertical-offset="22097">
-          <folding />
-        </state>
+        <state line="128" column="17" selection-start="5791" selection-end="5794" vertical-scroll-proportion="0.33243608" vertical-offset="1691" max-vertical-offset="22097" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/FindIO/Features/Visual Concept/trainImageList.txt">
@@ -805,9 +730,7 @@
     </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_20/src.zip!/java/lang/Double.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="537" column="0" selection-start="21639" selection-end="21639" vertical-scroll-proportion="0.33266932" vertical-offset="9561" max-vertical-offset="19741">
-          <folding />
-        </state>
+        <state line="537" column="0" selection-start="21639" selection-end="21639" vertical-scroll-proportion="0.33266932" vertical-offset="9561" max-vertical-offset="19741" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/FindIO/ColorHistCache.java">
@@ -866,20 +789,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/FindIO/TextIndex.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="42" column="13" selection-start="1590" selection-end="1590" vertical-scroll-proportion="0.0" vertical-offset="551" max-vertical-offset="6764">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/FindIO/image_groundTruth.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="21964">
-          <folding />
-        </state>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="21964" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/FindIO/FindIOPair.java">
@@ -896,42 +808,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/FindIO/ImageResult.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="23" selection-start="532" selection-end="532" vertical-scroll-proportion="0.0" vertical-offset="97" max-vertical-offset="1444">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/FindIO/ColorHistIndex.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="54" column="9" selection-start="1611" selection-end="1705" vertical-scroll-proportion="0.0" vertical-offset="709" max-vertical-offset="4693">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/FindIO/VisualWordCache.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="13" selection-start="765" selection-end="765" vertical-scroll-proportion="-4.212679" vertical-offset="2478" max-vertical-offset="4579">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/FindIO/VisualConceptCache.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="59" column="9" selection-start="1845" selection-end="1845" vertical-scroll-proportion="1.2908367" vertical-offset="169" max-vertical-offset="4446">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/FindIO/VisualConceptExtraction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="13" selection-start="234" selection-end="234" vertical-scroll-proportion="0.0" vertical-offset="513" max-vertical-offset="2774">
-          <folding />
         </state>
       </provider>
     </entry>
@@ -942,18 +824,35 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/FindIO/FindIOStyleSheet.css">
+    <entry file="file://$PROJECT_DIR$/src/FindIO/VisualConceptExtraction.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="76" column="30" selection-start="1517" selection-end="1517" vertical-scroll-proportion="0.0" vertical-offset="1170" max-vertical-offset="2432">
-          <folding>
-            <marker date="1413387515974" expanded="true" signature="1485:1519" placeholder="{...}" />
-          </folding>
+        <state line="10" column="13" selection-start="234" selection-end="234" vertical-scroll-proportion="-3.368526" vertical-offset="1767" max-vertical-offset="2774">
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/FindIO/ImageResultCell.java">
+    <entry file="file://$PROJECT_DIR$/src/FindIO/ImageResult.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="0" selection-start="1129" selection-end="1129" vertical-scroll-proportion="0.0" vertical-offset="372" max-vertical-offset="874">
+        <state line="15" column="23" selection-start="532" selection-end="532" vertical-scroll-proportion="0.0" vertical-offset="97" max-vertical-offset="1444">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_20/src.zip!/java/lang/Thread.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="742" column="16" selection-start="27648" selection-end="27648" vertical-scroll-proportion="0.33266932" vertical-offset="13228" max-vertical-offset="38000" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/FindIO/VisualConceptCache.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="236" column="13" selection-start="8673" selection-end="8673" vertical-scroll-proportion="0.0" vertical-offset="3906" max-vertical-offset="4503">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/FindIO/VisualWordCache.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="210" column="37" selection-start="7665" selection-end="7665" vertical-scroll-proportion="0.0" vertical-offset="2608" max-vertical-offset="4636">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -962,30 +861,58 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/FindIO/Common.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="48" column="0" selection-start="2573" selection-end="2573" vertical-scroll-proportion="0.0" vertical-offset="898" max-vertical-offset="1387">
+        <state line="48" column="0" selection-start="2573" selection-end="2573" vertical-scroll-proportion="0.0" vertical-offset="399" max-vertical-offset="1387">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/FindIO/FindIOView.java">
+    <entry file="file://$PROJECT_DIR$/src/FindIO/TextIndex.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="262" column="50" selection-start="8860" selection-end="8860" vertical-scroll-proportion="0.0" vertical-offset="4431" max-vertical-offset="7676">
+        <state line="149" column="43" selection-start="5398" selection-end="5398" vertical-scroll-proportion="0.0" vertical-offset="2215" max-vertical-offset="6764">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/FindIO/FindIOController.java">
+    <entry file="file://$PROJECT_DIR$/src/FindIO/FindIOStyleSheet.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="214" column="42" selection-start="8348" selection-end="8348" vertical-scroll-proportion="0.6830266" vertical-offset="3675" max-vertical-offset="7068">
+        <state line="78" column="1" selection-start="1550" selection-end="1550" vertical-scroll-proportion="0.0" vertical-offset="1303" max-vertical-offset="2603" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/FindIO/RelevanceFeedbackInterface.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="39" selection-start="142" selection-end="142" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="228">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/FindIO/ImageResultCell.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="73" column="51" selection-start="2960" selection-end="2960" vertical-scroll-proportion="2.8191056" vertical-offset="0" max-vertical-offset="2356">
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4804#4812#0" expanded="true" />
-            <element signature="e#5909#5917#0" expanded="true" />
-            <element signature="e#6970#6982#0" expanded="true" />
-            <element signature="e#7510#7518#0" expanded="true" />
-            <element signature="e#12943#12955#0" expanded="true" />
+            <element signature="e#2589#2782#0" expanded="true" />
+            <element signature="e#2767#2768#0" expanded="true" />
+            <element signature="e#3117#3312#0" expanded="true" />
+            <element signature="e#3297#3298#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/FindIO/FindIOController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="22" column="0" selection-start="691" selection-end="691" vertical-scroll-proportion="0.0" vertical-offset="6683" max-vertical-offset="7220">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/FindIO/FindIOView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="366" column="38" selection-start="13012" selection-end="13012" vertical-scroll-proportion="-0.6904442" vertical-offset="6954" max-vertical-offset="8075">
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#12847#12860#0" expanded="true" />
           </folding>
         </state>
       </provider>

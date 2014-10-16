@@ -208,6 +208,9 @@ public class VisualWordCache extends Index {
             if(mapResults.get(imageName) == null){
                 mapResults.put(imageName, new double[Common.NUM_VISUAL_WORDS]);
             }
+            if(wordsInfo.length < 2){
+                continue;
+            }
             double[] words = mapResults.get(imageName);
             for(int i = 0; i < wordsInfo.length; i += 2){
                 words[Integer.parseInt(wordsInfo[i])] = Double.parseDouble(wordsInfo[i + 1]);

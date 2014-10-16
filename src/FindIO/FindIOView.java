@@ -2,8 +2,8 @@ package FindIO;
 
 import java.io.File;
 import java.util.List;
-
 import javafx.animation.*;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -38,6 +38,7 @@ public class FindIOView {
     private Pane navBar;
     private Pane sideBar;
     private Pane centerSection;
+    private StackPane preloadPane;
 
     /* Screen Attributes */
 	private double SCREEN_WIDTH  = Screen.getPrimary().getVisualBounds().getWidth();
@@ -60,11 +61,16 @@ public class FindIOView {
 
     /* Image Results List */
     ObservableList<ImageResult> imageList = FXCollections.observableArrayList();
+    List<String> results = null;
+
+    /* Interface */
+    RelevanceFeedbackInterface rf;
 
     /* Constructor */
-	public FindIOView(Stage primaryStage) {
-		this.primaryStage = primaryStage;
-	}
+    public FindIOView(Stage primaryStage, RelevanceFeedbackInterface rf) {
+        this.primaryStage = primaryStage;
+        this.rf = rf;
+    }
 
     /* UI Control Accessors */
     public FileChooser getImageChooser(){
@@ -121,7 +127,7 @@ public class FindIOView {
 		// Button Upload Image
 		imageChooser = new FileChooser();
 		configureImageChooser(imageChooser);
-		imageButton = new Button("Image");
+		imageButton = new Button();
 		imageButton.getStyleClass().add("transparentButton");
 		imageButton.setId("imageButton");
 		imageButton.setPrefHeight(40.0);
@@ -139,7 +145,7 @@ public class FindIOView {
 		stackPane.getChildren().addAll(textField, imageButton);
 		
 		// Button Search
-		searchButton = new Button("Search");
+		searchButton = new Button();
 		searchButton.getStyleClass().add("defaultButton");
 		searchButton.setId("searchButton");
 		searchButton.setPrefHeight(40.0);
@@ -180,12 +186,23 @@ public class FindIOView {
         searchButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                List<String> results = handler.search();
                 imageList.clear();
-                for(int i = 0; i < results.size(); i++){
-                    imageList.add(new ImageResult(results.get(i), i));
-                }
-                System.out.println("Length: " + imageList.size());
+                centerSection.getChildren().add(1, preloadPane);
+                new Thread(){
+                    @Override
+                    public void run(){
+                        results = handler.search();
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                for(int i = 0; i < results.size(); i++){
+                                    imageList.add(new ImageResult(results.get(i), i));
+                                }
+                                centerSection.getChildren().remove(preloadPane);
+                            }
+                        });
+                    }
+                }.start();
             }
         });
     }
@@ -291,9 +308,19 @@ public class FindIOView {
         sideBar = initSideBar();
         overlayLayer = initOverlayLayer();
 
+        preloadPane = new StackPane();
+        ImageView preloadGlyph = new ImageView();
+        preloadGlyph.setId("preloadGlyph");
+        preloadGlyph.setPreserveRatio(true);
+        preloadGlyph.setFitHeight(64.0);
+        preloadGlyph.setSmooth(true);
+        preloadGlyph.setImage(new Image(getClass().getResourceAsStream("./Images/preloader.gif")));
+        preloadPane.setAlignment(Pos.CENTER);
+        preloadPane.getChildren().add(preloadGlyph);
+
         StackPane subStack = new StackPane();
-        settingsButton = new Button("Settings");
-        settingsButton.getStyleClass().add("defaultButton");
+        settingsButton = new Button();
+        settingsButton.getStyleClass().add("greenButton");
         settingsButton.setId("settingsButton");
         settingsButton.setPrefHeight(50.0);
         settingsButton.setPrefWidth(50.0);
@@ -341,7 +368,7 @@ public class FindIOView {
         grid.setCellFactory(new Callback<GridView<ImageResult>, GridCell<ImageResult>>() {
             @Override
             public GridCell<ImageResult> call(GridView<ImageResult> imageResultGridView) {
-                return new ImageResultCell(grid.getCellWidth(), grid.getCellHeight());
+                return new ImageResultCell(grid.getCellWidth(), grid.getCellHeight(), rf);
             }
         });
 

@@ -5,7 +5,7 @@ import java.io.*;
 import java.util.*;
 import javafx.stage.Stage;
 
-public class FindIOController extends Application implements  FindIOImageChooserInterface, FindIOSearchInterface {
+public class FindIOController extends Application implements  FindIOImageChooserInterface, FindIOSearchInterface, RelevanceFeedbackInterface {
 	private FindIOView findIOView;
     private double[] colorHist = null;
     private double[] terms = null;
@@ -16,7 +16,7 @@ public class FindIOController extends Application implements  FindIOImageChooser
 	@Override
 	public void start(Stage primaryStage) {
         initDb();
-		findIOView = new FindIOView(primaryStage);
+		findIOView = new FindIOView(primaryStage, this);
 		findIOView.initGUI();
         injectLogicIntoView();
 	}
@@ -365,5 +365,13 @@ public class FindIOController extends Application implements  FindIOImageChooser
             System.out.println("There was error in searching in the index database for color histogram");
         }
         return results;
+    }
+
+    public void upvote(String imageID) {
+        System.out.println("Upvote for image: " + imageID);
+    }
+
+    public void downvote(String imageID) {
+        System.out.println("Downvote for image: " + imageID);
     }
 }

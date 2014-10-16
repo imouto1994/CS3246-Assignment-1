@@ -23,7 +23,9 @@
 .button {
     -fx-background-insets: 0 0 0 0, 0, 0, 0;
     -fx-background-radius: 1, 1, 1, 1;
-    -fx-content-display: graphic-only;
+    -fx-text-fill: #eaeaea;
+    -fx-font-weight: 800;
+    -fx-font-size: 18;
 }
 
 .defaultButton {
@@ -37,6 +39,19 @@
 
 .defaultButton:armed {
     -fx-background-color: rgb(207, 68, 54);
+}
+
+.greenButton {
+    -fx-background-color: rgb(0, 171, 91);
+    -fx-padding: 0.166667em 0.833333em 0.25em 0.833333em;
+}
+
+.greenButton:hover {
+    -fx-background-color: rgb(0, 203, 108);
+}
+
+.greenButton:armed {
+    -fx-background-color: rgb(0, 148, 79);
 }
 
 .transparentButton {
@@ -68,15 +83,10 @@
 }
 
 .check-box:selected > .box > .mark {
-    -fx-background-color: red;
+    -fx-background-color: #e43532;
     -fx-background-position: top;
     -fx-background-repeat: stretch;
 }
-
-.imageResult {
-    -fx-background-color: red;
-}
-
 
 /* ID Elements */
 
@@ -99,15 +109,14 @@
 #settingsButton {
     -fx-background-radius: 50;
     -fx-padding: 2, 0, 2, 0;
-    -fx-background-color: rgb(0, 171, 91);
 }
 
-#settingsButton:hover {
-    -fx-background-color: rgb(0, 203, 108);
+#upvoteButton {
+    -fx-background-radius: 0, 0, 0, 0;
 }
 
-#settingsButton:armed {
-    -fx-background-color: rgb(0, 148, 79);
+#downvoteButton {
+    -fx-background-radius: 0, 0, 0, 0;
 }
 
 #navBar {

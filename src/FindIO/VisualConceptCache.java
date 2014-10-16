@@ -232,6 +232,9 @@ public class VisualConceptCache extends Index{
             if(mapResults.get(imageName) == null){
                 mapResults.put(imageName, new double[Common.NUM_VISUAL_CONCEPTS]);
             }
+            if(conceptsInfo.length < 2){
+                continue;
+            }
             double[] concepts = mapResults.get(imageName);
             for(int i = 0; i < conceptsInfo.length; i += 2){
                 concepts[Integer.parseInt(conceptsInfo[i])] = Double.parseDouble(conceptsInfo[i + 1]);
