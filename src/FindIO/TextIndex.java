@@ -294,14 +294,15 @@ public class TextIndex extends Index{
             ScoreDoc[] hits = topDocs.scoreDocs;
             if(hits.length == 0){ //It's a new tag
                 Document doc = new Document();
-                String img_score = imageID + " " + add_score + " ";
-
-                // set fields for document
-                this.tag_field.setStringValue(this.textAnalyzer.getStem(tag));
-                this.img_field.setStringValue(img_score);
-                doc.add(tag_field);
-                doc.add(img_field);
-                MMwriter.addDocument(doc);
+                String img_score = imageID + " " + (0.1 * add_score) + " ";
+                if(add_score > 0){
+                    // set fields for document
+                    this.tag_field.setStringValue(this.textAnalyzer.getStem(tag));
+                    this.img_field.setStringValue(img_score);
+                    doc.add(tag_field);
+                    doc.add(img_field);
+                    MMwriter.addDocument(doc);
+                }
             } else {
                 //The tag is included in the index
                 int docId = hits[0].doc;
