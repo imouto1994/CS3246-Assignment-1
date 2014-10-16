@@ -225,6 +225,7 @@ public class VisualConceptIndex extends Index{
         QueryParser parser = new QueryParser(fieldname1, analyzer);
 
         Query query = parser.parse(visualConcepts);
+        if(test)
         System.out.println("Searching for VC: " + query.toString(fieldname1));
 
         TopDocs topDocs;

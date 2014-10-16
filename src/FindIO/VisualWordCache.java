@@ -185,6 +185,7 @@ public class VisualWordCache extends Index {
         QueryParser parser = new QueryParser(fieldname1, analyzer);
 
         Query query = parser.parse(imageID);
+        if(test)
         System.out.println("Searching VW for image: " + query.toString(fieldname1));
 
         TopDocs topDocs;

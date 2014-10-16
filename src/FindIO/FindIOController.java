@@ -13,6 +13,9 @@ public class FindIOController extends Application implements  FindIOImageChooser
     private double[] visualConcepts = null;
     private String queryString;
     private Map<String, String> imageFilePaths = null;
+    private ColorHistCache colorHistCache;
+    private VisualConceptCache visualConceptCache;
+    private VisualWordCache visualWordCache;
 
     private boolean isCHSelected = false;
     private boolean isVWSelected = false;
@@ -47,6 +50,18 @@ public class FindIOController extends Application implements  FindIOImageChooser
             }
         } catch (Exception e) {
             System.out.println("There was error during the process of reading the ground truth file");
+        }
+
+        /* Initialize Caches */
+        colorHistCache = new ColorHistCache();
+        visualConceptCache = new VisualConceptCache();
+        visualWordCache = new VisualWordCache();
+        try {
+            colorHistCache.initBuilding();
+            visualConceptCache.initBuilding();
+            visualWordCache.initBuilding();
+        } catch (Throwable throwable) {
+            System.err.println("There is error in the process of initializing the caches");
         }
     }
 
@@ -89,39 +104,39 @@ public class FindIOController extends Application implements  FindIOImageChooser
 
     private double[] extractHistogram(File file) throws Exception {
         String imageID = Common.removeExtension(file.getName());
-        ColorHistCache colorHistCache = new ColorHistCache();
         double[] result = null;
         Map<String, double[]> cacheResults = colorHistCache.searchImgHist(imageID);
         if(cacheResults.containsKey(imageID)){
             result = cacheResults.get(imageID);
         } else {
             result = ColorHistExtraction.getHist(file);
+            colorHistCache.addDoc(imageID, result);
         }
         return result;
     }
 
     private double[] extractVisualWords(File file) throws Exception{
         String imageID = Common.removeExtension(file.getName());
-        VisualWordCache vwCache = new VisualWordCache();
         double[] result = null;
-        Map<String, double[]> cacheResults = vwCache.searchVisualWordsForImage(imageID);
+        Map<String, double[]> cacheResults = visualWordCache.searchVisualWordsForImage(imageID);
         if(cacheResults.containsKey(imageID)){
             result = cacheResults.get(imageID);
         } else {
             result = VisualWordExtraction.getVisualWords(file);
+            visualWordCache.addDoc(imageID, result);
         }
         return result;
     }
 
     private double[] extractVisualConcepts(File file) throws Exception {
         String imageID = Common.removeExtension(file.getName());
-        VisualConceptCache vcCache = new VisualConceptCache();
         double[] result = null;
-        Map<String, double[]> cacheResults = vcCache.searchVisualConceptsForImage(imageID);
+        Map<String, double[]> cacheResults = visualConceptCache.searchVisualConceptsForImage(imageID);
         if(cacheResults.containsKey(imageID)) {
             result = cacheResults.get(imageID);
         } else {
             result = VisualConceptExtraction.getVisualConcepts(file);
+            visualConceptCache.addDoc(imageID, result);
         }
         return result;
     }
@@ -172,7 +187,7 @@ public class FindIOController extends Application implements  FindIOImageChooser
         boolean hasVisualConceptFeature = isVCSelected && visualConcepts != null;
         boolean isSearchValid = hasColorHistogramFeature || hasVisualWordFeature || hasVisualConceptFeature || isTextSelected;
         if(!isSearchValid){
-            return null;
+            return new ArrayList<String>();
         }
 
         Set<String> imagePool = new HashSet<String>();
@@ -276,30 +291,30 @@ public class FindIOController extends Application implements  FindIOImageChooser
         } else if(!hasColorHistogramFeature && !hasTextFeature && !hasVisualConceptFeature && hasVisualWordFeature){
             return new double[]{0.0, 0.0, 0.0, 1.0}; // only visual word
         } else if(hasColorHistogramFeature && hasTextFeature && !hasVisualConceptFeature && !hasVisualWordFeature){
-            return new double[]{0.25, 0.75, 0.0, 0.0}; // only hist and text
+            return new double[]{0.1, 0.9, 0.0, 0.0}; // only hist and text
         } else if(hasColorHistogramFeature && !hasTextFeature && hasVisualConceptFeature && !hasVisualWordFeature){
-            return new double[]{0.25, 0.0, 0.75, 0.0}; // only hist and visual concept
+            return new double[]{0.2, 0.0, 0.8, 0.0}; // only hist and visual concept
         } else if(hasColorHistogramFeature && !hasTextFeature && !hasVisualConceptFeature && hasVisualWordFeature){
-            return new double[]{0.25, 0.0, 0.0, 0.75}; // only hist and visual word
+            return new double[]{0.3, 0.0, 0.0, 0.7}; // only hist and visual word
         } else if(!hasColorHistogramFeature && hasTextFeature && hasVisualConceptFeature && !hasVisualWordFeature){
-            return new double[]{0.0, 0.6, 0.4, 0.0}; // only text and visual concept
+            return new double[]{0.0, 0.7, 0.3, 0.0}; // only text and visual concept
         } else if(!hasColorHistogramFeature && hasTextFeature && !hasVisualConceptFeature && hasVisualWordFeature){
-            return new double[]{0.0, 0.4, 0.0, 0.6}; // only text and visual word
+            return new double[]{0.0, 0.75, 0.0, 0.25}; // only text and visual word
         } else if(!hasColorHistogramFeature && !hasTextFeature && hasVisualConceptFeature && hasVisualWordFeature){
-            return new double[]{0.0, 0.35, 0.0, 0.65}; // only visual concept and visual word
+            return new double[]{0.0, 0.7, 0.0, 0.3}; // only visual concept and visual word
         } else if(hasColorHistogramFeature && hasTextFeature && hasVisualConceptFeature && !hasVisualWordFeature){
-            return new double[]{0.1, 0.55, 0.35, 0.0}; // only hist, text and visual concept
+            return new double[]{0.1, 0.7, 0.2, 0.0}; // only hist, text and visual concept
         } else if(!hasColorHistogramFeature && hasTextFeature && hasVisualConceptFeature && hasVisualWordFeature){
-            return new double[]{0.2, 0.0, 0.2, 0.6}; // only text, visual concept and visual word
+            return new double[]{0.0, 0.6, 0.2, 0.2}; // only text, visual concept and visual word
         } else if(hasColorHistogramFeature && hasTextFeature && !hasVisualConceptFeature && hasVisualWordFeature){
-            return new double[]{0.1, 0.4, 0.0, 0.5}; // only hist, text and visual word
+            return new double[]{0.1, 0.75, 0.0, 0.15}; // only hist, text and visual word
         } else if(hasColorHistogramFeature && !hasTextFeature && hasVisualConceptFeature && hasVisualWordFeature){
-            return new double[]{0.1, 0.3, 0.0, 0.6}; // only hist, visual concept and visual word
+            return new double[]{0.1, 0.0, 0.6, 0.3}; // only hist, visual concept and visual word
         } else if(hasColorHistogramFeature && hasTextFeature && hasVisualConceptFeature && hasVisualWordFeature){
-            return new double[]{0.1, 0.2, 0.2, 0.5}; // all features
+            return new double[]{0.05, 0.6, 0.2, 0.15}; // all features
         }
 
-        System.out.println("Invalid case");
+        System.err.println("Invalid case");
         return null;
     }
 
