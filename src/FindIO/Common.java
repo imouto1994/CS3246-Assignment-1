@@ -22,13 +22,18 @@ public class Common {
     public static final int topK = 1024;
     public static final int NUM_VISUAL_WORDS = 21504;
     public static final int NUM_VISUAL_CONCEPTS = 1000;
-    public static final int MAXIMUM_NUMBER_OF_TERMS = 50;
     public static final int MAX_RESULTS = 20;
 
     public static final int COLOR_HIST_WEIGHT_INDEX = 0;
     public static final int TEXT_WEIGHT_INDEX = 1;
     public static final int VISUAL_CONCEPT_WEIGHT_INDEX = 2;
     public static final int VISUAL_WORD_WEIGHT_INDEX = 3;
+
+    public static final int BHATTACHARYYA_DISTANCE = 0;
+    public static final int CHI_SQUARE_DISTANCE = 1;
+    public static final int INTERSECTION_DISTANCE = 2;
+    public static final int CORRELATION_DISTANCE = 3;
+    public static final int CORRELATION_DISTANCE_WITHOUT_NORMALIZATION = 4;
 
     public static String removeExtension(String fileName){
         if(!fileName.contains(".")){
@@ -46,12 +51,25 @@ public class Common {
         return originalString;
     }
 
-    public static double calculateSimilarity(double[] arr1, double[] arr2){
-        return 1 - calculateDistance(arr1, arr2);
+    public static double calculateSimilarity(double[] arr1, double[] arr2, int distanceType){
+        switch (distanceType) {
+            case BHATTACHARYYA_DISTANCE:
+                return 1 - bhattacharyyaDistance(arr1, arr2);
+            case CHI_SQUARE_DISTANCE:
+                return 1 / chiSquareDistance(arr1, arr2);
+            case INTERSECTION_DISTANCE:
+                return intersectionDistance(arr1, arr2);
+            case CORRELATION_DISTANCE:
+                return correlationDistance(arr1, arr2);
+            case CORRELATION_DISTANCE_WITHOUT_NORMALIZATION:
+                return correlationDistanceWithoutNormalization(arr1, arr2);
+            default:
+                System.out.println("Invalid case");
+                return 0.0;
+        }
     }
 
-    public static double calculateDistance(double[] arr1, double[] arr2) {
-        // Bhattacharyya distance
+    public static double bhattacharyyaDistance(double[] arr1, double[] arr2){
         double h1 = 0.0;
         double h2 = 0.0;
         int N = arr1.length;
@@ -64,7 +82,64 @@ public class Common {
         for(int i = 0; i < N; i++) {
             Sum = Sum + Math.sqrt(arr1[i]*arr2[i]);
         }
-        double dist = Math.sqrt(1 - Sum / Math.sqrt(h1*h2));
+        double dist = Math.sqrt( 1 - Sum / Math.sqrt(h1*h2));
+
         return dist;
     }
+
+    public static double chiSquareDistance(double[] arr1, double[] arr2) {
+        double dist = 0.0;
+        int N = arr1.length;
+        for(int i = 0; i < N; i++){
+            if(arr1[i] != 0.0){
+                dist +=  (arr1[i] - arr2[i]) * (arr1[i] - arr2[i]) / arr1[i];
+            }
+        }
+        return dist;
+    }
+
+    public static double intersectionDistance(double[] arr1, double[] arr2) {
+        double dist = 0.0;
+        int N = arr1.length;
+        for(int i = 0; i < N; i++){
+            dist += Math.min(arr1[i], arr2[i]);
+        }
+        return dist;
+    }
+
+    public static double correlationDistanceWithoutNormalization(double[] arr1, double[] arr2) {
+        int N = arr1.length;
+        double sum = 0.0;
+        for(int i = 0; i < N; i++) {
+            sum += (arr1[i]) * (arr2[i]);
+        }
+        double dist = sum;
+
+        return dist;
+    }
+
+    public static double correlationDistance(double[] arr1, double[] arr2) {
+        double h1 = 0.0;
+        double h2 = 0.0;
+        int N = arr1.length;
+        for(int i = 0; i < N; i++) {
+            h1 = h1 + arr1[i];
+            h2 = h2 + arr2[i];
+        }
+        h1 = h1 / N;
+        h2 = h2 / N;
+
+        double sum1 = 0.0;
+        double sum2 = 0.0;
+        double sum3 = 0.0;
+        for(int i = 0; i < N; i++) {
+            sum1 += (arr1[i] - h1) * (arr2[i] - h2);
+            sum2 += (arr1[i] - h1) * (arr1[i] - h1);
+            sum3 += (arr2[i] - h2) * (arr2[i] - h2);
+        }
+        double dist = sum1 / Math.sqrt(sum2 * sum3);
+
+        return dist;
+    }
+
 }

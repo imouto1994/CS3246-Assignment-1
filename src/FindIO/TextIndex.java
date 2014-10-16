@@ -327,7 +327,7 @@ public class TextIndex extends Index{
                     }
                     String img_score_pair;
                     if(img.equals(imageID)){
-                        img_score_pair = img+" "+new_score;
+                        img_score_pair = img + " " + new_score + " ";
                         isImageContained = true;
                     } else {
                         img_score_pair = img + " " + old_score + " ";
@@ -352,9 +352,8 @@ public class TextIndex extends Index{
             }
 
             MMwriter.commit();
-
-            reader.close();
-            closeWriter();
         }
+        reader.close();
+        closeWriter();
     }
 }

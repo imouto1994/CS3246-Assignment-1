@@ -17,6 +17,8 @@ public class FindIOController extends Application implements  FindIOImageChooser
     private VisualConceptCache visualConceptCache;
     private VisualWordCache visualWordCache;
 
+    private double maxTextSim = 0.0;
+
     private boolean isCHSelected = false;
     private boolean isVWSelected = false;
     private boolean isVCSelected = false;
@@ -198,8 +200,9 @@ public class FindIOController extends Application implements  FindIOImageChooser
 
         Map<String, double[]> vwResults = null;
         if(hasVisualWordFeature ){
-            vwResults  = searchVisualWord();
-            imagePool.addAll(vwResults.keySet());
+            vwResults  = searchVisualWordsForAllImages();
+            List<String> vwPool = filterVWResults(visualWords, vwResults);
+            imagePool.addAll(vwPool);
         }
         Map<String, double[]> vcResults = null;
         if(hasVisualConceptFeature){
@@ -227,6 +230,7 @@ public class FindIOController extends Application implements  FindIOImageChooser
             double similarity = calculateSimilarity(image, colorHistResults, textResults, vcResults, vwResults);
             rankList.add(new FindIOPair(image, similarity));
         }
+        maxTextSim = 0.0;
         rankList.sort(new Comparator<FindIOPair>() {
             @Override
             public int compare(FindIOPair o1, FindIOPair o2) {
@@ -240,6 +244,21 @@ public class FindIOController extends Application implements  FindIOImageChooser
         }
 
         return results;
+    }
+
+    private List<String> filterVWResults(double[] visualWords, Map<String, double[]> vwResults) {
+        List<FindIOPair> top40 = new ArrayList<FindIOPair>();
+        for(String imageID: vwResults.keySet()){
+            double[] imageWords = vwResults.get(imageID);
+            top40.add(new FindIOPair(imageID, Common.calculateSimilarity(visualWords, imageWords, Common.CORRELATION_DISTANCE)));
+        }
+        Collections.sort(top40);
+        List<String> pool = new ArrayList<String>();
+        for(int i = top40.size() - 1; i >= (top40.size() - 40); i--){
+            pool.add(top40.get(i).getID());
+        }
+
+        return pool;
     }
 
     private double calculateSimilarity(
@@ -259,19 +278,22 @@ public class FindIOController extends Application implements  FindIOImageChooser
         colorHistSim = textSim = vcSim = vwSim = 0.0;
 
         if(hasColorHistogramFeature && colorHistResults.containsKey(image)){
-            colorHistSim = Common.calculateSimilarity(colorHist, colorHistResults.get(image));
+            colorHistSim = Common.calculateSimilarity(colorHist, colorHistResults.get(image), Common.CORRELATION_DISTANCE);
         }
 
         if(hasTextFeature && textResults.containsKey(image)){
-            textSim = Common.calculateSimilarity(terms, textResults.get(image));
+            textSim = Common.calculateSimilarity(terms, textResults.get(image), Common.CORRELATION_DISTANCE_WITHOUT_NORMALIZATION);
+            if(maxTextSim > 0.0){
+                textSim = textSim / maxTextSim;
+            }
         }
 
         if(hasVisualConceptFeature && vcResults.containsKey(image)){
-            vcSim = Common.calculateSimilarity(visualConcepts, vcResults.get(image));
+            vcSim = Common.calculateSimilarity(visualConcepts, vcResults.get(image), Common.BHATTACHARYYA_DISTANCE);
         }
 
         if(hasVisualWordFeature && vwResults.containsKey(image)) {
-            vwSim = Common.calculateSimilarity(visualWords, vwResults.get(image));
+            vwSim = Common.calculateSimilarity(visualWords, vwResults.get(image), Common.CORRELATION_DISTANCE);
         }
 
         return weights[Common.COLOR_HIST_WEIGHT_INDEX] * colorHistSim
@@ -295,23 +317,23 @@ public class FindIOController extends Application implements  FindIOImageChooser
         } else if(!hasColorHistogramFeature && !hasTextFeature && !hasVisualConceptFeature && hasVisualWordFeature){
             return new double[]{0.0, 0.0, 0.0, 1.0}; // only visual word
         } else if(hasColorHistogramFeature && hasTextFeature && !hasVisualConceptFeature && !hasVisualWordFeature){
-            return new double[]{0.25, 0.75, 0.0, 0.0}; // only hist and text
+            return new double[]{0.1, 0.9, 0.0, 0.0}; // only hist and text
         } else if(hasColorHistogramFeature && !hasTextFeature && hasVisualConceptFeature && !hasVisualWordFeature){
-            return new double[]{0.25, 0.0, 0.75, 0.0}; // only hist and visual concept
+            return new double[]{0.1, 0.0, 0.9, 0.0}; // only hist and visual concept
         } else if(hasColorHistogramFeature && !hasTextFeature && !hasVisualConceptFeature && hasVisualWordFeature){
-            return new double[]{0.25, 0.0, 0.0, 0.75}; // only hist and visual word
+            return new double[]{0.1, 0.0, 0.0, 0.9}; // only hist and visual word
         } else if(!hasColorHistogramFeature && hasTextFeature && hasVisualConceptFeature && !hasVisualWordFeature){
             return new double[]{0.0, 0.6, 0.4, 0.0}; // only text and visual concept
         } else if(!hasColorHistogramFeature && hasTextFeature && !hasVisualConceptFeature && hasVisualWordFeature){
-            return new double[]{0.0, 0.6, 0.0, 0.4}; // only text and visual word
+            return new double[]{0.0, 0.7, 0.0, 0.3}; // only text and visual word
         } else if(!hasColorHistogramFeature && !hasTextFeature && hasVisualConceptFeature && hasVisualWordFeature){
-            return new double[]{0.0, 0.0, 0.55, 0.45}; // only visual concept and visual word
+            return new double[]{0.0, 0.0, 0.6, 0.4}; // only visual concept and visual word
         } else if(hasColorHistogramFeature && hasTextFeature && hasVisualConceptFeature && !hasVisualWordFeature){
             return new double[]{0.1, 0.55, 0.35, 0.0}; // only hist, text and visual concept
         } else if(!hasColorHistogramFeature && hasTextFeature && hasVisualConceptFeature && hasVisualWordFeature){
-            return new double[]{0.0, 0.4, 0.4, 0.3}; // only text, visual concept and visual word
+            return new double[]{0.0, 0.5, 0.3, 0.2}; // only text, visual concept and visual word
         } else if(hasColorHistogramFeature && hasTextFeature && !hasVisualConceptFeature && hasVisualWordFeature){
-            return new double[]{0.1, 0.5, 0.0, 0.4}; // only hist, text and visual word
+            return new double[]{0.1, 0.6, 0.0, 0.3}; // only hist, text and visual word
         } else if(hasColorHistogramFeature && !hasTextFeature && hasVisualConceptFeature && hasVisualWordFeature){
             return new double[]{0.1, 0.0, 0.5, 0.4}; // only hist, visual concept and visual word
         } else if(hasColorHistogramFeature && hasTextFeature && hasVisualConceptFeature && hasVisualWordFeature){
@@ -322,30 +344,15 @@ public class FindIOController extends Application implements  FindIOImageChooser
         return null;
     }
 
-    private Map<String, double[]> searchVisualWord(){
-        List<FindIOPair> wordsList = new ArrayList<FindIOPair>();
-        int index = 0;
-        for(int i = 0; i < visualWords.length; i++){
-            if(visualWords[i] > 0){
-                wordsList.add(new FindIOPair(String.valueOf(i), visualWords[i]));
-            }
-        }
-        Collections.sort(wordsList);
-        StringBuilder strBuilder = new StringBuilder();
-        for(int i = wordsList.size() - 1; i >= 0 && (wordsList.size() - i) <= Common.MAXIMUM_NUMBER_OF_TERMS; i--){
-            FindIOPair word = wordsList.get(i);
-            strBuilder.append(word.getID());
-            strBuilder.append(" ");
-        }
-        VisualWordIndex vwIndex = new VisualWordIndex();
+    private Map<String, double[]> searchVisualWordsForAllImages(){
+        VisualWordIndex visualWordIndex = new VisualWordIndex();
         Map<String, double[]> results = null;
         try {
-            results = vwIndex.searchVisualWord(strBuilder.toString().trim());
+            results = visualWordIndex.scanVisualWords();
         } catch (Exception e) {
             results = new HashMap<String, double[]>();
             System.out.println("There was error in searching in the index database for visual words");
         }
-
         return results;
     }
 
@@ -377,7 +384,14 @@ public class FindIOController extends Application implements  FindIOImageChooser
             results = textIndex.searchText(queryString);
         } catch (Exception e) {
             results = new HashMap<String, double[]>();
+            e.printStackTrace();
             System.out.println("There was error in searching in the index database for text annotation");
+        }
+        for(double[] termsFreq: results.values()){
+            double textSim = Common.calculateSimilarity(terms, termsFreq, Common.CORRELATION_DISTANCE_WITHOUT_NORMALIZATION);
+            if(textSim > maxTextSim){
+                maxTextSim = textSim;
+            }
         }
         return results;
     }
@@ -421,6 +435,7 @@ public class FindIOController extends Application implements  FindIOImageChooser
             textIndex.initBuilding();
             textIndex.updateScore(imageID, updateTermsList);
         } catch (Throwable throwable) {
+            throwable.printStackTrace();
             System.err.println("There is problem in updating text index");
         }
     }
