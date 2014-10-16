@@ -64,7 +64,7 @@ public class Common {
         for(int i = 0; i < N; i++) {
             Sum = Sum + Math.sqrt(arr1[i]*arr2[i]);
         }
-        double dist = 1 - Math.sqrt(Sum / Math.sqrt(h1*h2));
+        double dist = Math.sqrt(1 - Sum / Math.sqrt(h1*h2));
         return dist;
     }
 }
