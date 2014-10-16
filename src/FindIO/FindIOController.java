@@ -17,6 +17,8 @@ public class FindIOController extends Application implements  FindIOImageChooser
     private VisualConceptCache visualConceptCache;
     private VisualWordCache visualWordCache;
 
+    private double maxTextSim = 0.0;
+
     private boolean isCHSelected = false;
     private boolean isVWSelected = false;
     private boolean isVCSelected = false;
@@ -228,6 +230,7 @@ public class FindIOController extends Application implements  FindIOImageChooser
             double similarity = calculateSimilarity(image, colorHistResults, textResults, vcResults, vwResults);
             rankList.add(new FindIOPair(image, similarity));
         }
+        maxTextSim = 0.0;
         rankList.sort(new Comparator<FindIOPair>() {
             @Override
             public int compare(FindIOPair o1, FindIOPair o2) {
@@ -279,7 +282,10 @@ public class FindIOController extends Application implements  FindIOImageChooser
         }
 
         if(hasTextFeature && textResults.containsKey(image)){
-            textSim = Common.calculateSimilarity(terms, textResults.get(image), Common.BHATTACHARYYA_DISTANCE);
+            textSim = Common.calculateSimilarity(terms, textResults.get(image), Common.CORRELATION_DISTANCE_WITHOUT_NORMALIZATION);
+            if(maxTextSim > 0.0){
+                textSim = textSim / maxTextSim;
+            }
         }
 
         if(hasVisualConceptFeature && vcResults.containsKey(image)){
@@ -378,7 +384,14 @@ public class FindIOController extends Application implements  FindIOImageChooser
             results = textIndex.searchText(queryString);
         } catch (Exception e) {
             results = new HashMap<String, double[]>();
+            e.printStackTrace();
             System.out.println("There was error in searching in the index database for text annotation");
+        }
+        for(double[] termsFreq: results.values()){
+            double textSim = Common.calculateSimilarity(terms, termsFreq, Common.CORRELATION_DISTANCE_WITHOUT_NORMALIZATION);
+            if(textSim > maxTextSim){
+                maxTextSim = textSim;
+            }
         }
         return results;
     }
@@ -422,6 +435,7 @@ public class FindIOController extends Application implements  FindIOImageChooser
             textIndex.initBuilding();
             textIndex.updateScore(imageID, updateTermsList);
         } catch (Throwable throwable) {
+            throwable.printStackTrace();
             System.err.println("There is problem in updating text index");
         }
     }

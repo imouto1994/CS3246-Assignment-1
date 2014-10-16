@@ -33,6 +33,7 @@ public class Common {
     public static final int CHI_SQUARE_DISTANCE = 1;
     public static final int INTERSECTION_DISTANCE = 2;
     public static final int CORRELATION_DISTANCE = 3;
+    public static final int CORRELATION_DISTANCE_WITHOUT_NORMALIZATION = 4;
 
     public static String removeExtension(String fileName){
         if(!fileName.contains(".")){
@@ -60,24 +61,10 @@ public class Common {
                 return intersectionDistance(arr1, arr2);
             case CORRELATION_DISTANCE:
                 return correlationDistance(arr1, arr2);
+            case CORRELATION_DISTANCE_WITHOUT_NORMALIZATION:
+                return correlationDistanceWithoutNormalization(arr1, arr2);
             default:
                 System.out.println("Invalid case");
-                return 0.0;
-        }
-    }
-
-    public static double calculateDistance(double[] arr1, double[] arr2, int distanceType) {
-        switch (distanceType){
-            case BHATTACHARYYA_DISTANCE:
-                return bhattacharyyaDistance(arr1, arr2);
-            case CHI_SQUARE_DISTANCE:
-                return chiSquareDistance(arr1, arr2);
-            case INTERSECTION_DISTANCE:
-                return intersectionDistance(arr1, arr2);
-            case CORRELATION_DISTANCE:
-                return correlationDistance(arr1, arr2);
-            default:
-                System.err.println("Invalid case");
                 return 0.0;
         }
     }
@@ -117,6 +104,17 @@ public class Common {
         for(int i = 0; i < N; i++){
             dist += Math.min(arr1[i], arr2[i]);
         }
+        return dist;
+    }
+
+    public static double correlationDistanceWithoutNormalization(double[] arr1, double[] arr2) {
+        int N = arr1.length;
+        double sum = 0.0;
+        for(int i = 0; i < N; i++) {
+            sum += (arr1[i]) * (arr2[i]);
+        }
+        double dist = sum;
+
         return dist;
     }
 

@@ -67,11 +67,8 @@
       <file leaf-file-name="FindIOController.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/FindIO/FindIOController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="319" column="23" selection-start="13789" selection-end="13789" vertical-scroll-proportion="9.193309" vertical-offset="1001" max-vertical-offset="8322">
-              <folding>
-                <element signature="e#9337#9349#0" expanded="true" />
-                <element signature="e#9674#9682#0" expanded="true" />
-              </folding>
+            <state line="238" column="11" selection-start="9015" selection-end="9015" vertical-scroll-proportion="0.52796423" vertical-offset="4172" max-vertical-offset="8664">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -79,16 +76,16 @@
       <file leaf-file-name="Common.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/FindIO/Common.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="122" column="73" selection-start="5190" selection-end="5190" vertical-scroll-proportion="0.0" vertical-offset="1856" max-vertical-offset="2907">
+            <state line="117" column="20" selection-start="4994" selection-end="4994" vertical-scroll-proportion="0.0" vertical-offset="2016" max-vertical-offset="2869">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="VisualWordIndex.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/FindIO/VisualWordIndex.java">
+      <file leaf-file-name="TextIndex.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/FindIO/TextIndex.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="167" column="48" selection-start="5758" selection-end="5758" vertical-scroll-proportion="0.0" vertical-offset="2787" max-vertical-offset="4009">
+            <state line="339" column="17" selection-start="12869" selection-end="12869" vertical-scroll-proportion="0.0" vertical-offset="4636" max-vertical-offset="6973">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -137,13 +134,13 @@
         <option value="$PROJECT_DIR$/src/FindIO/FindIOView.java" />
         <option value="$PROJECT_DIR$/src/FindIO/FindIOTest.java" />
         <option value="$PROJECT_DIR$/src/FindIO/ColorHistIndex.java" />
-        <option value="$PROJECT_DIR$/src/FindIO/TextIndex.java" />
         <option value="$PROJECT_DIR$/src/FindIO/ColorHistCache.java" />
         <option value="$PROJECT_DIR$/src/FindIO/VisualWordCache.java" />
         <option value="$PROJECT_DIR$/src/FindIO/VisualConceptIndex.java" />
         <option value="$PROJECT_DIR$/src/FindIO/VisualConceptCache.java" />
         <option value="$PROJECT_DIR$/src/FindIO/VisualWordIndex2.java" />
         <option value="$PROJECT_DIR$/src/FindIO/VisualWordIndex.java" />
+        <option value="$PROJECT_DIR$/src/FindIO/TextIndex.java" />
         <option value="$PROJECT_DIR$/src/FindIO/Common.java" />
         <option value="$PROJECT_DIR$/src/FindIO/FindIOController.java" />
       </list>
@@ -185,6 +182,7 @@
     </navigator>
     <panes>
       <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -221,31 +219,8 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CS3246-Assignment1" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FindIO" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="FindIO" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Images" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -330,9 +305,9 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <configuration default="false" name="VisualWordIndex" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration default="false" name="VisualWordCache" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <option name="MAIN_CLASS_NAME" value="FindIO.VisualWordIndex" />
+      <option name="MAIN_CLASS_NAME" value="FindIO.VisualWordCache" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -347,9 +322,9 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <configuration default="false" name="VisualWordCache" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+    <configuration default="false" name="TextIndex" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
-      <option name="MAIN_CLASS_NAME" value="FindIO.VisualWordCache" />
+      <option name="MAIN_CLASS_NAME" value="FindIO.TextIndex" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -493,16 +468,16 @@
       <item index="1" class="java.lang.String" itemvalue="Application.VisualConceptIndex" />
       <item index="2" class="java.lang.String" itemvalue="Application.VisualWordIndex" />
       <item index="3" class="java.lang.String" itemvalue="Application.FindIOTest" />
-      <item index="4" class="java.lang.String" itemvalue="Application.VisualWordIndex" />
-      <item index="5" class="java.lang.String" itemvalue="Application.VisualWordCache" />
+      <item index="4" class="java.lang.String" itemvalue="Application.VisualWordCache" />
+      <item index="5" class="java.lang.String" itemvalue="Application.TextIndex" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Application.VisualWordIndex" />
+        <item index="0" class="java.lang.String" itemvalue="Application.TextIndex" />
         <item index="1" class="java.lang.String" itemvalue="Application.VisualWordIndex" />
-        <item index="2" class="java.lang.String" itemvalue="Application.VisualWordCache" />
-        <item index="3" class="java.lang.String" itemvalue="Application.FindIOTest" />
-        <item index="4" class="java.lang.String" itemvalue="Application.VisualConceptIndex" />
+        <item index="2" class="java.lang.String" itemvalue="Application.VisualWordIndex" />
+        <item index="3" class="java.lang.String" itemvalue="Application.VisualWordCache" />
+        <item index="4" class="java.lang.String" itemvalue="Application.FindIOTest" />
       </list>
     </recent_temporary>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
@@ -572,7 +547,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.201875" sideWeight="0.6703755" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2496749" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.33420026" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Problems" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -611,13 +586,17 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/FindIO/VisualWordIndex.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="167" column="48" selection-start="5758" selection-end="5758" vertical-scroll-proportion="0.0" vertical-offset="2787" max-vertical-offset="4009">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/FindIO/FindIOController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="0">
-          <folding>
-            <element signature="e#9337#9349#0" expanded="true" />
-            <element signature="e#9674#9682#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -772,13 +751,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/FindIO/TextAnalyzer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="0" selection-start="216" selection-end="216" vertical-scroll-proportion="0.07671601" vertical-offset="0" max-vertical-offset="4902">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/FindIO/image_groundTruth.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="21964" />
@@ -859,13 +831,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/FindIO/ColorHistCache.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="170" column="16" selection-start="5913" selection-end="5913" vertical-scroll-proportion="0.37281293" vertical-offset="2611" max-vertical-offset="3914">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/FindIO/ColorHistExtraction.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="127" column="5" selection-start="3991" selection-end="3991" vertical-scroll-proportion="4.0" vertical-offset="0" max-vertical-offset="2850">
@@ -882,26 +847,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/FindIO/ColorHistIndex.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="227" column="5" selection-start="7284" selection-end="8198" vertical-scroll-proportion="0.0" vertical-offset="3724" max-vertical-offset="4351">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/FindIO/FindIOTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="88" column="53" selection-start="3265" selection-end="3265" vertical-scroll-proportion="0.0" vertical-offset="1419" max-vertical-offset="3325">
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/FindIO/TextIndex.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="219" column="16" selection-start="7867" selection-end="7867" vertical-scroll-proportion="0.03448276" vertical-offset="4142" max-vertical-offset="6954">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -922,6 +871,36 @@
     <entry file="file://$PROJECT_DIR$/src/FindIO/VisualWordIndex.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="167" column="48" selection-start="5758" selection-end="5758" vertical-scroll-proportion="0.0" vertical-offset="2958" max-vertical-offset="4009">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/FindIO/ColorHistIndex.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="8" column="37" selection-start="323" selection-end="323" vertical-scroll-proportion="0.0" vertical-offset="1" max-vertical-offset="4712">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/FindIO/ColorHistCache.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="22" column="13" selection-start="765" selection-end="765" vertical-scroll-proportion="0.0" vertical-offset="1197" max-vertical-offset="4256">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/FindIO/TextAnalyzer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="10" column="13" selection-start="230" selection-end="230" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4902">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/FindIO/TextIndex.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="339" column="17" selection-start="12869" selection-end="12869" vertical-scroll-proportion="0.0" vertical-offset="6175" max-vertical-offset="6973">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -930,18 +909,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/FindIO/Common.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="122" column="73" selection-start="5190" selection-end="5190" vertical-scroll-proportion="0.0" vertical-offset="1856" max-vertical-offset="2907">
+        <state line="117" column="20" selection-start="4994" selection-end="4994" vertical-scroll-proportion="0.0" vertical-offset="2016" max-vertical-offset="2869">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/FindIO/FindIOController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="319" column="23" selection-start="13789" selection-end="13789" vertical-scroll-proportion="9.193309" vertical-offset="1001" max-vertical-offset="8322">
-          <folding>
-            <element signature="e#9337#9349#0" expanded="true" />
-            <element signature="e#9674#9682#0" expanded="true" />
-          </folding>
+        <state line="238" column="11" selection-start="9015" selection-end="9015" vertical-scroll-proportion="0.52796423" vertical-offset="4172" max-vertical-offset="8664">
+          <folding />
         </state>
       </provider>
     </entry>
