@@ -8,4 +8,4 @@ Copy the large MAT data for feature visual concept to use it. Since it is too la
 * TEXT feature: Inverted index
 * Color histogram feature: Direct index
 * Visual concept feature: Inverted index
-* Visual word feature: Inverted index
+* Visual word feature: Direct index
