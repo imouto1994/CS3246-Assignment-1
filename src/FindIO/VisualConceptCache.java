@@ -238,7 +238,7 @@ public class VisualConceptCache extends Index{
             }
             double[] concepts = mapResults.get(imageName);
             for(int i = 0; i < conceptsInfo.length; i += 2){
-                concepts[Integer.parseInt(conceptsInfo[i])] = Double.parseDouble(conceptsInfo[i + 1]) / 5.0; // normalize
+                concepts[Integer.parseInt(conceptsInfo[i])] = Double.parseDouble(conceptsInfo[i + 1]);
             }
         }
         reader.close();

@@ -54,6 +54,7 @@ public class FindIOTest {
                 tagList.add(img_tags[i]);
             }
             gtMap.put(imgID, tagList);
+            count++;
         }
 
         System.out.println("Number of query images: " + count);
@@ -62,40 +63,38 @@ public class FindIOTest {
 
     public void evaluateSearch(String benchmarkFile) throws IOException{
         FileWriter fileWriter = new FileWriter(new File(benchmarkFile));
-        StringBuilder stringBuilder = new StringBuilder();
-
-        stringBuilder.append("imageName\tch\tvw\tchvw\tvc\tchvc\tvwvc\tchvwvc");
-
-        for(String imageName : testGtmap.keySet()){
+        System.out.println("imageName\tch\tvw\tchvw\tvc\tchvc\tvwvc\tchvwvc");
+        for(int i = 1; i <= 7; i++){
             boolean isCHSelected, isVWSelected, isVCSelected, isTextSelected;
-            stringBuilder.append(imageName+"\t");
-            for(int i = 1; i <= 7; i++){
-                if(i % 2 == 1) {
-                    isCHSelected = true;
-                } else {
-                    isCHSelected = false;
-                }
-                if(i % 4 == 2 || i % 4 == 3){
-                    isVWSelected = true;
-                } else {
-                    isVWSelected = false;
-                }
-                if(i >= 4){
-                    isVCSelected = true;
-                } else {
-                    isVCSelected = false;
-                }
+            if(i % 2 == 1) {
+                isCHSelected = true;
+            } else {
+                isCHSelected = false;
+            }
+            if(i % 4 == 2 || i % 4 == 3){
+                isVWSelected = true;
+            } else {
+                isVWSelected = false;
+            }
+            if(i >= 4){
+                isVCSelected = true;
+            } else {
+                isVCSelected = false;
+            }
+            isTextSelected = false;
+            fileWriter.write("CH " + isCHSelected + "  VW " + isVWSelected + "  VC " + isVCSelected + "  TEXT " + isTextSelected + String.format("%n"));
+            for(String imageName : testGtmap.keySet()){
+                fileWriter.write("\tImage: " + imageName + "\tTag: " + testGtmap.get(imageName).get(1) + String.format("%n"));
                 isTextSelected = false;
                 List<String> rankedList = searchFile(imageName, isCHSelected, isVWSelected, isVCSelected, isTextSelected);
-                int[] precision = accumulateRelevanceScore(imageName, rankedList);
-                stringBuilder.append(precision[0]+"/"+precision[1]+"\t");
-                fileWriter.write(precision[0] + "/" + precision[1] + "\t");
-                System.out.print("CH " + isCHSelected + "  VW " + isVWSelected + "  VC " + isVCSelected);
-                System.out.println(precision[0] + "/" + precision[3] + " " + precision[1] + "/" + precision[3] + " " + precision[2] + "/" + precision[3]);
+                double[] scores = getRelevanceScore(imageName, rankedList);
+                double precision = (scores[0] / scores[1]);
+                double recall = (scores[0] / scores[2]);
+                double f1 = (2 * precision * recall) / (precision + recall);
+                fileWriter.write("\tPrecision: " + precision + "\tRecall: " + recall + "\tF1: " + f1 + String.format("%n"));
             }
-            stringBuilder.append(String.format("%n"));
-            System.out.println();
-            fileWriter.write(String.format("%n"));
+            System.out.println("Done " + i + "!");
+            fileWriter.write(String.format("%n") + String.format("%n") + String.format("%n"));
         }
         fileWriter.close();
     }
@@ -120,53 +119,32 @@ public class FindIOTest {
         return rankedFilteredList;
     }
 
-    public int[] accumulateRelevanceScore(String image1, List<String> rankedList){
+    public double[] getRelevanceScore(String image1, List<String> rankedList){
         int accumulatedScore = 0;
-        int weightedScore = 0;
-        int topScore = 0;
         for(int i = 0; i < rankedList.size(); i++){
             String image2 = rankedList.get(i);
-            int score = calculateRelevanceScore(image1, image2);
-            if(i <= 5){
-                accumulatedScore += score;
-                weightedScore += 3*score;
-                topScore += score;
-            } else if(i <=10){
-                accumulatedScore += score;
-                weightedScore += 2*score;
-            } else {
-                accumulatedScore += score;
-                weightedScore += score;
+            boolean isRelevant = isRelevant(image1, image2);
+            if(isRelevant){
+                accumulatedScore++;
             }
         }
-        int[] same_total = {accumulatedScore, weightedScore, topScore, rankedList.size()};
+        double[] same_total = {(double) accumulatedScore, (double) rankedList.size(), 40.0};
         return same_total;
     }
 
-    public int calculateRelevanceScore(String image1, String image2){
+    public boolean isRelevant(String image1, String image2){
         ArrayList<String> tagList1 = testGtmap.get(image1);
         ArrayList<String> tagList2 = trainGtmap.get(image2);
-        int score = getArraySimilarity(tagList1, tagList2);
-        if(score>=1) {
-            System.out.println(image1 + " " + image2 + "\t" + score);
-        }
-        return score;
-    }
-
-    public int getArraySimilarity(ArrayList<String> list1, ArrayList<String> list2){
-        int numSharedTags = 0;
-        for(int i = 0; i < list1.size(); i++){
-            for(int j = 0; j < list2.size(); j++){
-                if(!list1.get(i).equals("") &&
-                    !list2.get(j).equals("") &&
-                     list1.get(i).equals(list2.get(j))){
-                    numSharedTags++;
+        for(int i = 0; i < tagList1.size(); i++){
+            for(int j = 0; j < tagList2.size(); j++){
+                if(!tagList1.get(i).equals("") &&
+                        !tagList2.get(j).equals("") &&
+                        tagList1.get(i).equals(tagList2.get(j))){
+                    return true;
                 }
             }
         }
-        return numSharedTags;
+        return false;
     }
-
-
 }
 

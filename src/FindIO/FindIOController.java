@@ -247,15 +247,15 @@ public class FindIOController extends Application implements  FindIOImageChooser
     }
 
     private List<String> filterVWResults(double[] visualWords, Map<String, double[]> vwResults) {
-        List<FindIOPair> top40 = new ArrayList<FindIOPair>();
+        List<FindIOPair> top80 = new ArrayList<FindIOPair>();
         for(String imageID: vwResults.keySet()){
             double[] imageWords = vwResults.get(imageID);
-            top40.add(new FindIOPair(imageID, Common.calculateSimilarity(visualWords, imageWords, Common.CORRELATION_DISTANCE)));
+            top80.add(new FindIOPair(imageID, Common.calculateSimilarity(visualWords, imageWords, Common.CORRELATION_DISTANCE)));
         }
-        Collections.sort(top40);
+        Collections.sort(top80);
         List<String> pool = new ArrayList<String>();
-        for(int i = top40.size() - 1; i >= (top40.size() - 40); i--){
-            pool.add(top40.get(i).getID());
+        for(int i = top80.size() - 1; i >= (top80.size() - 80); i--){
+            pool.add(top80.get(i).getID());
         }
 
         return pool;
@@ -366,6 +366,9 @@ public class FindIOController extends Application implements  FindIOImageChooser
         }
         VisualConceptIndex vcIndex = new VisualConceptIndex();
         Map<String, double[]> results = null;
+        if(strBuilder.toString().trim().isEmpty()){
+            return new HashMap<String, double[]>();
+        }
         try {
             results = vcIndex.searchVisualConcept(strBuilder.toString().trim());
         } catch (Exception e) {
@@ -402,8 +405,11 @@ public class FindIOController extends Application implements  FindIOImageChooser
             strBuilder.append(image);
             strBuilder.append(" ");
         }
+        if(strBuilder.toString().trim().isEmpty()){
+            return new HashMap<String, double[]>();
+        }
         ColorHistIndex colorHistIndex = new ColorHistIndex();
-        Map<String, double[]> results = null;
+        Map<String, double[]> results;
         try {
             results = colorHistIndex.searchImgHist(strBuilder.toString().trim());
         } catch (Exception e){

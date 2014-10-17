@@ -253,7 +253,7 @@ public class VisualConceptIndex extends Index{
                     mapResults.put(imageName, new double[Common.NUM_VISUAL_CONCEPTS]);
                 }
                 double[] imageVisualConcepts = mapResults.get(imageName);
-                imageVisualConcepts[Integer.parseInt(visualConcept)] = Double.parseDouble(frequency) / 5.0; // normalize
+                imageVisualConcepts[Integer.parseInt(visualConcept)] = Double.parseDouble(frequency);
             }
         }
 

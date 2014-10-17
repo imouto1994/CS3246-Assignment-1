@@ -22,7 +22,7 @@ public class Common {
     public static final int topK = 1024;
     public static final int NUM_VISUAL_WORDS = 21504;
     public static final int NUM_VISUAL_CONCEPTS = 1000;
-    public static final int MAX_RESULTS = 20;
+    public static final int MAX_RESULTS = 40;
 
     public static final int COLOR_HIST_WEIGHT_INDEX = 0;
     public static final int TEXT_WEIGHT_INDEX = 1;
