@@ -64,7 +64,7 @@ public class FindIOTest {
     public void evaluateSearch(String benchmarkFile) throws IOException{
         FileWriter fileWriter = new FileWriter(new File(benchmarkFile));
         System.out.println("imageName\tch\tvw\tchvw\tvc\tchvc\tvwvc\tchvwvc");
-        for(int i = 1; i <= 7; i++){
+        for(int i = 0; i <= 8; i++){
             boolean isCHSelected, isVWSelected, isVCSelected, isTextSelected;
             if(i % 2 == 1) {
                 isCHSelected = true;
@@ -81,11 +81,18 @@ public class FindIOTest {
             } else {
                 isVCSelected = false;
             }
-            isTextSelected = false;
+
+            if(i == 0){
+                isTextSelected = true;
+            } else if(i == 8){
+                isTextSelected = true;
+                isVWSelected = isVCSelected = isCHSelected = true;
+            } else {
+                isTextSelected = false;
+            }
             fileWriter.write("CH " + isCHSelected + "  VW " + isVWSelected + "  VC " + isVCSelected + "  TEXT " + isTextSelected + String.format("%n"));
             for(String imageName : testGtmap.keySet()){
                 fileWriter.write("\tImage: " + imageName + "\tTag: " + testGtmap.get(imageName).get(1) + String.format("%n"));
-                isTextSelected = false;
                 List<String> rankedList = searchFile(imageName, isCHSelected, isVWSelected, isVCSelected, isTextSelected);
                 double[] scores = getRelevanceScore(imageName, rankedList);
                 double precision = (scores[0] / scores[1]);
@@ -103,9 +110,10 @@ public class FindIOTest {
 
 
         ArrayList<String> tagList = testGtmap.get(imageName);
-        String tag = tagList.get(0);
+        String tag = tagList.get(1);
 
         controller.imageSelectHandle(new File("./src/FindIO/Datasets/test/query/"+tag+"/"+imageName+".jpg"));
+        controller.setQueryString(tag);
         List<String> rankedList = controller.search(isCHSelected, isVWSelected, isVCSelected, isTextSelected);
         List<String> rankedFilteredList = new ArrayList<String>();
 

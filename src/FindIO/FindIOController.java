@@ -24,6 +24,8 @@ public class FindIOController extends Application implements  FindIOImageChooser
     private boolean isVCSelected = false;
     private boolean isTextSelected = false;
 
+    public void setQueryString(String qStr) { this.queryString = qStr.trim(); }
+
 	@Override
 	public void start(Stage primaryStage) {
         initDb();
@@ -148,7 +150,7 @@ public class FindIOController extends Application implements  FindIOImageChooser
     }
 
     private String extractTerms() {
-        String text = findIOView.getTextField().getText().trim();
+        String text = new String(queryString);
         String[] termStrings = new String[10];
         try {
             TextAnalyzer analyzer = new TextAnalyzer();
@@ -177,6 +179,10 @@ public class FindIOController extends Application implements  FindIOImageChooser
         boolean isVWSelected = findIOView.getCheckBoxForSIFT().isSelected();
         boolean isVCSelected = findIOView.getCheckBoxForConcept().isSelected();
         boolean isTextSelected = !findIOView.getTextField().getText().trim().isEmpty();
+
+        if(isTextSelected){
+            queryString = findIOView.getTextField().getText().trim();
+        }
 
         return search(isCHSelected,  isVWSelected, isVCSelected,  isTextSelected);
     }
@@ -278,7 +284,7 @@ public class FindIOController extends Application implements  FindIOImageChooser
         colorHistSim = textSim = vcSim = vwSim = 0.0;
 
         if(hasColorHistogramFeature && colorHistResults.containsKey(image)){
-            colorHistSim = Common.calculateSimilarity(colorHist, colorHistResults.get(image), Common.CORRELATION_DISTANCE);
+            colorHistSim = Common.calculateSimilarity(colorHist, colorHistResults.get(image), Common.BHATTACHARYYA_DISTANCE);
         }
 
         if(hasTextFeature && textResults.containsKey(image)){
